@@ -1,5 +1,6 @@
 import paramiko
 import csv
+import time
 
 # Router credentials and SSH setup
 ROUTER_IP = '192.168.1.254'
@@ -42,9 +43,11 @@ def ssh_connect(ip, username, password):
     client.connect(ip, port=PORT, username=username, password=password)
     return client
 
-def run_command(client, command):
-    stdin, stdout, stderr = client.exec_command(command)
-    return stdout.read().decode('utf-8')
+def run_command(shell, command):
+    shell.send(command + '\n')
+    time.sleep(2)  # Wait for the command to execute
+    output = shell.recv(65535).decode('utf-8')
+    return output
 
 def validate_output(output, expected):
     for keyword in expected:
@@ -52,19 +55,24 @@ def validate_output(output, expected):
             return 'Fail'
     return 'Pass'
 
-def execute_check(client, check):
+def execute_check(shell, check):
     # Enter system-view mode
-    run_command(client, 'system-view')
+    run_command(shell, 'system-view')
     # Run the validation command
-    output = run_command(client, check['command'])
+    output = run_command(shell, check['command'])
     return validate_output(output, check['expected_output'])
 
 def main():
     client = ssh_connect(ROUTER_IP, USERNAME, PASSWORD)
+    shell = client.invoke_shell()
+    
+    # Optional: send a dummy command to ensure the shell is ready
+    shell.send('\n')
+    time.sleep(2)
     
     results = []
     for check in CHECKS:
-        result = execute_check(client, check)
+        result = execute_check(shell, check)
         results.append({
             'Objective': check['objective'],
             'Result': result
