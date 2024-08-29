@@ -15,6 +15,13 @@ cert_file_path = "/flash/certificate.pem"
 ca_file_path = "/flash/rootCA.pem"
 output_excel_file = "certificate_check_results.xlsx"
 
+from paramiko import SSHClient
+from scp import SCPClient
+
+def download_file_via_scp(ssh_client, remote_path, local_path):
+    with SCPClient(ssh_client.get_transport()) as scp:
+        scp.get(remote_path, local_path)
+
 def ssh_connect(host, user, pwd):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -857,8 +864,9 @@ def perform_checks(cert_path, ca_path, output_file, ssh_client):
 def main():
     ssh_client = ssh_connect(router_ip, username, password)
     
-    download_file_via_ssh(ssh_client, cert_file_path, "certificate.pem")
-    download_file_via_ssh(ssh_client, ca_file_path, "rootCA.pem")
+    download_file_via_scp(ssh_client, cert_file_path, "certificate.pem")
+    download_file_via_scp(ssh_client, ca_file_path, "rootCA.pem")
+
     
     perform_checks("certificate.pem", "rootCA.pem", output_excel_file, ssh_client)
     
