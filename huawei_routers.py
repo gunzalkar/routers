@@ -12,8 +12,8 @@ import sys
 router_ip = sys.argv[1] #"192.168.1.1"
 username = sys.argv[2] #"admin"
 password = sys.argv[3] #"admin_password"
-cert_file_path = "/flash/certificate.pem"
-ca_file_path = "/flash/rootCA.pem"
+cert_file_path = "certificate.pem"
+ca_file_path = "rootCA.pem"
 output_excel_file = "certificate_check_results.xlsx"
 
 def ssh_connect(host, user, pwd):
