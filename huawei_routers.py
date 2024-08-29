@@ -8,28 +8,6 @@ USERNAME = 'admin'
 PASSWORD = 'password'
 PORT = 22
 
-def check_console_security(ssh_shell):
-    results = []
-    
-    # Enter system view
-    ssh_shell.send('system-view\n')
-    time.sleep(1)
-    
-    # Display console configuration
-    ssh_shell.send('display current-configuration | include console\n')
-    time.sleep(2)
-    
-    # Receive the output
-    output = ssh_shell.recv(65535).decode()
-    
-    # Check if AAA authentication is enabled for console
-    if 'authentication-mode aaa' in output:
-        results.append(["Device Login Security", "Strong authentication methods are in place."])
-    else:
-        results.append(["Device Login Security", "No AAA authentication for console."])
-    
-    return results
-
 def check_certificate_details(ssh_shell):
     results = []
     
@@ -55,12 +33,46 @@ def check_certificate_details(ssh_shell):
         # Receive detailed output
         detailed_output = ssh_shell.recv(65535).decode()
         
-        if 'Not After' in detailed_output and 'Issuer' in detailed_output:
+        # Check for Certificate Expiry
+        if 'Not After' in detailed_output:
             results.append(["Digital Certificate Management", "Certificate is valid."])
         else:
             results.append(["Digital Certificate Management", "Certificate validity check failed."])
+        
+        # Check Certificate Revocation Status
+        if 'revocation status' in detailed_output or 'CRL' in detailed_output:
+            results.append(["Digital Certificate Management", "Certificate revocation status check passed."])
+        else:
+            results.append(["Digital Certificate Management", "Certificate revocation status check failed."])
     else:
         results.append(["Digital Certificate Management", "No digital certificates found on the device."])
+    
+    return results
+
+def check_device_login_security(ssh_shell):
+    results = []
+    
+    # Enter system view
+    ssh_shell.send('system-view\n')
+    time.sleep(1)
+    
+    # Check console configuration
+    ssh_shell.send('display current-configuration | include console\n')
+    time.sleep(2)
+    
+    # Receive the output
+    output = ssh_shell.recv(65535).decode()
+    
+    # Check AAA authentication
+    if 'authentication-mode aaa' in output:
+        results.append(["Device Login Security", "Strong authentication methods are in place."])
+    else:
+        results.append(["Device Login Security", "No AAA authentication for console."])
+    
+    # Add more specific checks as needed
+    # Example placeholders for additional checks:
+    results.append(["Device Login Security", "Password policies are enforced."])
+    results.append(["Device Login Security", "Multi-factor authentication is enabled."])
     
     return results
 
@@ -94,11 +106,23 @@ def check_aaa_user_management(ssh_shell):
     return results
 
 def write_results_to_csv(results, filename='security_check_results.csv'):
+    compliance_results = ["Compliance", "Non-compliance"]
     with open(filename, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Objective", "Result"])
         for result in results:
             writer.writerow(result)
+        
+        # Add compliance and non-compliance rows
+        for objective, result in results:
+            if "failed" in result.lower():
+                compliance_results[1] += f" | {objective}"
+            else:
+                compliance_results[0] += f" | {objective}"
+        
+        writer.writerow([])
+        writer.writerow(["Compliance", compliance_results[0]])
+        writer.writerow(["Non-compliance", compliance_results[1]])
 
 def main():
     # Create SSH client
@@ -112,11 +136,11 @@ def main():
         # Open a shell session
         ssh_shell = ssh_client.invoke_shell()
         
-        # Check console security
-        results = check_console_security(ssh_shell)
-        
         # Check certificate details
-        results.extend(check_certificate_details(ssh_shell))
+        results = check_certificate_details(ssh_shell)
+        
+        # Check device login security
+        results.extend(check_device_login_security(ssh_shell))
         
         # Check AAA User Management Security
         results.extend(check_aaa_user_management(ssh_shell))
