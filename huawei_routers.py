@@ -858,8 +858,8 @@ def perform_checks(cert_path, ca_path, output_file, ssh_client):
 def main():
     ssh_client = ssh_connect(router_ip, username, password)
     
-    download_file_via_ssh(ssh_client, cert_file_path, "certificate.pem")
-    download_file_via_ssh(ssh_client, ca_file_path, "rootCA.pem")
+    #download_file_via_ssh(ssh_client, cert_file_path, "certificate.pem")
+    #download_file_via_ssh(ssh_client, ca_file_path, "rootCA.pem")
     
     perform_checks("certificate.pem", "rootCA.pem", output_excel_file, ssh_client)
     
