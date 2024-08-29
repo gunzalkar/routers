@@ -1,12 +1,62 @@
 import paramiko
 import time
+
 # Router connection details
 ROUTER_IP = '192.168.1.254'
 USERNAME = 'admin'
 PASSWORD = 'password'
 PORT = 22
 
-def check_console_security():
+def check_console_security(ssh_shell):
+    # Send commands to enter system view and check console settings
+    ssh_shell.send('system-view\n')
+    time.sleep(1)
+    ssh_shell.send('display current-configuration | include console\n')
+    time.sleep(2)
+    
+    # Receive the output
+    output = ssh_shell.recv(65535).decode()
+    
+    # Check if AAA authentication is enabled for console
+    if 'authentication-mode aaa' in output:
+        print("Console port is configured with AAA authentication.")
+    else:
+        print("Console port is not configured with AAA authentication.")
+
+def check_certificate_management(ssh_shell):
+    # Send commands to enter system view and check certificate settings
+    ssh_shell.send('system-view\n')
+    time.sleep(1)
+    ssh_shell.send('display pki certificate all\n')
+    time.sleep(2)
+    
+    # Receive the output
+    output = ssh_shell.recv(65535).decode()
+    
+    # Check if certificates are present and valid
+    if 'Certificate ID' in output:
+        print("Digital certificates are present on the device.")
+        # You can add more specific checks here based on your needs
+        print(output)
+    else:
+        print("No digital certificates found on the device.")
+
+def check_certificate_details(ssh_shell):
+    # Send command to display certificate details
+    ssh_shell.send('display pki certificate detail\n')
+    time.sleep(2)
+    
+    # Receive the output
+    output = ssh_shell.recv(65535).decode()
+    
+    # Check for expiry and issuer
+    if 'Not After' in output and 'Issuer' in output:
+        print("Certificate details found:")
+        print(output)
+    else:
+        print("Failed to retrieve certificate details.")
+
+def main():
     # Create SSH client
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -18,21 +68,14 @@ def check_console_security():
         # Open a shell session
         ssh_shell = ssh_client.invoke_shell()
         
-        # Send commands to enter system view and check console settings
-        ssh_shell.send('system-view\n')
-        ssh_shell.send('display current-configuration | include console\n')
+        # Check console security
+        check_console_security(ssh_shell)
         
-        # Allow some time for the command to execute
-        time.sleep(2)
+        # Check certificate management
+        check_certificate_management(ssh_shell)
         
-        # Receive the output
-        output = ssh_shell.recv(65535).decode()
-        
-        # Check if AAA authentication is enabled for console
-        if 'authentication-mode aaa' in output:
-            print("Console port is configured with AAA authentication.")
-        else:
-            print("Console port is not configured with AAA authentication.")
+        # Check certificate details
+        check_certificate_details(ssh_shell)
         
         # Close SSH connection
         ssh_client.close()
@@ -45,4 +88,4 @@ def check_console_security():
         print(f"An error occurred: {e}")
 
 if __name__ == '__main__':
-    check_console_security()
+    main()
