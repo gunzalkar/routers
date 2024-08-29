@@ -1,5 +1,4 @@
 import paramiko
-import time
 import csv
 
 # Define router details
@@ -17,10 +16,8 @@ def ssh_connect(hostname, username, password, port=22):
 
 # Send command and receive output
 def send_command(ssh, command):
-    shell = ssh.invoke_shell()
-    shell.send(command + '\n')
-    time.sleep(2)
-    output = shell.recv(65535).decode('utf-8')
+    stdin, stdout, stderr = ssh.exec_command(command)
+    output = stdout.read().decode('utf-8') + stderr.read().decode('utf-8')
     return output
 
 # Configure AAA User Management Security
