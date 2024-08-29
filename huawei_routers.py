@@ -1,70 +1,80 @@
 import paramiko
 import csv
-import time
 
-# SSH connection details
-host = '192.168.1.254'
-username = 'admin'
-password = 'password'
-port = 22
+# Router credentials and SSH setup
+ROUTER_IP = '192.168.1.254'
+USERNAME = 'admin'
+PASSWORD = 'password'
+PORT = 22
 
-# Command definitions
-commands = {
-    "Authentication Mechanisms": [
-        "system-view",
-        "display aaa configuration",
-        "display current-configuration | include password",
-        "quit"
-    ],
-    "User Identity Management": [
-        "system-view",
-        "display local-user",
-        "display current-configuration | include local-user",
-        "quit"
-    ],
-    "Access Control Policies": [
-        "system-view",
-        "display acl",
-        "display current-configuration | include rbac",
-        "quit"
-    ]
-}
+# Validation checks
+CHECKS = [
+    {
+        'objective': 'Digital Certificate Management',
+        'command': 'display pki certificates',
+        'expected_output': ['Certificate Authority', 'Revocation Status', 'Expiry Date']
+    },
+    {
+        'objective': 'Device Login Security',
+        'command': 'display aaa user',
+        'expected_output': ['Authentication Methods', 'Password Policies', 'MFA']
+    },
+    {
+        'objective': 'AAA User Management Security',
+        'command': 'display aaa configuration',
+        'expected_output': ['Account Locking', 'Authentication Retry Interval']
+    },
+    {
+        'objective': 'SNMP Device Management Security',
+        'command': 'display snmp-agent',
+        'expected_output': ['ACL Configuration', 'SNMPv3 Settings']
+    },
+    {
+        'objective': 'Service Plane Access Prohibition of Insecure Management Protocols',
+        'command': 'display cpu-defend policy 1',
+        'expected_output': ['Telnet', 'SSH', 'HTTP', 'SNMP', 'FTP', 'ICMP']
+    }
+]
 
-def execute_commands(client, commands):
-    ssh = client.invoke_shell()
-    output = ""
-    
-    for command in commands:
-        print(f"Executing: {command}")
-        ssh.send(command + '\n')
-        time.sleep(2)  # Allow time for the command to be processed
-        
-        while True:
-            if ssh.recv_ready():
-                output_chunk = ssh.recv(1024).decode('utf-8')
-                output += output_chunk
-                if ">" in output_chunk or "%" in output_chunk:
-                    break
-            time.sleep(1)  # Wait for more output if available
-
-    return output
-
-def main():
-    # Establish SSH connection
+def ssh_connect(ip, username, password):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(host, username=username, password=password, port=port)
+    client.connect(ip, port=PORT, username=username, password=password)
+    return client
 
-    # Run commands and collect output
+def run_command(client, command):
+    stdin, stdout, stderr = client.exec_command(command)
+    return stdout.read().decode('utf-8')
+
+def validate_output(output, expected):
+    for keyword in expected:
+        if keyword not in output:
+            return 'Fail'
+    return 'Pass'
+
+def main():
+    client = ssh_connect(ROUTER_IP, USERNAME, PASSWORD)
+    
     results = []
-    for objective, cmds in commands.items():
-        output = ""
-        output += execute_commands(client, cmds)
-        results.append({"Objective": objective, "Result": output})
-
-    # Close SSH connection
+    for check in CHECKS:
+        command = check['command']
+        expected_output = check['expected_output']
+        output = run_command(client, command)
+        result = validate_output(output, expected_output)
+        results.append({
+            'Objective': check['objective'],
+            'Result': result
+        })
+    
     client.close()
 
     # Write results to CSV
-    with open('router_compliance_report.csv', 'w', newline='') as csvfile:
-        fieldnam
+    with open('validation_results.csv', 'w', newline='') as csvfile:
+        fieldnames = ['Objective', 'Result']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for result in results:
+            writer.writerow(result)
+
+if __name__ == '__main__':
+    main()
