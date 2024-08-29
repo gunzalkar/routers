@@ -1,6 +1,5 @@
 import paramiko
 import csv
-import time
 
 # SSH connection details
 host = '192.168.1.254'
@@ -11,35 +10,26 @@ port = 22
 # Command definitions
 commands = {
     "Authentication Mechanisms": [
-        "system-view",
         "display aaa configuration",  # Check for AAA and authentication mechanisms
-        "display current-configuration | include password",  # Verify cryptographic algorithms for password
-        "quit"
+        "display current-configuration | include password"  # Verify cryptographic algorithms for password
     ],
     "User Identity Management": [
-        "system-view",
         "display aaa local-user",  # List local users to verify lifecycle management
-        "display current-configuration | include local-user",  # Review user access privileges
-        "quit"
+        "display current-configuration | include local-user"  # Review user access privileges
     ],
     "Access Control Policies": [
-        "system-view",
         "display current-configuration | include acl",  # Validate ACL policies
-        "display current-configuration | include rbac",  # Check for RBAC implementation
-        "quit"
+        "display current-configuration | include rbac"  # Check for RBAC implementation
     ]
 }
 
 def execute_commands(client, commands):
-    ssh = client.invoke_shell()
     output = ""
-
     for command in commands:
-        print(f"Executing: {command}")  # Debugging line to see the command being executed
-        ssh.send(command + '\n')
-        time.sleep(2)  # Adjust delay if necessary for the command to execute properly
-        while ssh.recv_ready():
-            output += ssh.recv(1024).decode('utf-8')  # Read output in chunks
+        print(f"Executing: {command}")
+        stdin, stdout, stderr = client.exec_command(command, timeout=30)
+        output += stdout.read().decode('utf-8')
+        output += stderr.read().decode('utf-8')
     return output
 
 def main():
