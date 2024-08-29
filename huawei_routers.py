@@ -52,15 +52,19 @@ def validate_output(output, expected):
             return 'Fail'
     return 'Pass'
 
+def execute_check(client, check):
+    # Enter system-view mode
+    run_command(client, 'system-view')
+    # Run the validation command
+    output = run_command(client, check['command'])
+    return validate_output(output, check['expected_output'])
+
 def main():
     client = ssh_connect(ROUTER_IP, USERNAME, PASSWORD)
     
     results = []
     for check in CHECKS:
-        command = check['command']
-        expected_output = check['expected_output']
-        output = run_command(client, command)
-        result = validate_output(output, expected_output)
+        result = execute_check(client, check)
         results.append({
             'Objective': check['objective'],
             'Result': result
