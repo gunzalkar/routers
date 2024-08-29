@@ -8,16 +8,8 @@ PORT = 22
 USERNAME = 'admin'
 PASSWORD = 'password'
 
-# Define control checks
+# Define control checks, excluding the first one
 checks = [
-    {
-        'sl_no': 1,
-        'category': 'Management Pane',
-        'control_objective': 'Digital Certificate Management',
-        'description': 'Digital certificates are used to secure communication...',
-        'remediation': 'Upload the obtained certificates and private key file...',
-        'validation': 'Certificate Authority (CA) Verification, Certificate Revocation Status, Certificate Expiry'
-    },
     {
         'sl_no': 2,
         'category': 'Management Pane',
@@ -42,12 +34,10 @@ def check_control(ssh_client, control):
     try:
         print(f"Checking control {control['sl_no']}...")
         # Choose command based on control
-        if control['sl_no'] == 1:
-            command = 'display pki certificate ocsp'  # Adjusted command for PKI OCSP certificates
-        elif control['sl_no'] == 2:
-            command = 'display console'
+        if control['sl_no'] == 2:
+            command = 'display console'  # Adjusted command for device login security
         elif control['sl_no'] == 3:
-            command = 'display aaa'
+            command = 'display aaa'  # Adjusted command for AAA user management security
         
         print(f"Executing command: {command}")
         # Execute command and capture output
@@ -61,7 +51,7 @@ def check_control(ssh_client, control):
         print(f"Command output: {output[:500]}...")  # Print the first 500 characters for brevity
 
         # Example validation logic
-        if 'Certificate' in output or 'AAA' in output:
+        if 'Authentication' in output or 'AAA' in output:
             compliance_status = 'Compliant'
         
     except Exception as e:
