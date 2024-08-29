@@ -857,6 +857,7 @@ def check_port_security(ssh_client):
 def perform_checks(cert_path, ca_path, output_file, ssh_client):
     cert, root_ca = load_certificate(cert_path), load_certificate(ca_path)
     results = [
+        ["system-view"],
         ["Digital Certificate Management", verify_certificate(cert, root_ca)],
         ["Digital Certificate Management", check_ocsp_status(cert, root_ca)],
         ["Digital Certificate Management", check_certificate_expiry(cert)]
