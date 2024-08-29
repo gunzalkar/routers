@@ -34,6 +34,55 @@ CHECKS = [
         'objective': 'Service Plane Access Prohibition of Insecure Management Protocols',
         'command': 'display cpu-defend policy 1',
         'expected_output': ['Telnet', 'SSH', 'HTTP', 'SNMP', 'FTP', 'ICMP']
+    },
+    {
+        'objective': 'Management Pane MPAC Configuration',
+        'commands': [
+            'system-view',
+            'service-security policy ipv4 test',
+            'rule 10 deny protocol ip source-ip 10.10.1.1 0',
+            'quit',
+            'service-security global-binding ipv4 test'
+        ],
+        'expected_output': ['service-security policy', 'deny protocol ip', 'global-binding ipv4 test']
+    },
+    {
+        'objective': 'Local Attack Defense',
+        'commands': [
+            'system-view',
+            'cpu-defend',
+            'attack-source-tracing',
+            'port-attack-defend'
+        ],
+        'expected_output': ['CPU attack defense', 'Attack source tracing', 'Port attack defense']
+    },
+    {
+        'objective': 'Attack Defense Through Service and Management Isolation',
+        'commands': [
+            'system-view',
+            'management-port isolate enable',
+            'management-plane isolate enable'
+        ],
+        'expected_output': ['management-port isolate enable', 'management-plane isolate enable']
+    },
+    {
+        'objective': 'Attack Defense',
+        'commands': [
+            'system-view',
+            'attack-defense'
+        ],
+        'expected_output': ['attack defense', 'malformed packet', 'flood attack', 'IGMP null packet attack']
+    },
+    {
+        'objective': 'Wireless User Access Security',
+        'commands': [
+            'system-view',
+            'wlan',
+            'security-profile name p1',
+            'security wpa-wpa2 psk pass-phrase YsHsjx_202206 aes-tkip',
+            'security wpa-wpa2 dot1x aes-tkip'
+        ],
+        'expected_output': ['WPA-WPA2-PSK', 'WPA-WPA2-802.1X', 'TKIP-AES']
     }
 ]
 
@@ -56,10 +105,14 @@ def validate_output(output, expected):
     return 'Pass'
 
 def execute_check(shell, check):
-    # Enter system-view mode
-    run_command(shell, 'system-view')
-    # Run the validation command
-    output = run_command(shell, check['command'])
+    if isinstance(check['commands'], list):
+        # Execute each command in the list
+        for command in check['commands']:
+            output = run_command(shell, command)
+    else:
+        # Single command case
+        output = run_command(shell, check['command'])
+    
     return validate_output(output, check['expected_output'])
 
 def main():
