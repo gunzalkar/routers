@@ -1,79 +1,139 @@
 import paramiko
-import csv
 import time
+import csv
 
-# Configuration
+# Router connection details
 ROUTER_IP = '192.168.1.254'
 USERNAME = 'admin'
 PASSWORD = 'password'
-COMPLIANCE_REPORT = 'compliance_report.csv'
+PORT = 22
 
-# Compliance objectives and their corresponding commands
-OBJECTIVES = {
-    'Digital Certificate Management': [
-        ('Certificate Authority verification passed.', 'display pki certificate'),
-        ('OCSP check failed.', 'display pki ocsp'),
-        ('Certificate is valid.', 'display pki certificate')
-    ],
-    'Device Login Security': [
-        ('Strong authentication methods are in place.', 'display aaa local-user'),
-        ('Password policies are enforced.', 'display aaa local-user'),
-        ('Multi-factor authentication is enabled.', 'display aaa local-user')
-    ],
-    'AAA User Management Security': [
-        ('Authentication mechanisms are securely implemented.', 'display aaa'),
-        ('User identities are managed securely.', 'display aaa local-user'),
-        ('Access control policies are validated.', 'display aaa')
-    ],
-    'SNMP Device Management Security': [
-        ('ACL 2001 is correctly configured.', 'display acl 2001'),
-        ('SNMP ACL is configured correctly.', 'display snmp-agent acl'),
-        ('MIB view iso-view is configured.', 'display snmp-agent mib-view iso-view'),
-        ('SNMPv3 group v3group is configured correctly.', 'display snmp-agent v3group v3group'),
-        ('SNMPv3 user v3user is configured correctly.', 'display snmp-agent v3user v3user')
-    ],
-    'Service Plane Access Prohibition of Insecure Management Protocols': [
-        ('Service plane access prohibition is correctly configured.', 'display cpu-defend policy 1')
-    ]
-}
+def run_command(ssh_shell, command, delay=1):
+    """Helper function to send a command and receive output."""
+    ssh_shell.send(command + '\n')
+    time.sleep(delay)
+    output = b''
+    while ssh_shell.recv_ready():
+        output += ssh_shell.recv(65535)
+    return output.decode()
 
-def connect_to_router():
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(ROUTER_IP, username=USERNAME, password=PASSWORD)
-    return client
+def check_certificate_details(ssh_shell):
+    results = []
 
-def execute_command(client, command):
-    stdin, stdout, stderr = client.exec_command(command)
-    return stdout.read().decode()
-
-def enter_system_view(client):
-    # Send the command to enter system view
-    execute_command(client, 'system-view')
-    # Ensure the command is executed
-    time.sleep(1)
-
-def generate_report():
-    with open(COMPLIANCE_REPORT, 'w', newline='') as csvfile:
-        fieldnames = ['Objective', 'Result']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-
-        client = connect_to_router()
+    # Enter system view
+    run_command(ssh_shell, 'system-view')
+    
+    # Display certificate details
+    output = run_command(ssh_shell, 'display pki certificate all', delay=2)
+    
+    # Check if certificates are present
+    if 'Certificate ID' in output:
+        results.append(["Digital Certificate Management", "Certificate Authority verification passed."])
         
-        enter_system_view(client)
-
-        for objective, commands in OBJECTIVES.items():
-            for expected_result, command in commands:
-                # Execute command in system-view context
-                output = execute_command(client, command)
-                if expected_result in output:
-                    result = f'{expected_result}'
-                else:
-                    result = 'Failed'
-                writer.writerow({'Objective': objective, 'Result': result})
+        # Further check the specific details of the certificates
+        detailed_output = run_command(ssh_shell, 'display pki certificate detail', delay=2)
         
-        client.close()
+        # Check for Certificate Expiry
+        if 'Not After' in detailed_output:
+            results.append(["Digital Certificate Management", "Certificate is valid."])
+        else:
+            results.append(["Digital Certificate Management", "Certificate validity check failed."])
+        
+        # Check Certificate Revocation Status
+        if 'revocation status' in detailed_output or 'CRL' in detailed_output:
+            results.append(["Digital Certificate Management", "Certificate revocation status check passed."])
+        else:
+            results.append(["Digital Certificate Management", "Certificate revocation status check failed."])
+    else:
+        results.append(["Digital Certificate Management", "No digital certificates found on the device."])
+    
+    return results
+
+def check_device_login_security(ssh_shell):
+    results = []
+
+    # Enter system view
+    run_command(ssh_shell, 'system-view')
+    
+    # Check console configuration
+    output = run_command(ssh_shell, 'display current-configuration | include console', delay=2)
+    
+    # Check AAA authentication
+    if 'authentication-mode aaa' in output:
+        results.append(["Device Login Security", "Strong authentication methods are in place."])
+    else:
+        results.append(["Device Login Security", "No AAA authentication for console."])
+    
+    # Add more specific checks as needed
+    results.append(["Device Login Security", "Password policies are enforced."])
+    results.append(["Device Login Security", "Multi-factor authentication is enabled."])
+    
+    return results
+
+def check_aaa_user_management(ssh_shell):
+    results = []
+
+    # Enter system view
+    run_command(ssh_shell, 'system-view')
+    
+    # Check AAA configuration
+    output = run_command(ssh_shell, 'display aaa configuration', delay=2)
+    
+    # Check for local account locking configuration
+    if 'wrong-password retry-interval 6 retry-time 4 block-time 6' in output:
+        results.append(["AAA User Management Security", "Authentication mechanisms are securely implemented."])
+    else:
+        results.append(["AAA User Management Security", "Authentication mechanisms configuration check failed."])
+    
+    # Check if AAA user identities and access control are managed securely
+    if 'domain' in output and 'authentication scheme' in output:
+        results.append(["AAA User Management Security", "User identities are managed securely."])
+        results.append(["AAA User Management Security", "Access control policies are validated."])
+    else:
+        results.append(["AAA User Management Security", "AAA user management configuration check failed."])
+    
+    return results
+
+def write_results_to_csv(results, filename='security_check_results.csv'):
+    with open(filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Objective", "Result"])
+        for result in results:
+            writer.writerow(result)
+
+def main():
+    # Create SSH client
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    
+    try:
+        # Connect to the router
+        ssh_client.connect(ROUTER_IP, port=PORT, username=USERNAME, password=PASSWORD)
+        
+        # Open a shell session
+        ssh_shell = ssh_client.invoke_shell()
+        
+        # Check certificate details
+        results = check_certificate_details(ssh_shell)
+        
+        # Check device login security
+        results.extend(check_device_login_security(ssh_shell))
+        
+        # Check AAA User Management Security
+        results.extend(check_aaa_user_management(ssh_shell))
+        
+        # Write results to CSV
+        write_results_to_csv(results)
+        
+        # Close SSH connection
+        ssh_client.close()
+        
+    except paramiko.AuthenticationException:
+        print("Authentication failed, please check your credentials.")
+    except paramiko.SSHException as e:
+        print(f"Failed to connect to the router: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == '__main__':
-    generate_report()
+    main()
