@@ -12,43 +12,36 @@ port = 22
 commands = {
     "Authentication Mechanisms": [
         "system-view",
-        "display aaa configuration",  # Check for AAA and authentication mechanisms
+        "display aaa",  # General AAA configuration command
         "display current-configuration | include password",  # Verify cryptographic algorithms for password
         "quit"
     ],
     "User Identity Management": [
         "system-view",
-        "display aaa local-user",  # List local users to verify lifecycle management
+        "display local-user",  # Updated command to list local users
         "display current-configuration | include local-user",  # Review user access privileges
         "quit"
     ],
     "Access Control Policies": [
         "system-view",
-        "display current-configuration | include acl",  # Validate ACL policies
+        "display acl",  # Check ACL policies
         "display current-configuration | include rbac",  # Check for RBAC implementation
         "quit"
     ]
 }
 
-def execute_commands(client, commands):
-    ssh = client.invoke_shell()
+def execute_command(client, command):
+    stdin, stdout, stderr = client.exec_command(command, timeout=60)
+    time.sleep(1)  # Short delay to ensure command starts executing
+
     output = ""
-    
-    for command in commands:
-        print(f"Executing: {command}")
-        ssh.send(command + '\n')
-        time.sleep(2)  # Delay to allow command to execute
+    while not stdout.channel.exit_status_ready():
+        if stdout.channel.recv_ready():
+            output += stdout.read(1024).decode('utf-8')
+        time.sleep(1)  # Wait for more output if available
 
-        # Read output in chunks
-        while not ssh.recv_ready():
-            time.sleep(1)  # Wait for output to be ready
-        
-        while ssh.recv_ready():
-            output += ssh.recv(1024).decode('utf-8')  # Read output in chunks
-        
-        # Ensure all output is captured
-        time.sleep(2)  # Wait to ensure the output is fully received
-
+    output += stdout.read().decode('utf-8')
+    output += stderr.read().decode('utf-8')
     return output
 
 def main():
@@ -60,7 +53,10 @@ def main():
     # Run commands and collect output
     results = []
     for objective, cmds in commands.items():
-        output = execute_commands(client, cmds)
+        output = ""
+        for cmd in cmds:
+            print(f"Executing: {cmd}")
+            output += execute_command(client, cmd)
         results.append({"Objective": objective, "Result": output})
 
     # Close SSH connection
