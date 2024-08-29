@@ -2,63 +2,70 @@ import paramiko
 import time
 import csv
 
-# SSH connection details
-router_ip = '192.168.1.254'  # Replace with your router's IP
-username = 'admin'  # Replace with your router's username
-password = 'password'  # Replace with your router's password
+# Define router details
+hostname = '192.168.1.254'  # Replace with the router's IP address
+username = 'admin'          # Replace with the router's username
+password = 'password'       # Replace with the router's password
+port = 22
 
-# Commands for console port security check and AAA authentication configuration
-commands = [
-    'system-view',
-    'user-interface console 0',
-    'display this',  # Check current configuration
-    'authentication-mode aaa',  # Ensure AAA authentication is set
-    'quit',
-    'aaa',
-    'display this',  # Check AAA configuration
-    'quit'
-]
+# SSH connection to the router
+def ssh_connect(hostname, username, password, port=22):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname, port, username, password)
+    return ssh
 
-# Function to execute commands on the router
-def execute_commands(commands):
-    output = []
-    try:
-        # Initialize SSH client
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(router_ip, username=username, password=password)
-
-        # Start an interactive shell session
-        remote_conn = ssh.invoke_shell()
-        time.sleep(1)
-        remote_conn.recv(1000)  # Clear the initial buffer
-
-        for command in commands:
-            remote_conn.send(command + '\n')
-            time.sleep(1)
-            output.append(remote_conn.recv(5000).decode('utf-8'))
-
-        ssh.close()
-    except Exception as e:
-        print(f"Error: {str(e)}")
-    
+# Send command and receive output
+def send_command(ssh, command):
+    shell = ssh.invoke_shell()
+    shell.send(command + '\n')
+    time.sleep(2)
+    output = shell.recv(65535).decode('utf-8')
     return output
 
-# Save results to a CSV file
-def save_to_csv(output):
-    with open('security_check_results.csv', mode='w') as file:
+# Configure AAA User Management Security
+def configure_aaa(ssh):
+    commands = [
+        'system-view',
+        'aaa',
+        'local-aaa-user wrong-password retry-interval 6 retry-time 4 block-time 6',
+        'return'
+    ]
+    output = []
+    for command in commands:
+        cmd_output = send_command(ssh, command)
+        output.append(cmd_output)
+    return output
+
+# Verify the configuration
+def verify_configuration(ssh):
+    command = 'display aaa configuration'
+    return send_command(ssh, command)
+
+# Save results to CSV
+def save_results_to_csv(objective, result, filename='validation_results.csv'):
+    with open(filename, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Objective', 'Result'])
+        writer.writerow([objective, result])
 
-        objectives = [
-            "Check console port authentication mode",
-            "Check AAA configuration"
-        ]
-        
-        for i, obj in enumerate(objectives):
-            writer.writerow([obj, output[i]])
+# Main function
+def main():
+    try:
+        ssh = ssh_connect(hostname, username, password, port)
+        # Configure AAA User Management
+        config_output = configure_aaa(ssh)
+        # Verify the configuration
+        verify_output = verify_configuration(ssh)
 
-if __name__ == "__main__":
-    output = execute_commands(commands)
-    save_to_csv(output)
-    print("Security check completed. Results saved to 'security_check_results.csv'.")
+        # Save the results to CSV
+        save_results_to_csv('AAA User Management Security Configuration', 'Success' if 'wrong-password' in verify_output else 'Failed')
+        save_results_to_csv('Configuration Verification', verify_output.strip())
+
+        print("Configuration and verification complete. Results saved to CSV.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        ssh.close()
+
+if __name__ == '__main__':
+    main()
