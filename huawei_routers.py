@@ -31,16 +31,15 @@ commands = {
 }
 
 def execute_commands(client, commands):
+    ssh = client.invoke_shell()
     output = ""
+
     for command in commands:
         print(f"Executing: {command}")  # Debugging line to see the command being executed
-        stdin, stdout, stderr = client.exec_command(command, timeout=30)  # Timeout of 30 seconds
-        while not stdout.channel.exit_status_ready():  # Check if the command is completed
-            if stdout.channel.recv_ready():
-                output += stdout.read(1024).decode('utf-8')  # Read output in chunks of 1024 bytes
-        output += stdout.read().decode('utf-8')  # Ensure all output is read
-        output += stderr.read().decode('utf-8')  # Add any errors to the output
-        time.sleep(1)  # Add delay to ensure the command is fully processed
+        ssh.send(command + '\n')
+        time.sleep(2)  # Adjust delay if necessary for the command to execute properly
+        while ssh.recv_ready():
+            output += ssh.recv(1024).decode('utf-8')  # Read output in chunks
     return output
 
 def main():
