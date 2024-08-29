@@ -53,6 +53,7 @@ def check_certificate_expiry(cert):
 
 def check_device_login_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include aaa",
         "display current-configuration | include authentication-mode",
         "display current-configuration | include password complexity",
@@ -70,6 +71,7 @@ def check_device_login_security(ssh_client):
     mfa_enabled = "Multi-factor authentication is enabled." if "mfa" in results[3][1] else "Multi-factor authentication is not enabled."
 
     return [
+        ["system-view"],
         ["Device Login Security", strong_authentication],
         ["Device Login Security", password_policies],
         ["Device Login Security", mfa_enabled]
@@ -77,6 +79,7 @@ def check_device_login_security(ssh_client):
 
 def check_aaa_user_management_security(ssh_client):
     commands = [
+        "system-view",
         "display aaa",
         "display user",
         "display acl all"
@@ -93,6 +96,7 @@ def check_aaa_user_management_security(ssh_client):
     access_control_policies = "Access control policies are validated." if "acl" in results[2][1] else "Access control policies are not validated."
 
     return [
+        ["system-view"],
         ["AAA User Management Security", auth_mechanisms],
         ["AAA User Management Security", user_identity_mgmt],
         ["AAA User Management Security", access_control_policies]
@@ -100,6 +104,7 @@ def check_aaa_user_management_security(ssh_client):
 
 def check_snmp_device_management_security(ssh_client):
     commands = [
+        "system-view",
         "display acl 2001",
         "display current-configuration | include snmp-agent",
         "display current-configuration | include mib-view",
@@ -120,6 +125,7 @@ def check_snmp_device_management_security(ssh_client):
     snmpv3_user = "SNMPv3 user v3user is configured correctly." if "snmp-agent usm-user v3user" in results[4][1] else "SNMPv3 user v3user is not configured correctly."
 
     return [
+        ["system-view"],
         ["SNMP Device Management Security", acl_config],
         ["SNMP Device Management Security", snmp_acl],
         ["SNMP Device Management Security", mib_view],
@@ -286,12 +292,14 @@ def check_traffic_suppression_storm_control(ssh_client):
     supported_protocols = "Traffic suppression mechanisms support relevant protocols." if "suppression" in results[1][1] else "Traffic suppression mechanisms do not support relevant protocols."
 
     return [
+        ["system-view"],
         ["Traffic Suppression and Storm Control - Threshold Configuration", threshold_configuration],
         ["Traffic Suppression and Storm Control - Supported Protocols", supported_protocols]
     ]
 
 def check_trusted_path_based_forwarding(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include routing",
         "display current-configuration | include control-plane",
         "display current-configuration | include physical-security"
@@ -308,6 +316,7 @@ def check_trusted_path_based_forwarding(ssh_client):
     infrastructure_integrity = "Infrastructure integrity is maintained." if "physical-security" in results[2][1] else "Infrastructure integrity is not maintained."
 
     return [
+        ["system-view"],
         ["Trusted Path-based Forwarding - Path Verification", path_verification],
         ["Trusted Path-based Forwarding - Control Plane Security", control_plane_security],
         ["Trusted Path-based Forwarding - Infrastructure Integrity", infrastructure_integrity]
@@ -315,6 +324,7 @@ def check_trusted_path_based_forwarding(ssh_client):
 
 def check_information_center_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include access-control",
         "display current-configuration | include data-encryption",
         "display current-configuration | include network-segmentation"
@@ -331,6 +341,7 @@ def check_information_center_security(ssh_client):
     network_segmentation = "Network segmentation is in place." if "network-segmentation" in results[2][1] else "Network segmentation is not in place."
 
     return [
+        ["system-view"],
         ["Information Center Security - Access Controls", access_controls],
         ["Information Center Security - Data Encryption", data_encryption],
         ["Information Center Security - Network Segmentation", network_segmentation]
@@ -338,6 +349,7 @@ def check_information_center_security(ssh_client):
 
 def check_hwtacacs_user_management_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include hwtacacs-server",
         "display current-configuration | include authentication-mode",
         "display current-configuration | include authorization-mode",
@@ -356,6 +368,7 @@ def check_hwtacacs_user_management_security(ssh_client):
     accounting_config = "Accounting is configured correctly." if "accounting-mode" in results[3][1] else "Accounting is not configured correctly."
 
     return [
+        ["system-view"],
         ["HWTACACS User Management Security - Configuration Review", config_review],
         ["HWTACACS User Management Security - Authentication Mechanisms", auth_mechanisms],
         ["HWTACACS User Management Security - Authorization Policies", authz_policies],
@@ -364,6 +377,7 @@ def check_hwtacacs_user_management_security(ssh_client):
 
 def check_arp_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include arp anti-attack",
         "display current-configuration | include arp static",
         "display current-configuration | include arp dynamic-timeout"
@@ -380,6 +394,7 @@ def check_arp_security(ssh_client):
     dynamic_arp_aging = "Dynamic ARP aging is configured." if "arp dynamic-timeout" in results[2][1] else "Dynamic ARP aging is not configured."
 
     return [
+        ["system-view"],
         ["ARP Security - ARP Spoofing Detection", arp_spoofing_detection],
         ["ARP Security - Static ARP Entries", static_arp_entries],
         ["ARP Security - Dynamic ARP Aging", dynamic_arp_aging]
@@ -387,6 +402,7 @@ def check_arp_security(ssh_client):
 
 def check_dhcp_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include dhcp authentication",
         "display current-configuration | include ip pool",
         "display current-configuration | include arp inspection"
@@ -403,6 +419,7 @@ def check_dhcp_security(ssh_client):
     arp_inspection = "Dynamic ARP Inspection (DAI) is enabled." if "arp inspection" in results[2][1] else "Dynamic ARP Inspection (DAI) is not enabled."
 
     return [
+        ["system-view"],
         ["DHCP Security - Authentication Mechanisms", dhcp_auth],
         ["DHCP Security - IP Address Management", ip_management],
         ["DHCP Security - Dynamic ARP Inspection (DAI)", arp_inspection]
@@ -410,6 +427,7 @@ def check_dhcp_security(ssh_client):
 
 def check_mpls_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include ldp authentication",
         "display current-configuration | include mpls-te",
         "display current-configuration | include mpls vpn"
@@ -426,6 +444,7 @@ def check_mpls_security(ssh_client):
     mpls_vpn = "MPLS VPN security is configured." if "mpls vpn" in results[2][1] else "MPLS VPN security is not configured."
 
     return [
+        ["system-view"],
         ["MPLS Security - LDP Authentication", ldp_auth],
         ["MPLS Security - MPLS-TE Security", mpls_te],
         ["MPLS Security - MPLS VPN Security", mpls_vpn]
@@ -433,6 +452,7 @@ def check_mpls_security(ssh_client):
 
 def check_multicast_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include igmp snooping",
         "display current-configuration | include igmp authentication",
         "display current-configuration | include multicast acl"
@@ -449,6 +469,7 @@ def check_multicast_security(ssh_client):
     multicast_acl = "Multicast ACLs are implemented." if "multicast acl" in results[2][1] else "Multicast ACLs are not implemented."
 
     return [
+        ["system-view"],
         ["Multicast Security - IGMP Snooping", igmp_snooping],
         ["Multicast Security - IGMP Authentication", igmp_auth],
         ["Multicast Security - Multicast ACLs", multicast_acl]
@@ -456,6 +477,7 @@ def check_multicast_security(ssh_client):
 
 def check_svf_system_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include ntp authentication",
         "display current-configuration | include acl",
         "display current-configuration | include ntp peer"
@@ -473,6 +495,7 @@ def check_svf_system_security(ssh_client):
     ntp_peer_auth = "NTP peer authentication is enabled." if "ntp peer" in results[2][1] else "NTP peer authentication is not enabled."
 
     return [
+        ["system-view"],
         ["SVF System Security - NTP Authentication Mechanisms", ntp_auth],
         ["SVF System Security - NTP ACLs", ntp_acl],
         ["SVF System Security - NTP Peer Authentication", ntp_peer_auth]
@@ -480,6 +503,7 @@ def check_svf_system_security(ssh_client):
 
 def check_ntp_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include ntp authentication",
         "display current-configuration | include acl",
         "display current-configuration | include ntp peer"
@@ -496,6 +520,7 @@ def check_ntp_security(ssh_client):
     ntp_peer_auth = "NTP peer authentication is enabled." if "ntp peer" in results[2][1] else "NTP peer authentication is not enabled."
 
     return [
+        ["system-view"],
         ["NTP Security - NTP Authentication Mechanisms", ntp_auth],
         ["NTP Security - NTP ACLs", ntp_acl],
         ["NTP Security - NTP Peer Authentication", ntp_peer_auth]
@@ -503,6 +528,7 @@ def check_ntp_security(ssh_client):
 
 def check_mstp_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include stp root",
         "display current-configuration | include bpdu filter",
         "display current-configuration | include bpdu guard",
@@ -521,6 +547,7 @@ def check_mstp_security(ssh_client):
     bpdu_rate_limiting = "BPDU rate limiting is configured correctly." if "bpdu rate-limit" in results[3][1] else "BPDU rate limiting is not configured correctly."
 
     return [
+        ["system-view"],
         ["MSTP Security - Root Bridge Protection", root_protection],
         ["MSTP Security - BPDU Filtering", bpdu_filtering],
         ["MSTP Security - BPDU Guard", bpdu_guard],
@@ -529,6 +556,7 @@ def check_mstp_security(ssh_client):
 
 def check_vrrp_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include vrrp authentication-mode",
         "display current-configuration | include vrrp preempt-mode",
         "display current-configuration | include ipsec policy"
@@ -545,6 +573,7 @@ def check_vrrp_security(ssh_client):
     preemption_control = "VRRP preemption control is configured correctly." if "vrrp preempt-mode" in results[1][1] else "VRRP preemption control is not configured correctly."
 
     return [
+        ["system-view"],
         ["VRRP Security - Authentication Mechanisms", vrrp_auth],
         ["VRRP Security - Secure Communication Channels", secure_comm],
         ["VRRP Security - Preemption Control", preemption_control]
@@ -553,6 +582,7 @@ def check_vrrp_security(ssh_client):
 
 def check_etrunk_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include etrunk authentication",
         "display current-configuration | include acl",
         "display current-configuration | include audit log"
@@ -569,6 +599,7 @@ def check_etrunk_security(ssh_client):
     audit_logging = "E-Trunk audit logging is enabled." if "audit log" in results[2][1] else "E-Trunk audit logging is not enabled."
 
     return [
+        ["system-view"],
         ["E-Trunk Security - Authentication Mechanisms", auth_mechanisms],
         ["E-Trunk Security - Access Control", access_control],
         ["E-Trunk Security - Audit Logging", audit_logging]
@@ -576,6 +607,7 @@ def check_etrunk_security(ssh_client):
 
 def check_easydeploy_system_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include icmpv6 filter",
         "display current-configuration | include ndp",
         "display current-configuration | include ra guard"
@@ -592,6 +624,7 @@ def check_easydeploy_system_security(ssh_client):
     ra_guard = "RA Guard is enabled." if "ra guard" in results[2][1] else "RA Guard is not enabled."
 
     return [
+        ["system-view"],
         ["EasyDeploy System Security - ICMPv6 Filtering", icmpv6_filtering],
         ["EasyDeploy System Security - NDP Security", ndp_security],
         ["EasyDeploy System Security - RA Guard", ra_guard]
@@ -617,6 +650,7 @@ def check_icmpv6_attack_defense(ssh_client):
     icmpv6_flood_protection = "ICMPv6 flood protection is enabled." if "icmpv6 flood" in results[3][1] else "ICMPv6 flood protection is not enabled."
 
     return [
+        ["system-view"],
         ["Defense Against ICMPv6 Attacks - ICMPv6 Message Filtering", icmpv6_filtering],
         ["Defense Against ICMPv6 Attacks - NDP Protection", ndp_protection],
         ["Defense Against ICMPv6 Attacks - ICMPv6 Rate Limiting", icmpv6_rate_limiting],
@@ -626,6 +660,7 @@ def check_icmpv6_attack_defense(ssh_client):
 
 def check_defense_against_ip_packet_route_options(ssh_client):
     commands = [
+        "system-view",
         "display firewall rule all",
         "display current-configuration | include route-options",
         "display current-configuration | include ingress-filtering"
@@ -642,6 +677,7 @@ def check_defense_against_ip_packet_route_options(ssh_client):
     ingress_filtering = "Ingress filtering policies to prevent spoofed IP packets are implemented." if "ingress-filtering" in results[2][1] else "Ingress filtering policies to prevent spoofed IP packets are not implemented."
 
     return [
+        ["system-view"],
         ["Defense Against IP Packets with Route Options - Packet Filtering and Inspection", packet_filtering],
         ["Defense Against IP Packets with Route Options - Firewall Rules", firewall_rules],
         ["Defense Against IP Packets with Route Options - Ingress Filtering", ingress_filtering]
@@ -649,6 +685,7 @@ def check_defense_against_ip_packet_route_options(ssh_client):
 
 def check_defense_against_ip_spoofing(ssh_client):
     commands = [
+        ["system-view"],
         "display current-configuration | include ingress-filtering",
         "display current-configuration | include egress-filtering",
         "display current-configuration | include rpf"
@@ -665,6 +702,7 @@ def check_defense_against_ip_spoofing(ssh_client):
     rpf_checks = "RPF checks are enabled to verify the legitimacy of source IP addresses." if "rpf" in results[2][1] else "RPF checks are not enabled to verify the legitimacy of source IP addresses."
 
     return [
+        ["system-view"],
         ["Defense Against IP Address Spoofing - Ingress Filtering", ingress_filtering],
         ["Defense Against IP Address Spoofing - Egress Filtering", egress_filtering],
         ["Defense Against IP Address Spoofing - Reverse Path Forwarding (RPF)", rpf_checks]
@@ -672,6 +710,7 @@ def check_defense_against_ip_spoofing(ssh_client):
 
 def check_data_transmission_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include tls",
         "display current-configuration | include ipsec",
         "display current-configuration | include certificate",
@@ -689,6 +728,7 @@ def check_data_transmission_security(ssh_client):
     key_management = "Secure key management practices are implemented." if "key-management" in results[3][1] else "Secure key management practices are not implemented."
 
     return [
+        ["system-view"],
         ["Data Transmission Security - Encryption Protocols", encryption_protocols],
         ["Data Transmission Security - Certificate Management", certificate_management],
         ["Data Transmission Security - Key Management", key_management]
@@ -696,6 +736,7 @@ def check_data_transmission_security(ssh_client):
 
 def check_ipv6_nd_security(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include ra guard",
         "display current-configuration | include ns rate-limit",
         "display current-configuration | include send"
@@ -712,6 +753,7 @@ def check_ipv6_nd_security(ssh_client):
     send_deployment = "SEND is implemented to secure ND messages." if "send" in results[2][1] else "SEND is not implemented to secure ND messages."
 
     return [
+        ["system-view"],
         ["IPv6 ND Security - RA Guard", ra_guard],
         ["IPv6 ND Security - NS Rate Limiting", ns_rate_limiting],
         ["IPv6 ND Security - Secure Neighbor Discovery (SEND)", send_deployment]
@@ -719,6 +761,7 @@ def check_ipv6_nd_security(ssh_client):
 
 def check_acl_security(ssh_client):
     commands = [
+        "system-view",
         "display acl all",
         "display current-configuration | include acl rule"
     ]
@@ -734,6 +777,7 @@ def check_acl_security(ssh_client):
     acl_testing = "ACL functionality is validated through testing." if "acl" in results[0][1] else "ACL functionality is not validated through testing."
 
     return [
+        ["system-view"],
         ["ACL Security - Rule Analysis", rule_analysis],
         ["ACL Security - Specificity and Order", specificity_and_order],
         ["ACL Security - Testing and Verification", acl_testing]
@@ -741,6 +785,7 @@ def check_acl_security(ssh_client):
 
 def check_port_protection(ssh_client):
     commands = [
+        "system-view",
         "display current-configuration | include physical security",
         "display current-configuration | include port security",
         "display current-configuration | include dynamic arp inspection"
@@ -757,6 +802,7 @@ def check_port_protection(ssh_client):
     dynamic_arp_inspection = "DAI is enabled to prevent ARP spoofing." if "dynamic arp inspection" in results[2][1] else "DAI is not enabled to prevent ARP spoofing."
 
     return [
+        ["system-view"]
         ["Port Protection - Physical Security", physical_security],
         ["Port Protection - Port Security Configuration", port_security_config],
         ["Port Protection - Dynamic ARP Inspection (DAI)", dynamic_arp_inspection]
