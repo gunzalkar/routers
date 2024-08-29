@@ -15,12 +15,21 @@ def check_console_security():
         # Connect to the router
         ssh_client.connect(ROUTER_IP, port=PORT, username=USERNAME, password=PASSWORD)
         
-        # Execute the command to show console settings
-        stdin, stdout, stderr = ssh_client.exec_command('display current-configuration | include console')
-        console_config = stdout.read().decode()
+        # Open a shell session
+        ssh_shell = ssh_client.invoke_shell()
+        
+        # Send commands to enter system view and check console settings
+        ssh_shell.send('system-view\n')
+        ssh_shell.send('display current-configuration | include console\n')
+        
+        # Allow some time for the command to execute
+        time.sleep(2)
+        
+        # Receive the output
+        output = ssh_shell.recv(65535).decode()
         
         # Check if AAA authentication is enabled for console
-        if 'authentication-mode aaa' in console_config:
+        if 'authentication-mode aaa' in output:
             print("Console port is configured with AAA authentication.")
         else:
             print("Console port is not configured with AAA authentication.")
