@@ -12,7 +12,7 @@ port = 22
 commands = {
     "Authentication Mechanisms": [
         "system-view",
-        "display aaa",  # General AAA configuration command
+        "display aaa configuration",  # General AAA configuration command
         "display current-configuration | include password",  # Verify cryptographic algorithms for password
         "quit"
     ],
