@@ -5,8 +5,8 @@ import time
 # Define SSH connection parameters
 HOST = '192.168.1.254'
 PORT = 22
-USERNAME = 'super'
-PASSWORD = 'kali'
+USERNAME = 'admin'
+PASSWORD = 'password'
 
 # Define control checks
 checks = [
