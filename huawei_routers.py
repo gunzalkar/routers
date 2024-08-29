@@ -10,6 +10,7 @@ port = 22
 # Command definitions
 commands = {
     "Authentication Mechanisms": [
+         "system-view",
         "display aaa configuration",  # Check for AAA and authentication mechanisms
         "display current-configuration | include password"  # Verify cryptographic algorithms for password
     ],
