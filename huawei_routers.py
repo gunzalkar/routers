@@ -1,11 +1,11 @@
-import paramiko
-import requests
-from cryptography import x509
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import serialization
-from cryptography.x509.oid import ExtensionOID
+import paramiko # type: ignore
+import requests # type: ignore
+from cryptography import x509 # type: ignore
+from cryptography.hazmat.backends import default_backend # type: ignore
+from cryptography.hazmat.primitives import serialization # type: ignore
+from cryptography.x509.oid import ExtensionOID # type: ignore
 from datetime import datetime
-from openpyxl import Workbook
+from openpyxl import Workbook # type: ignore
 import sys
 
 def ssh_connect(host, user, pwd):
@@ -884,24 +884,24 @@ if __name__ == "__main__":
     username = sys.argv[2]
     password = sys.argv[3]
 
-    cert_file_path = "/flash/certificate.pem"
-    ca_file_path = "/flash/rootCA.pem"
+    #cert_file_path = "/flash/certificate.pem"
+    #ca_file_path = "/flash/rootCA.pem"
     output_excel_file = "certificate_check_results.xlsx"
 
     try:
         ssh_client = ssh_connect(router_ip, username, password)
-        download_file_via_ssh(ssh_client, cert_file_path, "certificate.pem")
-        download_file_via_ssh(ssh_client, ca_file_path, "rootCA.pem")
-        ssh_client.close()
+        #download_file_via_ssh(ssh_client, cert_file_path, "certificate.pem")
+        #download_file_via_ssh(ssh_client, ca_file_path, "rootCA.pem")
+        #ssh_client.close()
 
-        cert = load_certificate("certificate.pem")
-        root_ca = load_certificate("rootCA.pem")
+        #cert = load_certificate("certificate.pem")
+        #root_ca = load_certificate("rootCA.pem")
 
-        ca_verification_result = verify_certificate(cert, root_ca)
-        print(ca_verification_result)
+        #ca_verification_result = verify_certificate(cert, root_ca)
+        #print(ca_verification_result)
 
-        ocsp_status = check_ocsp_status(cert, root_ca)
-        print(ocsp_status)
+        #ocsp_status = check_ocsp_status(cert, root_ca)
+        #print(ocsp_status)
 
     except Exception as e:
         print(f"An error occurred: {e}")
