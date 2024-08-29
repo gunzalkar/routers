@@ -43,7 +43,7 @@ def check_control(ssh_client, control):
         print(f"Checking control {control['sl_no']}...")
         # Choose command based on control
         if control['sl_no'] == 1:
-            command = 'display pki certificate'
+            command = 'display pki certificate ocsp'  # Adjusted command for PKI OCSP certificates
         elif control['sl_no'] == 2:
             command = 'display console'
         elif control['sl_no'] == 3:
