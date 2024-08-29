@@ -105,7 +105,7 @@ def validate_output(output, expected):
     return 'Pass'
 
 def execute_check(shell, check):
-    if isinstance(check['commands'], list):
+    if 'commands' in check:
         # Execute each command in the list
         for command in check['commands']:
             output = run_command(shell, command)
