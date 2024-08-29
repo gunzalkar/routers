@@ -1,8 +1,7 @@
 import paramiko # type:ignore
-import requests # type:ignore
-from cryptography import x509 # type:ignore
+import requests #type:ignore
+from cryptography import x509 #type:ignore
 from cryptography.hazmat.backends import default_backend # type:ignore
-from cryptography.x509.oid import  # type:ignore
 from cryptography.hazmat.primitives import serialization # type:ignore
 from cryptography.x509.oid import ExtensionOID # type:ignore
 from datetime import datetime
