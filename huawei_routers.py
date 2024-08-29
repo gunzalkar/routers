@@ -12,36 +12,41 @@ port = 22
 commands = {
     "Authentication Mechanisms": [
         "system-view",
-        "display aaa configuration",  # General AAA configuration command
-        "display current-configuration | include password",  # Verify cryptographic algorithms for password
+        "display aaa configuration",
+        "display current-configuration | include password",
         "quit"
     ],
     "User Identity Management": [
         "system-view",
-        "display local-user",  # Updated command to list local users
-        "display current-configuration | include local-user",  # Review user access privileges
+        "display local-user",
+        "display current-configuration | include local-user",
         "quit"
     ],
     "Access Control Policies": [
         "system-view",
-        "display acl",  # Check ACL policies
-        "display current-configuration | include rbac",  # Check for RBAC implementation
+        "display acl",
+        "display current-configuration | include rbac",
         "quit"
     ]
 }
 
-def execute_command(client, command):
-    stdin, stdout, stderr = client.exec_command(command, timeout=60)
-    time.sleep(1)  # Short delay to ensure command starts executing
-
+def execute_commands(client, commands):
+    ssh = client.invoke_shell()
     output = ""
-    while not stdout.channel.exit_status_ready():
-        if stdout.channel.recv_ready():
-            output += stdout.read(1024).decode('utf-8')
-        time.sleep(1)  # Wait for more output if available
+    
+    for command in commands:
+        print(f"Executing: {command}")
+        ssh.send(command + '\n')
+        time.sleep(2)  # Allow time for the command to be processed
+        
+        while True:
+            if ssh.recv_ready():
+                output_chunk = ssh.recv(1024).decode('utf-8')
+                output += output_chunk
+                if ">" in output_chunk or "%" in output_chunk:
+                    break
+            time.sleep(1)  # Wait for more output if available
 
-    output += stdout.read().decode('utf-8')
-    output += stderr.read().decode('utf-8')
     return output
 
 def main():
@@ -54,9 +59,7 @@ def main():
     results = []
     for objective, cmds in commands.items():
         output = ""
-        for cmd in cmds:
-            print(f"Executing: {cmd}")
-            output += execute_command(client, cmd)
+        output += execute_commands(client, cmds)
         results.append({"Objective": objective, "Result": output})
 
     # Close SSH connection
@@ -64,11 +67,4 @@ def main():
 
     # Write results to CSV
     with open('router_compliance_report.csv', 'w', newline='') as csvfile:
-        fieldnames = ['Objective', 'Result']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for result in results:
-            writer.writerow(result)
-
-if __name__ == "__main__":
-    main()
+        fieldnam
