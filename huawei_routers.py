@@ -2,10 +2,10 @@ import paramiko
 import pandas as pd
 
 # Define SSH connection parameters
-HOST = 'your_router_ip'
+HOST = '192.168.1.254'
 PORT = 22
-USERNAME = 'your_username'
-PASSWORD = 'your_password'
+USERNAME = 'admin'
+PASSWORD = 'password'
 
 # Define control checks
 checks = [
