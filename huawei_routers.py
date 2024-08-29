@@ -28,7 +28,7 @@ def check_digital_certificate_management(client):
         print("Failed to retrieve certificate information.")
 
 def main():
-    host = "192.168.1.1"
+    host = "192.168.1.254"
     username = "admin"
     password = "password"
 
