@@ -10,36 +10,14 @@ PASSWORD = 'password'
 
 # Define control checks
 checks = [
-    {
-        'sl_no': 1,
-        'category': 'Management Pane',
-        'control_objective': 'Digital Certificate Management',
-        'description': 'Digital certificates are used to secure communication...',
-        'remediation': 'Upload the obtained certificates and private key file...',
-        'validation': 'Certificate Authority (CA) Verification, Certificate Revocation Status, Certificate Expiry'
-    },
-    {
-        'sl_no': 2,
-        'category': 'Management Pane',
-        'control_objective': 'Device Login Security',
-        'description': 'Console ports are physical interfaces...',
-        'remediation': 'Connect the DB9 female connector of the console cable...',
-        'validation': 'Strong Authentication Methods, Password Policies, Multi-factor Authentication (MFA)'
-    },
-    {
-        'sl_no': 3,
-        'category': 'Management Pane',
-        'control_objective': 'AAA User Management Security',
-        'description': 'An attacker attempts to obtain system administrators\' login access rights...',
-        'remediation': 'Enable local account locking...',
-        'validation': 'Authentication Mechanisms, User Identity Management, Access Control Policies'
-    }
+    # Control details here
 ]
 
 def check_control(ssh_client, control):
     start_time = time.time()
     compliance_status = 'Non-Compliant'
     try:
+        print(f"Checking control {control['sl_no']}...")
         # Choose command based on control
         if control['sl_no'] == 1:
             command = 'display pki certificate'
@@ -48,13 +26,20 @@ def check_control(ssh_client, control):
         elif control['sl_no'] == 3:
             command = 'display aaa'
         
+        print(f"Executing command: {command}")
         # Execute command and capture output
         stdin, stdout, stderr = ssh_client.exec_command(command)
         output = stdout.read().decode()
+        error_output = stderr.read().decode()
 
+        if error_output:
+            print(f"Error output: {error_output}")
+        
         # Example validation logic
         if 'Certificate' in output or 'AAA' in output:
             compliance_status = 'Compliant'
+        
+        print(f"Command output: {output[:500]}...")  # Print the first 500 characters for brevity
     except Exception as e:
         print(f"Error checking control {control['sl_no']}: {e}")
     end_time = time.time()
@@ -70,7 +55,9 @@ def generate_report():
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     try:
+        print(f"Connecting to {HOST}...")
         ssh_client.connect(HOST, PORT, USERNAME, PASSWORD)
+        print("Connection established.")
     except Exception as e:
         print(f"Failed to connect to {HOST}: {e}")
         return
@@ -89,6 +76,7 @@ def generate_report():
         })
 
     ssh_client.close()
+    print("SSH connection closed.")
 
     # Save to CSV
     df = pd.DataFrame(report)
