@@ -10,6 +10,7 @@ PORT = 22
 
 # Validation checks
 CHECKS = [
+    # Existing checks...
     {
         'objective': 'Digital Certificate Management',
         'command': 'display pki certificates',
@@ -195,59 +196,90 @@ CHECKS = [
             'igmp-snooping group-policy 2000'
         ],
         'expected_output': ['acl number 2000', 'rule permit source 225.0.0.0 0.0.0.255', 'igmp-snooping group-policy 2000']
+    },
+    {
+        'objective': 'SVF System Security',
+        'commands': [
+            'system-view',
+            'dhcp enable',
+            'dhcp snooping enable',
+            'interface gigabitethernet 1/0/1',
+            'dhcp snooping enable',
+            'quit',
+            'interface gigabitethernet 1/0/1',
+            'dhcp snooping trusted'
+        ],
+        'expected_output': ['dhcp snooping enable', 'dhcp snooping trusted']
+    },
+    {
+        'objective': 'NTP Security',
+        'commands': [
+            'system-view',
+            'ntp-service authentication enable',
+            'ntp-service authentication-keyid 10 authentication-mode hmac-sha256 cipher xyz123',
+            'ntp-service reliable authentication-keyid 10'
+        ],
+        'expected_output': ['ntp-service authentication enable', 'ntp-service authentication-keyid 10 authentication-mode hmac-sha256 cipher xyz123']
+    },
+    {
+        'objective': 'MSTP Security',
+        'commands': [
+            'system-view',
+            'interface gigabitethernet 1/0/1',
+            'stp root-protection'
+        ],
+        'expected_output': ['stp root-protection']
+    },
+    {
+        'objective': 'VRRP Security',
+        'commands': [
+            'system-view',
+            'interface vlanif 100',
+            'vrrp vrid 1 virtual-ip 10.1.1.1',
+            'vrrp vrid 1 authentication-mode md5 Example-1'
+        ],
+        'expected_output': ['vrrp vrid 1 authentication-mode md5 Example-1']
+    },
+    {
+        'objective': 'E-Trunk Security',
+        'commands': [
+            'system-view',
+            'e-trunk 1',
+            'security-key cipher 00E0FC000000'
+        ],
+        'expected_output': ['security-key cipher 00E0FC000000']
     }
 ]
 
-def ssh_connect(ip, username, password):
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(ip, port=PORT, username=username, password=password)
-    return client
-
-def run_command(shell, command):
-    shell.send(command + '\n')
-    time.sleep(2)  # Wait for the command to execute
-    output = shell.recv(65535).decode('utf-8')
-    return output
-
-def validate_output(output, expected):
-    for keyword in expected:
+def run_check(ssh_client, check):
+    output = []
+    stdin, stdout, stderr = ssh_client.exec_command(check['command'])
+    time.sleep(1)  # Allow some time for command execution
+    output = stdout.read().decode()
+    for keyword in check['expected_output']:
         if keyword not in output:
             return 'Fail'
     return 'Pass'
 
-def execute_check(shell, check):
-    if 'commands' in check:
-        # Execute each command in the list
-        output = ''
-        for command in check['commands']:
-            output += run_command(shell, command)
-    else:
-        # Single command case
-        output = run_command(shell, check['command'])
-    
-    return validate_output(output, check['expected_output'])
-
 def main():
-    client = ssh_connect(ROUTER_IP, USERNAME, PASSWORD)
-    shell = client.invoke_shell()
-    
-    # Optional: send a dummy command to ensure the shell is ready
-    shell.send('\n')
-    time.sleep(2)
-    
     results = []
-    for check in CHECKS:
-        result = execute_check(shell, check)
-        results.append({
-            'Objective': check['objective'],
-            'Result': result
-        })
-    
-    client.close()
 
-    # Write results to CSV
-    with open('validation_results.csv', 'w', newline='') as csvfile:
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(ROUTER_IP, port=PORT, username=USERNAME, password=PASSWORD)
+
+    for check in CHECKS:
+        if isinstance(check['command'], list):
+            for cmd in check['command']:
+                result = run_check(ssh, {'command': cmd, 'expected_output': check['expected_output']})
+                results.append({'Objective': check['objective'], 'Result': result})
+        else:
+            result = run_check(ssh, check)
+            results.append({'Objective': check['objective'], 'Result': result})
+
+    ssh.close()
+
+    with open('compliance_report.csv', 'w', newline='') as csvfile:
         fieldnames = ['Objective', 'Result']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         
