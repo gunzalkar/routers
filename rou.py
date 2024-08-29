@@ -2,7 +2,7 @@ import subprocess
 
 def run_command(command):
     """Helper function to run a command in the terminal."""
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if result.returncode != 0:
         print(f"Error: {result.stderr}")
     else:
