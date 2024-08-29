@@ -6,7 +6,7 @@ import time
 HOST = '192.168.1.254'
 PORT = 22
 USERNAME = 'admin'
-PASSWORD = 'admin'
+PASSWORD = 'password'
 
 # Define control checks
 checks = [
@@ -42,22 +42,21 @@ def check_control(ssh_client, control):
     try:
         # Choose command based on control
         if control['sl_no'] == 1:
-            command = 'display pki certificate'  # Example command; adjust as needed
+            command = 'display pki certificate'
         elif control['sl_no'] == 2:
-            command = 'display console'  # Example command; adjust as needed
+            command = 'display console'
         elif control['sl_no'] == 3:
-            command = 'display aaa'  # Example command; adjust as needed
+            command = 'display aaa'
         
         # Execute command and capture output
         stdin, stdout, stderr = ssh_client.exec_command(command)
         output = stdout.read().decode()
-        
-        # Example validation logic; adjust based on actual needs
+
+        # Example validation logic
         if 'Certificate' in output or 'AAA' in output:
             compliance_status = 'Compliant'
     except Exception as e:
         print(f"Error checking control {control['sl_no']}: {e}")
-    
     end_time = time.time()
     print(f"Control {control['sl_no']} check time: {end_time - start_time:.2f} seconds")
     return compliance_status
@@ -69,7 +68,12 @@ def generate_report():
     # SSH Connection
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh_client.connect(HOST, PORT, USERNAME, PASSWORD)
+
+    try:
+        ssh_client.connect(HOST, PORT, USERNAME, PASSWORD)
+    except Exception as e:
+        print(f"Failed to connect to {HOST}: {e}")
+        return
 
     # Check each control
     for control in checks:
