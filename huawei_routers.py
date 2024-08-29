@@ -130,6 +130,71 @@ CHECKS = [
             'hwtacacs-server shared-key cipher YsHsjx_202206'
         ],
         'expected_output': ['hwtacacs-server shared-key cipher YsHsjx_202206']
+    },
+    {
+        'objective': 'ARP Security',
+        'commands': [
+            'system-view',
+            'arp anti-attack entry-check fixed-mac enable',
+            'interface gigabitethernet 1/0/1',
+            'arp anti-attack check user-bind enable',
+            'arp anti-attack gateway-collision enable'
+        ],
+        'expected_output': ['arp anti-attack entry-check fixed-mac enable', 'arp anti-attack check user-bind enable', 'arp anti-attack gateway-collision enable']
+    },
+    {
+        'objective': 'DHCP Security',
+        'commands': [
+            'system-view',
+            'acl name dhcp-valid',
+            'rule permit udp source-port eq bootps',
+            'quit',
+            'acl name dhcp-invalid',
+            'rule deny udp source-port eq bootps',
+            'quit'
+        ],
+        'expected_output': ['acl name dhcp-valid', 'rule permit udp source-port eq bootps', 'acl name dhcp-invalid', 'rule deny udp source-port eq bootps']
+    },
+    {
+        'objective': 'Routing Protocol Security',
+        'commands': [
+            'system-view',
+            'cpu-defend policy 1',
+            'car packet-type bgp cir 64',
+            'cpu-defend-policy 1 global',
+            'cpu-defend-policy 1',
+            'bgp max-as-path 200'
+        ],
+        'expected_output': ['cpu-defend policy 1', 'car packet-type bgp cir 64', 'bgp max-as-path 200']
+    },
+    {
+        'objective': 'MPLS Security',
+        'commands': [
+            'system-view',
+            'keychain kc1 mode absolute',
+            'key-id 1',
+            'algorithm sha-256',
+            'key-string YsHsjx_202206',
+            'quit',
+            'mpls lsr-id 2.2.2.2',
+            'mpls ldp',
+            'authentication key-chain kc1'
+        ],
+        'expected_output': ['keychain kc1 mode absolute', 'algorithm sha-256', 'mpls lsr-id 2.2.2.2', 'authentication key-chain kc1']
+    },
+    {
+        'objective': 'Multicast Security',
+        'commands': [
+            'system-view',
+            'acl number 2000',
+            'rule permit source 225.0.0.0 0.0.0.255',
+            'quit',
+            'igmp-snooping enable',
+            'vlan 2',
+            'igmp-snooping enable',
+            'igmp-snooping group-policy 2000'
+        ],
+        'expected_output': ['acl number 2000', 'rule permit source 225.0.0.0 0.0.0.255', 'igmp-snooping group-policy 2000']
     }
 ]
 
@@ -185,6 +250,7 @@ def main():
     with open('validation_results.csv', 'w', newline='') as csvfile:
         fieldnames = ['Objective', 'Result']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
         writer.writeheader()
         for result in results:
             writer.writerow(result)
