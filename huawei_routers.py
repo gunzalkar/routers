@@ -1,5 +1,6 @@
 import paramiko
 import csv
+import time
 
 # SSH connection details
 host = '192.168.1.254'
@@ -10,27 +11,44 @@ port = 22
 # Command definitions
 commands = {
     "Authentication Mechanisms": [
-         "system-view",
+        "system-view",
         "display aaa configuration",  # Check for AAA and authentication mechanisms
-        "display current-configuration | include password"  # Verify cryptographic algorithms for password
+        "display current-configuration | include password",  # Verify cryptographic algorithms for password
+        "quit"
     ],
     "User Identity Management": [
+        "system-view",
         "display aaa local-user",  # List local users to verify lifecycle management
-        "display current-configuration | include local-user"  # Review user access privileges
+        "display current-configuration | include local-user",  # Review user access privileges
+        "quit"
     ],
     "Access Control Policies": [
+        "system-view",
         "display current-configuration | include acl",  # Validate ACL policies
-        "display current-configuration | include rbac"  # Check for RBAC implementation
+        "display current-configuration | include rbac",  # Check for RBAC implementation
+        "quit"
     ]
 }
 
 def execute_commands(client, commands):
+    ssh = client.invoke_shell()
     output = ""
+    
     for command in commands:
         print(f"Executing: {command}")
-        stdin, stdout, stderr = client.exec_command(command, timeout=30)
-        output += stdout.read().decode('utf-8')
-        output += stderr.read().decode('utf-8')
+        ssh.send(command + '\n')
+        time.sleep(2)  # Delay to allow command to execute
+
+        # Read output in chunks
+        while not ssh.recv_ready():
+            time.sleep(1)  # Wait for output to be ready
+        
+        while ssh.recv_ready():
+            output += ssh.recv(1024).decode('utf-8')  # Read output in chunks
+        
+        # Ensure all output is captured
+        time.sleep(2)  # Wait to ensure the output is fully received
+
     return output
 
 def main():
