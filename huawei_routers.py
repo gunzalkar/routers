@@ -8,34 +8,50 @@ from datetime import datetime
 from openpyxl import Workbook
 import sys
 
-# Router credentials and file paths
-router_ip = sys.argv[1] #"192.168.1.1"
-username = sys.argv[2] #"admin"
-password = sys.argv[3] #"admin_password"
-cert_file_path = "/flash/certificate.pem"
-ca_file_path = "/flash/rootCA.pem"
-output_excel_file = "certificate_check_results.xlsx"
-
 def ssh_connect(host, user, pwd):
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(hostname=host, username=user, password=pwd)
-    return client
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        print(f"Connecting to {host} as {user}...")
+        client.connect(hostname=host, username=user, password=pwd)
+        print("SSH connection established.")
+        return client
+    except paramiko.AuthenticationException:
+        print("Authentication failed, please verify your credentials.")
+        raise
+    except paramiko.SSHException as e:
+        print(f"Unable to establish SSH connection: {e}")
+        raise
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        raise
 
 def download_file_via_ssh(ssh_client, remote_path, local_path):
-    sftp = ssh_client.open_sftp()
-    sftp.get(remote_path, local_path)
-    sftp.close()
+    try:
+        sftp = ssh_client.open_sftp()
+        print(f"Downloading {remote_path} to {local_path}...")
+        sftp.get(remote_path, local_path)
+        sftp.close()
+        print("Download successful.")
+    except paramiko.SFTPError as e:
+        print(f"SFTP error: {e}")
+    except Exception as e:
+        print(f"Unexpected error during file transfer: {e}")
 
 def load_certificate(file_path):
-    with open(file_path, "rb") as f:
-        return x509.load_pem_x509_certificate(f.read(), default_backend())
+    try:
+        with open(file_path, "rb") as f:
+            return x509.load_pem_x509_certificate(f.read(), default_backend())
+    except Exception as e:
+        print(f"Failed to load certificate: {e}")
+        raise
 
 def verify_certificate(cert, root_ca):
     try:
         root_ca.public_key().verify(cert.signature, cert.tbs_certificate_bytes, cert.signature_hash_algorithm)
         return "Certificate Authority verification passed."
-    except Exception:
+    except Exception as e:
+        print(f"Certificate Authority verification failed: {e}")
         return "Certificate Authority verification failed."
 
 def check_ocsp_status(cert, issuer):
@@ -44,8 +60,12 @@ def check_ocsp_status(cert, issuer):
         ocsp_request = x509.ocsp.OCSPRequestBuilder().add_certificate(cert, issuer, cert.signature_hash_algorithm).build()
         response = requests.post(ocsp_url, data=ocsp_request.public_bytes(serialization.Encoding.DER), headers={'Content-Type': 'application/ocsp-request'})
         ocsp_response = x509.ocsp.load_der_ocsp_response(response.content)
-        return "Certificate has been revoked." if ocsp_response.certificate_status == x509.ocsp.OCSPCertStatus.REVOKED else "Certificate is not revoked."
-    except Exception:
+        if ocsp_response.certificate_status == x509.ocsp.OCSPCertStatus.REVOKED:
+            return "Certificate has been revoked."
+        else:
+            return "Certificate is not revoked."
+    except Exception as e:
+        print(f"OCSP check failed: {e}")
         return "OCSP check failed."
 
 def check_certificate_expiry(cert):
@@ -855,15 +875,33 @@ def perform_checks(cert_path, ca_path, output_file, ssh_client):
     for row in results: ws.append(row)
     wb.save(output_file)
 
-def main():
-    ssh_client = ssh_connect(router_ip, username, password)
-    
-    download_file_via_ssh(ssh_client, cert_file_path, "certificate.pem")
-    download_file_via_ssh(ssh_client, ca_file_path, "rootCA.pem")
-    
-    perform_checks("certificate.pem", "rootCA.pem", output_excel_file, ssh_client)
-    
-    ssh_client.close()
-
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 4:
+        print("Usage: python3 huawei_routers.py <router_ip> <username> <password>")
+        sys.exit(1)
+
+    router_ip = sys.argv[1]
+    username = sys.argv[2]
+    password = sys.argv[3]
+
+    cert_file_path = "/flash/certificate.pem"
+    ca_file_path = "/flash/rootCA.pem"
+    output_excel_file = "certificate_check_results.xlsx"
+
+    try:
+        ssh_client = ssh_connect(router_ip, username, password)
+        download_file_via_ssh(ssh_client, cert_file_path, "certificate.pem")
+        download_file_via_ssh(ssh_client, ca_file_path, "rootCA.pem")
+        ssh_client.close()
+
+        cert = load_certificate("certificate.pem")
+        root_ca = load_certificate("rootCA.pem")
+
+        ca_verification_result = verify_certificate(cert, root_ca)
+        print(ca_verification_result)
+
+        ocsp_status = check_ocsp_status(cert, root_ca)
+        print(ocsp_status)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
