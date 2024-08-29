@@ -13,9 +13,10 @@ def generate_root_ca_private_key(ca_password, key_file="rootCA.key"):
     command = f"openssl genpkey -algorithm RSA -out {key_file} -aes256 -pass pass:{ca_password}"
     run_command(command)
 
-# 2. Generate Root CA Certificate
+# 2. Generate Root CA Certificate (Non-Interactive)
 def generate_root_ca_certificate(ca_password, cert_file="rootCA.pem"):
-    command = f"openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out {cert_file} -passin pass:{ca_password}"
+    subject = "/C=US/ST=California/L=San Francisco/O=MyCompany/OU=Org/CN=RootCA"
+    command = f"openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out {cert_file} -subj \"{subject}\" -passin pass:{ca_password}"
     run_command(command)
 
 # 3. Generate Server/Device Private Key
@@ -23,9 +24,10 @@ def generate_private_key(password, key_file="private.key"):
     command = f"openssl genpkey -algorithm RSA -out {key_file} -aes256 -pass pass:{password}"
     run_command(command)
 
-# 4. Create CSR for Server/Device
+# 4. Create CSR for Server/Device (Non-Interactive)
 def create_csr(password, csr_file="certificate.csr", key_file="private.key"):
-    command = f"openssl req -new -key {key_file} -out {csr_file} -passin pass:{password}"
+    subject = "/C=US/ST=California/L=San Francisco/O=MyCompany/OU=Org/CN=ServerCert"
+    command = f"openssl req -new -key {key_file} -out {csr_file} -subj \"{subject}\" -passin pass:{password}"
     run_command(command)
 
 # 5. Generate Server/Device Certificate signed by CA
