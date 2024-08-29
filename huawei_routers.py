@@ -248,6 +248,54 @@ CHECKS = [
             'security-key cipher 00E0FC000000'
         ],
         'expected_output': ['security-key cipher 00E0FC000000']
+    },
+    {
+        'objective': 'EasyDeploy System Security',
+        'commands': [
+            'system-view',
+            'easy-operation shared-key cipher YsHsjx_202206'
+        ],
+        'expected_output': ['easy-operation shared-key cipher YsHsjx_202206']
+    },
+    {
+        'objective': 'Defense Against ICMPv6 Attacks',
+        'commands': [
+            'system-view',
+            'undo ipv6 icmp echo-reply receive',
+            'undo ipv6 icmp port-unreachable receive',
+            'undo ipv6 icmp host-unreachable receive'
+        ],
+        'expected_output': ['undo ipv6 icmp echo-reply receive', 'undo ipv6 icmp port-unreachable receive', 'undo ipv6 icmp host-unreachable receive']
+    },
+    {
+        'objective': 'Defense Against Attacks Launched Using IP Packets with Route Options',
+        'commands': [
+            'system-view',
+            'interface vlanif 100',
+            'discard rr'
+        ],
+        'expected_output': ['discard rr']
+    },
+    {
+        'objective': 'Defense Against IP Address Spoofing Attacks',
+        'commands': [
+            'system-view',
+            'ip source guard',
+            'ip source binding static 192.168.1.1 00:11:22:33:44:55'
+        ],
+        'expected_output': ['ip source guard', 'ip source binding static 192.168.1.1']
+    },
+    {
+        'objective': 'Data Transmission Security',
+        'commands': [
+            'system-view',
+            'ipsec proposal newprop1',
+            'transform esp',
+            'esp authentication-algorithm sha2-256',
+            'esp encryption-algorithm aes 256',
+            'encapsulation-mode transport'
+        ],
+        'expected_output': ['ipsec proposal newprop1', 'transform esp', 'esp authentication-algorithm sha2-256', 'esp encryption-algorithm aes 256', 'encapsulation-mode transport']
     }
 ]
 
