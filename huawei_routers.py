@@ -1,5 +1,6 @@
 import paramiko
 import csv
+import time
 
 # Configuration
 ROUTER_IP = '192.168.1.254'
@@ -46,6 +47,12 @@ def execute_command(client, command):
     stdin, stdout, stderr = client.exec_command(command)
     return stdout.read().decode()
 
+def enter_system_view(client):
+    # Send the command to enter system view
+    execute_command(client, 'system-view')
+    # Ensure the command is executed
+    time.sleep(1)
+
 def generate_report():
     with open(COMPLIANCE_REPORT, 'w', newline='') as csvfile:
         fieldnames = ['Objective', 'Result']
@@ -54,8 +61,11 @@ def generate_report():
 
         client = connect_to_router()
         
+        enter_system_view(client)
+
         for objective, commands in OBJECTIVES.items():
             for expected_result, command in commands:
+                # Execute command in system-view context
                 output = execute_command(client, command)
                 if expected_result in output:
                     result = f'{expected_result}'
