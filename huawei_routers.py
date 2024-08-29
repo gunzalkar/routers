@@ -8,6 +8,28 @@ USERNAME = 'admin'
 PASSWORD = 'password'
 PORT = 22
 
+def check_console_security(ssh_shell):
+    results = []
+    
+    # Enter system view
+    ssh_shell.send('system-view\n')
+    time.sleep(1)
+    
+    # Display console configuration
+    ssh_shell.send('display current-configuration | include console\n')
+    time.sleep(2)
+    
+    # Receive the output
+    output = ssh_shell.recv(65535).decode()
+    
+    # Check if AAA authentication is enabled for console
+    if 'authentication-mode aaa' in output:
+        results.append(["Device Login Security", "Strong authentication methods are in place."])
+    else:
+        results.append(["Device Login Security", "No AAA authentication for console."])
+    
+    return results
+
 def check_certificate_details(ssh_shell):
     results = []
     
@@ -90,8 +112,11 @@ def main():
         # Open a shell session
         ssh_shell = ssh_client.invoke_shell()
         
+        # Check console security
+        results = check_console_security(ssh_shell)
+        
         # Check certificate details
-        results = check_certificate_details(ssh_shell)
+        results.extend(check_certificate_details(ssh_shell))
         
         # Check AAA User Management Security
         results.extend(check_aaa_user_management(ssh_shell))
