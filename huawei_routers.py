@@ -1,5 +1,5 @@
 import paramiko
-
+import time
 # Router connection details
 ROUTER_IP = '192.168.1.254'
 USERNAME = 'admin'
