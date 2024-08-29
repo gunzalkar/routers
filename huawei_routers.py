@@ -1,5 +1,6 @@
 import paramiko
 import csv
+import time
 
 # SSH details
 hostname = '192.168.1.254'
@@ -7,7 +8,7 @@ username = 'admin'
 password = 'password'
 port = 22
 
-# Command to be executed on the router for each compliance check
+# Commands to be executed in system-view
 commands = {
     "Certificate Authority verification passed.": "display certificate authority",
     "OCSP check failed.": "display certificate ocsp-status",
@@ -41,23 +42,33 @@ def main():
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh_client.connect(hostname, port, username, password)
 
+    # Enter system-view mode
+    channel = ssh_client.invoke_shell()
+    channel.send('system-view\n')
+    time.sleep(2)  # Wait for the command to be processed
+
     results = []
 
     for objective, command in commands.items():
-        print(f"Checking: {objective}")
-        output, error = execute_command(ssh_client, command)
-        
+        # Send command
+        channel.send(f'{command}\n')
+        time.sleep(2)  # Wait for command output
+
+        # Read command output
+        output = channel.recv(4096).decode()
+        result = "Check Failed"
+
         # Basic validation based on command output
         if "passed" in output.lower() or "valid" in output.lower() or "correctly configured" in output.lower():
             result = "Passed"
-        elif error:
+        elif "error" in output.lower():
             result = "Failed"
-        else:
-            result = "Check Failed"
-        
+
         results.append({"Objective": objective, "Result": result})
 
     # Close SSH connection
+    channel.send('quit\n')
+    time.sleep(2)
     ssh_client.close()
 
     # Write results to CSV
