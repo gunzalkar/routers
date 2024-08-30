@@ -35,7 +35,7 @@ def check_vty_acl(conn, acl_number):
 
 # Main function
 def main():
-    acl_number = '<vty_acl_number>'  # Replace with the actual ACL number
+    acl_number = '10'  # Replace with the actual ACL number
 
     with ConnectHandler(**router) as conn:
         # Policies
