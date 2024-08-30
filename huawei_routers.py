@@ -11,23 +11,23 @@ PORT = 22
 # Validation checks
 CHECKS = [
     {
-        'objective': 'Device Login Security: Strong Authentication Methods',
+        'objective': 'Device Login Security : Strong Authentication Methods',
         'commands': [
             'system-view',
             'aaa',
             'user-password complexity-check',
             'quit',
-            'display current-configuration | include irreversible-cipher'
+            'display current-configuration | include irreversible-cipher',
             'quit'
         ],
         'expected_output': ['super password irreversible-cipher']
     },
 
     {
-        'objective': 'Device Login Security:Password Policies',
+        'objective': 'Device Login Security : Password Policies',
         'commands': [
             'system-view',
-            'display current-configuration | include wrong-password'
+            'display current-configuration | include wrong-password',
             'quit'
         ],
         'expected_output': ['wrong-password retry-interval 6 retry-time 4 block-time 6']
