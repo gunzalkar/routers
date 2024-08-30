@@ -62,7 +62,7 @@ def main():
     hostname = "192.168.1.1"  # Replace with the router's IP
     port = 22
     username = "admin"
-    password = "admin_password"
+    password = "password"
 
     # Example policy checks
     policies = [
