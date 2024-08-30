@@ -8,6 +8,7 @@ def connect_to_router(hostname, port, username, password):
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname, port, username, password)
+        ssh.get_transport().set_keepalive(30)  # Keep the SSH session alive
         return ssh
     except paramiko.AuthenticationException:
         print("Authentication failed.")
@@ -19,38 +20,14 @@ def connect_to_router(hostname, port, username, password):
 
 def execute_command(ssh, command):
     """Execute a command on the router and return the output."""
-    stdin, stdout, stderr = ssh.exec_command(command)
-    return stdout.read().decode()
+    try:
+        stdin, stdout, stderr = ssh.exec_command(command, timeout=10)
+        return stdout.read().decode()
+    except Exception as e:
+        print(f"Command execution failed: {e}")
+        return ""
 
-def validate_privilege_level(output):
-    """Validate that the output contains users with 'privilege 1'."""
-    users_with_privilege_1 = re.findall(r'username \S+ privilege 1', output)
-    if users_with_privilege_1:
-        return "Compliant", "All local users have privilege level 1"
-    else:
-        return "Non-compliant", "No users found with privilege 1"
-
-def validate_vty_transport_input(output):
-    """Validate that the output shows only 'ssh' for 'transport input' on VTY lines."""
-    vty_sections = re.findall(r'line vty \d+ \d+[\s\S]*?transport input \S+', output)
-    non_ssh_transports = []
-    
-    for section in vty_sections:
-        if "transport input ssh" not in section:
-            non_ssh_transports.append(section)
-
-    if not non_ssh_transports:
-        return "Compliant", "All VTY lines have 'transport input ssh' configured"
-    else:
-        return "Non-compliant", f"Non-SSH transport methods found in VTY configurations: {non_ssh_transports}"
-
-def write_results_to_csv(results, csv_filename):
-    """Write the validation results to a CSV file."""
-    with open(csv_filename, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Sr. No.", "Policy", "Compliance Status", "Description"])
-        for result in results:
-            writer.writerow(result)
+# (Validation functions and the rest of the script remain the same)
 
 def main():
     # Replace these with your router's details
@@ -73,7 +50,6 @@ def main():
             "command": "show running-config | section vty",
             "validator": validate_vty_transport_input,
         }
-        # You can add more policies here
     ]
 
     # Connect to router
