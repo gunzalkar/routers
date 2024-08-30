@@ -47,10 +47,16 @@ def validate_vty_transport_input(output):
 
 def validate_no_exec_aux(output):
     """Validate that the 'no exec' command is set for 'line aux 0'."""
-    if 'line aux 0' in output and 'no exec' in output:
-        return "Compliant", "'no exec' is configured for 'line aux 0'"
+    # Extract configuration section for 'line aux 0'
+    aux_config = re.search(r'line aux 0[\s\S]*?(?=^line|\Z)', output, re.MULTILINE)
+    
+    if aux_config:
+        if 'no exec' in aux_config.group(0):
+            return "Compliant", "'no exec' is configured for 'line aux 0'"
+        else:
+            return "Non-compliant", "'no exec' is not configured for 'line aux 0'"
     else:
-        return "Non-compliant", "'no exec' is not configured for 'line aux 0'"
+        return "Non-compliant", "'line aux 0' configuration not found"
 
 def write_results_to_csv(results, csv_filename):
     """Write the validation results to a CSV file."""
