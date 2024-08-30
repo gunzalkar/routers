@@ -38,7 +38,16 @@ def check_vty_acl(conn, acl_number):
 def check_access_class(conn, line_number):
     command = f"show run | section vty {line_number}"
     output = execute_command(conn, command)
-    return 'Compliant' if 'access-class' in output else 'Non-Compliant'
+    
+    # Debug output
+    print("Access Class Check Output:")
+    print(output)
+    
+    # Check for 'access-class' in the output
+    if 'access-class' in output:
+        return 'Compliant'
+    else:
+        return 'Non-Compliant'
 
 # Main function
 def main():
