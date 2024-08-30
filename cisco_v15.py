@@ -11,7 +11,7 @@ def check_privilege_level(client, local_username):
     stdin, stdout, stderr = client.exec_command('show run | incl privilege')
     output = stdout.read().decode()
     # Check if the local user has privilege level 1
-    if f'username {local_username} privilege 1' in output:
+    if f'username {local_username} privilege 5' in output:
         return 'Pass'
     else:
         return 'Fail'
