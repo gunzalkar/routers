@@ -4,7 +4,7 @@ import csv
 # Configuration
 router = {
     'device_type': 'cisco_ios',
-    'host': '192.168.1.1',
+    'host': '192.168.1.254',
     'username': 'admin',
     'password': 'password',
     'port': 22,
@@ -28,8 +28,15 @@ def check_no_exec_aux(conn):
     output = execute_command(conn, command)
     return 'Compliant' if 'no exec' in output else 'Non-Compliant'
 
+def check_vty_acl(conn, acl_number):
+    command = f"show ip access-list {acl_number}"
+    output = execute_command(conn, command)
+    return 'Compliant' if 'permit tcp' in output and 'deny ip any any log' in output else 'Non-Compliant'
+
 # Main function
 def main():
+    acl_number = '<vty_acl_number>'  # Replace with the actual ACL number
+
     with ConnectHandler(**router) as conn:
         # Policies
         policies = [
@@ -50,6 +57,12 @@ def main():
                 'Description': 'The EXEC process on the auxiliary port should be disabled',
                 'Command': 'show run | section aux',
                 'Check': check_no_exec_aux(conn)
+            },
+            {
+                'Policy': 'Create access-list for use with line vty',
+                'Description': 'VTY ACLs control what addresses may attempt to log in to the router.',
+                'Command': f'show ip access-list {acl_number}',
+                'Check': check_vty_acl(conn, acl_number)
             }
         ]
 
