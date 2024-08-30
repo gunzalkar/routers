@@ -1,177 +1,86 @@
 import paramiko
-import re
 import csv
-import time
-import logging
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configuration
+router_ip = '192.168.1.1'
+username = 'admin'
+password = 'password'
+ssh_port = 22
 
-def connect_to_router(hostname, port, username, password, enable_password=None):
-    """Establish SSH connection to the router and enter enable mode."""
-    try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname, port, username, password)
-        ssh.get_transport().set_keepalive(60)  # Keep the SSH session alive
-        logging.info("Successfully connected to the router.")
-        
-        # Enter enable mode if enable password is provided
-        if enable_password:
-            shell = ssh.invoke_shell()
-            shell.send('enable\n')
-            time.sleep(1)
-            shell.send(f'{enable_password}\n')
-            time.sleep(1)
-            
-            # Check if enable mode was successfully entered
-            output = shell.recv(4096).decode()
-            if '>' in output or '#' in output:
-                logging.info("Successfully entered enable mode.")
-            else:
-                logging.error("Failed to enter enable mode.")
-                return None
-        return ssh
-    except paramiko.AuthenticationException:
-        logging.error("Authentication failed.")
-    except paramiko.SSHException as e:
-        logging.error(f"SSH connection error: {e}")
-    except Exception as e:
-        logging.error(f"Error: {e}")
-    return None
+# SSH Client Setup
+def ssh_connect(ip, user, pwd, port):
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(ip, port=port, username=user, password=pwd)
+    return client
 
-def execute_command(ssh, command, retries=3):
-    """Execute a command on the router with retries."""
-    for attempt in range(retries):
-        try:
-            # Enter enable mode for each command if needed
-            shell = ssh.invoke_shell()
-            shell.send(f'{command}\n')
-            time.sleep(1)
-            output = shell.recv(4096).decode()
-            if 'Invalid input detected' in output:
-                logging.error(f"Command error output: {output}")
-            logging.info(f"Command executed successfully: {command}")
-            return output
-        except paramiko.SSHException as e:
-            logging.warning(f"Attempt {attempt + 1}: Command execution failed: {e}")
-            time.sleep(5)  # Wait before retrying
-        except Exception as e:
-            logging.warning(f"Attempt {attempt + 1}: Error during command execution: {e}")
-            time.sleep(5)  # Wait before retrying
-    logging.error(f"Command execution failed after {retries} attempts.")
-    return ""
+def execute_command(client, command):
+    stdin, stdout, stderr = client.exec_command(command)
+    return stdout.read().decode('utf-8')
 
-def validate_privilege_level(output):
-    """Validate that the output contains users with 'privilege 1'."""
-    users_with_privilege_1 = re.findall(r'username \S+ privilege 1', output)
-    if users_with_privilege_1:
-        return "Compliant", "All local users have privilege level 1"
+def check_privilege_levels(client):
+    command = "show run | incl privilege"
+    output = execute_command(client, command)
+    if 'privilege 1' in output:
+        return 'Compliant'
     else:
-        return "Non-compliant", "No users found with privilege 1"
+        return 'Non-Compliant'
 
-def validate_vty_transport_input(output):
-    """Validate that the output shows only 'ssh' for 'transport input' on VTY lines."""
-    vty_sections = re.findall(r'line vty \d+ \d+[\s\S]*?transport input \S+', output)
-    non_ssh_transports = [section for section in vty_sections if "transport input ssh" not in section]
-
-    if not non_ssh_transports:
-        return "Compliant", "All VTY lines have 'transport input ssh' configured"
+def check_vty_transport(client):
+    command = "show run | sec vty"
+    output = execute_command(client, command)
+    if 'transport input ssh' in output:
+        return 'Compliant'
     else:
-        return "Non-compliant", f"Non-SSH transport methods found in VTY configurations: {non_ssh_transports}"
+        return 'Non-Compliant'
 
-def validate_no_exec_aux(output):
-    """Validate that the 'no exec' command is set for 'line aux 0'."""
-    # Extract configuration section for 'line aux 0'
-    aux_config = re.search(r'line aux 0[\s\S]*?(?=^line|\Z)', output, re.MULTILINE)
-    
-    if aux_config:
-        config_text = aux_config.group(0)
-        logging.debug(f"Extracted Configuration for aux 0:\n{config_text}")  # Debugging line
-        if 'no exec' in config_text:
-            return "Compliant", "'no exec' is configured for 'line aux 0'"
-        else:
-            return "Non-compliant", "'no exec' is not configured for 'line aux 0'"
+def check_no_exec_aux(client):
+    command = "show run | sec aux"
+    output = execute_command(client, command)
+    if 'no exec' in output:
+        return 'Compliant'
     else:
-        return "Non-compliant", "'line aux 0' configuration not found"
+        return 'Non-Compliant'
 
-def write_results_to_csv(results, csv_filename):
-    """Write the validation results to a CSV file."""
-    with open(csv_filename, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Sr. No.", "Policy", "Compliance Status", "Description"])
-        for result in results:
-            writer.writerow(result)
-
-def print_results(results):
-    """Print the validation results in the terminal."""
-    print("\nValidation Results:")
-    print(f"{'Sr. No.':<8} {'Policy':<50} {'Compliance Status':<15} {'Description'}")
-    print("-" * 90)
-    for result in results:
-        print(f"{result[0]:<8} {result[1]:<50} {result[2]:<15} {result[3]}")
-
-def check_policy(ssh, policy):
-    """Execute the command and validate the policy."""
-    output = execute_command(ssh, policy["command"])
-    compliance_status, description = policy["validator"](output)
-    return [
-        policy["sr_no"],
-        policy["policy"],
-        compliance_status,
-        description
-    ]
-
+# Main function
 def main():
-    # Replace these with your router's details
-    hostname = "192.168.1.1"  # Replace with the router's IP
-    port = 22
-    username = "admin"
-    password = "password"
-    enable_password = "enable_password"  # Replace with the enable password
-
-    # Policy definitions
+    client = ssh_connect(router_ip, username, password, ssh_port)
+    
+    # Policies
     policies = [
         {
-            "sr_no": 1,
-            "policy": "Set 'privilege 1' for local users",
-            "command": "show running-config | include privilege",
-            "validator": validate_privilege_level,
+            'Policy': 'Set privilege 1 for local users',
+            'Description': 'All local users have privilege level 1 or more',
+            'Command': 'show run | incl privilege',
+            'Check': check_privilege_levels(client)
         },
         {
-            "sr_no": 2,
-            "policy": "Set 'transport input ssh' for 'line vty' connections",
-            "command": "show running-config | section vty",
-            "validator": validate_vty_transport_input,
+            'Policy': 'Set transport input ssh for line vty connections',
+            'Description': 'SSH should be the only transport method for incoming VTY logins',
+            'Command': 'show run | sec vty',
+            'Check': check_vty_transport(client)
         },
         {
-            "sr_no": 3,
-            "policy": "Set 'no exec' for 'line aux 0'",
-            "command": "show running-config | section aux",
-            "validator": validate_no_exec_aux,
+            'Policy': 'Set no exec for line aux 0',
+            'Description': 'The EXEC process on the auxiliary port should be disabled',
+            'Command': 'show run | sec aux',
+            'Check': check_no_exec_aux(client)
         }
-        # You can add more policies here by adding new dictionaries to this list
     ]
 
-    # Connect to router
-    ssh = connect_to_router(hostname, port, username, password, enable_password)
-    if not ssh:
-        print("Failed to connect to the router.")
-        return
+    # Output to CSV and Terminal
+    with open('policy_compliance_report.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Policy', 'Description', 'Command', 'Check'])
+        for policy in policies:
+            writer.writerow([policy['Policy'], policy['Description'], policy['Command'], policy['Check']])
+            print(f"Policy: {policy['Policy']}")
+            print(f"Description: {policy['Description']}")
+            print(f"Command: {policy['Command']}")
+            print(f"Check: {policy['Check']}")
+            print('-' * 80)
 
-    # Store results for all policies
-    results = [check_policy(ssh, policy) for policy in policies]
-
-    # Close the SSH connection
-    ssh.close()
-
-    # Print results in terminal
-    print_results(results)
-
-    # Export results to CSV
-    csv_filename = "router_compliance_results.csv"
-    write_results_to_csv(results, csv_filename)
-    print(f"\nResults have been written to {csv_filename}")
+    client.close()
 
 if __name__ == "__main__":
     main()
