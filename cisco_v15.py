@@ -28,8 +28,11 @@ def execute_command(ssh, command, retries=3):
     """Execute a command on the router with retries."""
     for attempt in range(retries):
         try:
-            stdin, stdout, stderr = ssh.exec_command(command, timeout=30)  # Increased timeout
+            stdin, stdout, stderr = ssh.exec_command(command, timeout=60)  # Increased timeout
             output = stdout.read().decode()
+            error = stderr.read().decode()
+            if error:
+                logging.error(f"Command error output: {error}")
             logging.info(f"Command executed successfully: {command}")
             return output
         except paramiko.SSHException as e:
