@@ -44,6 +44,14 @@ def validate_vty_transport_input(output):
         return "Compliant", "All VTY lines have 'transport input ssh' configured"
     else:
         return "Non-compliant", f"Non-SSH transport methods found in VTY configurations: {non_ssh_transports}"
+    
+def validate_no_exec_aux(output):
+    """Validate that the 'no exec' command is set for 'line aux 0'."""
+    # Check if 'no exec' is present in the aux 0 configuration
+    if re.search(r'line aux 0[\s\S]*no exec', output):
+        return "Compliant", "'no exec' is configured for 'line aux 0'"
+    else:
+        return "Non-compliant", "'no exec' is not configured for 'line aux 0'"
 
 def write_results_to_csv(results, csv_filename):
     """Write the validation results to a CSV file."""
@@ -92,7 +100,14 @@ def main():
             "policy": "Set 'transport input ssh' for 'line vty' connections",
             "command": "show running-config | section vty",
             "validator": validate_vty_transport_input,
+        },
+        {
+            "sr_no": 3,
+            "policy": "Set 'no exec' for 'line aux 0'",
+            "command": "show running-config | section aux",
+            "validator": validate_no_exec_aux,
         }
+
         # You can add more policies here by adding new dictionaries to this list
     ]
 
