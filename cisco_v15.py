@@ -1,5 +1,9 @@
 import paramiko
+import logging
 import csv
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
 # Configuration
 router_ip = '192.168.1.1'
@@ -11,36 +15,40 @@ ssh_port = 22
 def ssh_connect(ip, user, pwd, port):
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(ip, port=port, username=user, password=pwd)
+    try:
+        client.connect(ip, port=port, username=user, password=pwd)
+    except Exception as e:
+        print(f"Error connecting to {ip}: {e}")
+        raise
     return client
 
 def execute_command(client, command):
-    stdin, stdout, stderr = client.exec_command(command)
-    return stdout.read().decode('utf-8')
+    try:
+        stdin, stdout, stderr = client.exec_command(command)
+        output = stdout.read().decode('utf-8')
+        if stderr:
+            error = stderr.read().decode('utf-8')
+            if error:
+                print(f"Error executing command '{command}': {error}")
+        return output
+    except Exception as e:
+        print(f"Error executing command '{command}': {e}")
+        raise
 
 def check_privilege_levels(client):
     command = "show run | incl privilege"
     output = execute_command(client, command)
-    if 'privilege 1' in output:
-        return 'Compliant'
-    else:
-        return 'Non-Compliant'
+    return 'Compliant' if 'privilege 1' in output else 'Non-Compliant'
 
 def check_vty_transport(client):
     command = "show run | sec vty"
     output = execute_command(client, command)
-    if 'transport input ssh' in output:
-        return 'Compliant'
-    else:
-        return 'Non-Compliant'
+    return 'Compliant' if 'transport input ssh' in output else 'Non-Compliant'
 
 def check_no_exec_aux(client):
     command = "show run | sec aux"
     output = execute_command(client, command)
-    if 'no exec' in output:
-        return 'Compliant'
-    else:
-        return 'Non-Compliant'
+    return 'Compliant' if 'no exec' in output else 'Non-Compliant'
 
 # Main function
 def main():
