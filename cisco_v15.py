@@ -30,6 +30,20 @@ def validate_privilege_level(output):
     else:
         return "Non-compliant", "No users found with privilege 1"
 
+def validate_vty_transport_input(output):
+    """Validate that the output shows only 'ssh' for 'transport input' on VTY lines."""
+    vty_sections = re.findall(r'line vty \d+ \d+[\s\S]*?transport input \S+', output)
+    non_ssh_transports = []
+    
+    for section in vty_sections:
+        if "transport input ssh" not in section:
+            non_ssh_transports.append(section)
+
+    if not non_ssh_transports:
+        return "Compliant", "All VTY lines have 'transport input ssh' configured"
+    else:
+        return "Non-compliant", f"Non-SSH transport methods found in VTY configurations: {non_ssh_transports}"
+
 def write_results_to_csv(results, csv_filename):
     """Write the validation results to a CSV file."""
     with open(csv_filename, mode='w', newline='') as file:
@@ -52,6 +66,12 @@ def main():
             "policy": "Set 'privilege 1' for local users",
             "command": "show running-config | include privilege",
             "validator": validate_privilege_level,
+        },
+        {
+            "sr_no": 2,
+            "policy": "Set 'transport input ssh' for 'line vty' connections",
+            "command": "show running-config | section vty",
+            "validator": validate_vty_transport_input,
         }
         # You can add more policies here
     ]
