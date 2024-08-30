@@ -1,9 +1,8 @@
-import paramiko
+from netmiko import ConnectHandler
 import csv
 
 def execute_command(conn, command):
-    stdin, stdout, stderr = conn.exec_command(command)
-    return stdout.read().decode('utf-8')
+    return conn.send_command(command)
 
 def check_privilege_level(conn):
     command = "show run | include privilege"
@@ -42,24 +41,26 @@ def check_access_class(conn, acl_number):
         return 'Non-Compliant'
 
 def main():
-    router_ip = "192.168.1.1"
-    username = "admin"
-    password = "password"
+    router = {
+        'device_type': 'cisco_ios',
+        'host': '192.168.1.1',
+        'username': 'admin',
+        'password': 'password',
+    }
+    
     acl_number = 10  # The ACL number that should be used for the VTY lines
     
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(router_ip, username=username, password=password)
+    conn = ConnectHandler(**router)
     
     compliance_data = [
-        {'Policy': "Set 'privilege 1' for local users", 'Check': check_privilege_level(client)},
-        {'Policy': "Set 'transport input ssh' for 'line vty'", 'Check': check_vty_transport(client)},
-        {'Policy': "Set 'no exec' for 'line aux 0'", 'Check': check_aux_no_exec(client)},
-        {'Policy': "Create 'access-list' for use with 'line vty'", 'Check': check_vty_acl(client, acl_number)},
-        {'Policy': "Set 'access-class' for 'line vty'", 'Check': check_access_class(client, acl_number)}
+        {'Policy': "Set 'privilege 1' for local users", 'Check': check_privilege_level(conn)},
+        {'Policy': "Set 'transport input ssh' for 'line vty'", 'Check': check_vty_transport(conn)},
+        {'Policy': "Set 'no exec' for 'line aux 0'", 'Check': check_aux_no_exec(conn)},
+        {'Policy': "Create 'access-list' for use with 'line vty'", 'Check': check_vty_acl(conn, acl_number)},
+        {'Policy': "Set 'access-class' for 'line vty'", 'Check': check_access_class(conn, acl_number)}
     ]
     
-    client.close()
+    conn.disconnect()
     
     # Print the compliance results
     for entry in compliance_data:
