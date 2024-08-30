@@ -13,10 +13,20 @@ router = {
 def execute_command(conn, command):
     return conn.send_command(command)
 
-def check_privilege_levels(conn):
+def enforce_privilege_level_1(conn):
     command = "show run | include privilege"
     output = execute_command(conn, command)
-    return 'Compliant' if 'privilege 1' in output else 'Non-Compliant'
+    lines = output.splitlines()
+    compliant = True
+
+    for line in lines:
+        if 'privilege' in line and '1' not in line:
+            user = line.split()[1]
+            set_privilege_command = f"username {user} privilege 1"
+            conn.send_config_set([set_privilege_command])
+            compliant = False
+
+    return 'Compliant' if compliant else 'Non-Compliant'
 
 def check_vty_transport(conn):
     command = "show run | section vty"
@@ -29,19 +39,13 @@ def check_no_exec_aux(conn):
     return 'Compliant' if 'no exec' in output else 'Non-Compliant'
 
 def check_vty_acl(conn, acl_number):
-    # Command to display the ACL details
     acl_command = f"show ip access-lists {acl_number}"
     acl_output = execute_command(conn, acl_command)
 
-    # Check if there is at least one permit rule and one deny any rule
     permit_found = any("permit" in line for line in acl_output.splitlines())
     deny_any_found = any("deny   any log" in line for line in acl_output.splitlines())
 
-    # Compliance if both a permit and a deny any rule exist
-    if permit_found and deny_any_found:
-        return 'Compliant'
-    else:
-        return 'Non-Compliant'
+    return 'Compliant' if permit_found and deny_any_found else 'Non-Compliant'
 
 # Main function
 def main():
@@ -52,9 +56,9 @@ def main():
         policies = [
             {
                 'Policy': 'Set privilege 1 for local users',
-                'Description': 'All local users have privilege level 1 or more',
+                'Description': 'All local users must have privilege level 1',
                 'Command': 'show run | include privilege',
-                'Check': check_privilege_levels(conn)
+                'Check': enforce_privilege_level_1(conn)
             },
             {
                 'Policy': 'Set transport input ssh for line vty connections',
