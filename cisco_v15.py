@@ -34,7 +34,7 @@ def enforce_privilege_level_1(conn):
 def check_vty_transport(conn):
     command = "show run | section vty"
     output = execute_command(conn, command)
-    return 'Compliant' if 'transport input ssh' in output else 'Non-Compliant'
+    return 'Compliant' if 'transport input ssh' in output and 'transport input telnet' not in output else 'Non-Compliant'
 
 def check_no_exec_aux(conn):
     command = "show run | section aux"
