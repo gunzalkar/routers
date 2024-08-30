@@ -2,6 +2,10 @@ import paramiko
 import re
 import csv
 import time
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def connect_to_router(hostname, port, username, password):
     """Establish SSH connection to the router."""
@@ -10,13 +14,14 @@ def connect_to_router(hostname, port, username, password):
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname, port, username, password)
         ssh.get_transport().set_keepalive(60)  # Keep the SSH session alive
+        logging.info("Successfully connected to the router.")
         return ssh
     except paramiko.AuthenticationException:
-        print("Authentication failed.")
+        logging.error("Authentication failed.")
     except paramiko.SSHException as e:
-        print(f"SSH connection error: {e}")
+        logging.error(f"SSH connection error: {e}")
     except Exception as e:
-        print(f"Error: {e}")
+        logging.error(f"Error: {e}")
     return None
 
 def execute_command(ssh, command, retries=3):
@@ -24,13 +29,16 @@ def execute_command(ssh, command, retries=3):
     for attempt in range(retries):
         try:
             stdin, stdout, stderr = ssh.exec_command(command, timeout=30)  # Increased timeout
-            return stdout.read().decode()
+            output = stdout.read().decode()
+            logging.info(f"Command executed successfully: {command}")
+            return output
         except paramiko.SSHException as e:
-            print(f"Attempt {attempt + 1}: Command execution failed: {e}")
+            logging.warning(f"Attempt {attempt + 1}: Command execution failed: {e}")
             time.sleep(5)  # Wait before retrying
         except Exception as e:
-            print(f"Attempt {attempt + 1}: Error during command execution: {e}")
+            logging.warning(f"Attempt {attempt + 1}: Error during command execution: {e}")
             time.sleep(5)  # Wait before retrying
+    logging.error(f"Command execution failed after {retries} attempts.")
     return ""
 
 def validate_privilege_level(output):
@@ -58,7 +66,7 @@ def validate_no_exec_aux(output):
     
     if aux_config:
         config_text = aux_config.group(0)
-        print(f"Debug: Extracted Configuration for aux 0:\n{config_text}")  # Debugging line
+        logging.debug(f"Extracted Configuration for aux 0:\n{config_text}")  # Debugging line
         if 'no exec' in config_text:
             return "Compliant", "'no exec' is configured for 'line aux 0'"
         else:
