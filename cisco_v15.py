@@ -10,10 +10,18 @@ LOCAL_USERNAME = 'local-user'  # Replace with the local username you want to che
 def check_privilege_level(client, local_username):
     stdin, stdout, stderr = client.exec_command('show run | incl privilege')
     output = stdout.read().decode()
-    # Check if the local user has privilege level 1
-    if f'username {local_username} privilege 5' in output:
-        return 'Pass'
+    privilege_level = None
+    
+    for line in output.splitlines():
+        if f'username {local_username}' in line:
+            privilege_level = line
+            break
+
+    if privilege_level:
+        print(f"Privilege level for user '{local_username}': {privilege_level}")
+        return 'Pass' if 'privilege 1' in privilege_level else 'Fail'
     else:
+        print(f"User '{local_username}' not found.")
         return 'Fail'
 
 def main():
