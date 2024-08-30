@@ -84,7 +84,7 @@ def main():
             {
                 'Policy': 'Set access-class for line vty',
                 'Description': 'Restrict remote access to devices authorized to manage the device.',
-                'Command': f'show run | sec vty {vty_line_number}',
+                'Command': f'show run | section vty {vty_line_number}',
                 'Check': check_access_class(conn, vty_line_number)
             }
         ]
