@@ -10,7 +10,6 @@ PORT = 22
 
 # Validation checks
 CHECKS = [
-
     {
         'objective': 'Device Login Security: Strong Authentication Methods',
         'commands': [
@@ -23,16 +22,36 @@ CHECKS = [
         ],
         'expected_output': ['irreversible-cipher']
     },
+
     {
         'objective': 'Device Login Security:Password Policies',
         'commands': [
             'system-view',
-            'display current-configuration | include wrong-password',
-            'attack-source-tracing',
-            'port-attack-defend'
+            'display current-configuration | include wrong-password'
         ],
         'expected_output': ['wrong-password retry-interval 6 retry-time 4 block-time 6']
+    },
+
+    {
+    'objective': 'Device Login Security:Multi-factor Authentication (MFA)',
+    'commands': [
+        'system-view',
+        'display current-configuration | include wrong-password',
+        'attack-source-tracing',
+        'port-attack-defend'
+    ],
+    'expected_output': ['wrong-password retry-interval 6 retry-time 4 block-time 6']
+    },
+
+    {
+    'objective': 'AAA User Management Security:Multi-factor Authentication (MFA)',
+    'commands': [
+        'system-view',
+        'display current-configuration | include wrong-password'
+    ],
+    'expected_output': ['wrong-password retry-interval 6 retry-time 4 block-time 6']
     }
+
 ]
 
 def ssh_connect(ip, username, password):
