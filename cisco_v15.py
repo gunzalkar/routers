@@ -20,11 +20,13 @@ def enforce_privilege_level_1(conn):
     compliant = True
 
     for line in lines:
-        if 'privilege' in line and '1' not in line:
-            user = line.split()[1]
-            set_privilege_command = f"username {user} privilege 1"
-            conn.send_config_set([set_privilege_command])
-            compliant = False
+        if 'privilege' in line:
+            privilege_level = int(line.split('privilege')[1].split()[0])
+            if privilege_level > 1:
+                user = line.split()[1]
+                set_privilege_command = f"username {user} privilege 1"
+                conn.send_config_set([set_privilege_command])
+                compliant = False  # Mark as non-compliant if any user had a privilege level higher than 1
 
     return 'Compliant' if compliant else 'Non-Compliant'
 
