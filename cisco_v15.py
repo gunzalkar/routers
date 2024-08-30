@@ -29,9 +29,20 @@ def check_no_exec_aux(conn):
     return 'Compliant' if 'no exec' in output else 'Non-Compliant'
 
 def check_vty_acl(conn, acl_number):
-    command = f"show ip access-list {acl_number}"
-    output = execute_command(conn, command)
-    return 'Compliant' if 'permit tcp' in output and 'deny ip any any log' in output else 'Non-Compliant'
+    # Command to display the ACL details
+    acl_command = f"show ip access-lists {acl_number}"
+    acl_output = execute_command(conn, acl_command)
+
+    # Check if there is at least one permit rule and one deny any rule
+    permit_found = any("permit" in line for line in acl_output.splitlines())
+    deny_any_found = any("deny   any log" in line for line in acl_output.splitlines())
+
+    # Compliance if both a permit and a deny any rule exist
+    if permit_found and deny_any_found:
+        return 'Compliant'
+    else:
+        return 'Non-Compliant'
+
 
 # Main function
 def main():
