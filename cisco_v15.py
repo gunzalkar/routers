@@ -7,14 +7,30 @@ import logging
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def connect_to_router(hostname, port, username, password):
-    """Establish SSH connection to the router."""
+def connect_to_router(hostname, port, username, password, enable_password=None):
+    """Establish SSH connection to the router and enter enable mode."""
     try:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname, port, username, password)
         ssh.get_transport().set_keepalive(60)  # Keep the SSH session alive
         logging.info("Successfully connected to the router.")
+        
+        # Enter enable mode if enable password is provided
+        if enable_password:
+            shell = ssh.invoke_shell()
+            shell.send('enable\n')
+            time.sleep(1)
+            shell.send(f'{enable_password}\n')
+            time.sleep(1)
+            
+            # Check if enable mode was successfully entered
+            output = shell.recv(4096).decode()
+            if '>' in output or '#' in output:
+                logging.info("Successfully entered enable mode.")
+            else:
+                logging.error("Failed to enter enable mode.")
+                return None
         return ssh
     except paramiko.AuthenticationException:
         logging.error("Authentication failed.")
@@ -28,11 +44,13 @@ def execute_command(ssh, command, retries=3):
     """Execute a command on the router with retries."""
     for attempt in range(retries):
         try:
-            stdin, stdout, stderr = ssh.exec_command(command, timeout=60)  # Increased timeout
-            output = stdout.read().decode()
-            error = stderr.read().decode()
-            if error:
-                logging.error(f"Command error output: {error}")
+            # Enter enable mode for each command if needed
+            shell = ssh.invoke_shell()
+            shell.send(f'{command}\n')
+            time.sleep(1)
+            output = shell.recv(4096).decode()
+            if 'Invalid input detected' in output:
+                logging.error(f"Command error output: {output}")
             logging.info(f"Command executed successfully: {command}")
             return output
         except paramiko.SSHException as e:
@@ -110,6 +128,7 @@ def main():
     port = 22
     username = "admin"
     password = "password"
+    enable_password = "enable_password"  # Replace with the enable password
 
     # Policy definitions
     policies = [
@@ -135,7 +154,7 @@ def main():
     ]
 
     # Connect to router
-    ssh = connect_to_router(hostname, port, username, password)
+    ssh = connect_to_router(hostname, port, username, password, enable_password)
     if not ssh:
         print("Failed to connect to the router.")
         return
