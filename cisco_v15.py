@@ -11,7 +11,13 @@ router = {
 }
 
 def execute_command(conn, command):
-    return conn.send_command(command)
+    try:
+        output = conn.send_command(command)
+        print(f"Command: {command}\nOutput:\n{output}\n")
+        return output
+    except Exception as e:
+        print(f"Error executing command '{command}': {e}")
+        return ""
 
 def enforce_privilege_level_1(conn):
     exempt_users = ['admin', 'super', 'super 2']
@@ -35,10 +41,7 @@ def check_vty_transport(conn):
     command = "show run | section vty"
     output = execute_command(conn, command)
     
-    # Debug output
-    print("VTY Transport Check Output:")
-    print(output)
-    
+    # Check if transport input ssh is present
     lines = output.splitlines()
     ssh_found = False
     for line in lines:
@@ -52,6 +55,8 @@ def check_vty_transport(conn):
 def check_no_exec_aux(conn):
     command = "show run | section aux"
     output = execute_command(conn, command)
+    
+    # Check if no exec is present
     return 'Compliant' if 'no exec' in output else 'Non-Compliant'
 
 def check_vty_acl(conn, acl_number):
@@ -64,13 +69,10 @@ def check_vty_acl(conn, acl_number):
     return 'Compliant' if permit_found and deny_any_found else 'Non-Compliant'
 
 def check_access_class(conn, acl_number):
-    command = f"show run | section vty"
+    command = "show run | section vty"
     output = execute_command(conn, command)
     
-    # Debug output
-    print("Access Class Check Output:")
-    print(output)
-    
+    # Check if access-class is set correctly
     return 'Compliant' if f'access-class {acl_number} in' in output else 'Non-Compliant'
 
 # Main function
