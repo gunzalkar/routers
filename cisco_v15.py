@@ -7,7 +7,7 @@ def execute_command(conn, command):
 def check_privilege_level(conn):
     command = "show run | include privilege"
     output = execute_command(conn, command)
-    return 'Compliant' if 'privilege 15' in output else 'Non-Compliant'
+    return 'Compliant' if 'privilege 1' in output else 'Non-Compliant'
 
 def check_vty_transport(conn):
     command = "show run | section vty"
