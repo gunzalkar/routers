@@ -18,7 +18,7 @@ CHECKS = [
             'aaa',
             'user-password complexity-check',
             'quit',
-            'display current-configuration | include password'
+            'display current-configuration | include irreversible-cipher'
             'quit'
         ],
         'expected_output': ['irreversible-cipher']
@@ -43,7 +43,7 @@ def ssh_connect(ip, username, password):
 
 def run_command(shell, command):
     shell.send(command + '\n')
-    time.sleep(2)  # Wait for the command to execute
+    time.sleep(1)  # Wait for the command to execute
     output = shell.recv(65535).decode('utf-8')
     return output
 
