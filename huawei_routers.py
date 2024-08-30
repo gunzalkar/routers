@@ -20,7 +20,7 @@ CHECKS = [
             'display current-configuration | include irreversible-cipher'
             'quit'
         ],
-        'expected_output': ['irreversible-cipher']
+        'expected_output': ['super password irreversible-cipher']
     },
 
     {
@@ -28,6 +28,7 @@ CHECKS = [
         'commands': [
             'system-view',
             'display current-configuration | include wrong-password'
+            'quit'
         ],
         'expected_output': ['wrong-password retry-interval 6 retry-time 4 block-time 6']
     },
@@ -37,19 +38,31 @@ CHECKS = [
     'commands': [
         'system-view',
         'display current-configuration | include wrong-password',
-        'attack-source-tracing',
-        'port-attack-defend'
+        'quit'
+
     ],
     'expected_output': ['wrong-password retry-interval 6 retry-time 4 block-time 6']
     },
 
     {
-    'objective': 'AAA User Management Security:Multi-factor Authentication (MFA)',
+    'objective': 'AAA User Management Security:Authentication Mechanisms',
     'commands': [
         'system-view',
-        'display current-configuration | include wrong-password'
+        'display current-configuration | include encryption',
+        'display local-user'
+
     ],
-    'expected_output': ['wrong-password retry-interval 6 retry-time 4 block-time 6']
+    'expected_output': ['encryption-algorithm aes-256', ' super                          A      TM        15']
+    },
+    {
+    'objective': 'SNMP Device Management Security',
+    'commands': [
+        'system-view',
+        'display acl 2001',
+        'quit'
+
+    ],
+    'expected_output': ['rule 10 deny source 10.183.20.123 0', 'rule 15 permit source 10.139.90.111 0' ]
     }
 
 ]
