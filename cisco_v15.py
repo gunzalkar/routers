@@ -5,7 +5,7 @@ import csv
 ROUTER_IP = '192.168.1.1'  # Replace with your router's IP address
 USERNAME = 'admin'  # Replace with your SSH username
 PASSWORD = 'password'  # Replace with your SSH password
-LOCAL_USERNAME = 'local-user'  # Replace with the local username you want to check
+LOCAL_USERNAME = 'admin'  # Replace with the local username you want to check
 
 def check_privilege_level(client, local_username):
     stdin, stdout, stderr = client.exec_command('show run | incl privilege')
