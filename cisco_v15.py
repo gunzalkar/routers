@@ -11,82 +11,33 @@ router = {
 }
 
 def execute_command(conn, command):
-    try:
-        output = conn.send_command(command)
-        print(f"Command: {command}\nOutput:\n{output}\n")
-        return output
-    except Exception as e:
-        print(f"Error executing command '{command}': {e}")
-        return ""
+    return conn.send_command(command)
 
-def enforce_privilege_level_1(conn):
-    exempt_users = ['admin', 'super', 'super 2']
+def check_privilege_levels(conn):
     command = "show run | include privilege"
     output = execute_command(conn, command)
-    lines = output.splitlines()
-    compliant = True
+    return 'Compliant' if 'privilege 1' in output else 'Non-Compliant'
 
-    for line in lines:
-        if 'privilege' in line:
-            privilege_level = int(line.split('privilege')[1].split()[0])
-            user = line.split()[1]
-            if privilege_level > 1 and user not in exempt_users:
-                set_privilege_command = f"username {user} privilege 1"
-                conn.send_config_set([set_privilege_command])
-                compliant = False  # Mark as non-compliant if any non-exempt user had a privilege level higher than 1
-
-    return 'Compliant' if compliant else 'Non-Compliant'
-    
 def check_vty_transport(conn):
     command = "show run | section vty"
     output = execute_command(conn, command)
-    
-    # Check if transport input ssh is present
-    lines = output.splitlines()
-    ssh_found = False
-    for line in lines:
-        if 'transport input ssh' in line:
-            ssh_found = True
-        if 'transport input telnet' in line or 'transport input all' in line:
-            return 'Non-Compliant'
-
-    return 'Compliant' if ssh_found else 'Non-Compliant'
+    return 'Compliant' if 'transport input ssh' in output else 'Non-Compliant'
 
 def check_no_exec_aux(conn):
     command = "show run | section aux"
     output = execute_command(conn, command)
-    
-    # Check if no exec is present
     return 'Compliant' if 'no exec' in output else 'Non-Compliant'
-
-def check_vty_acl(conn, acl_number):
-    acl_command = f"show ip access-lists {acl_number}"
-    acl_output = execute_command(conn, acl_command)
-
-    permit_found = any("permit" in line for line in acl_output.splitlines())
-    deny_any_found = any("deny   any log" in line for line in acl_output.splitlines())
-
-    return 'Compliant' if permit_found and deny_any_found else 'Non-Compliant'
-
-def check_access_class(conn, acl_number):
-    command = "show run | section vty"
-    output = execute_command(conn, command)
-    
-    # Check if access-class is set correctly
-    return 'Compliant' if f'access-class {acl_number} in' in output else 'Non-Compliant'
 
 # Main function
 def main():
-    acl_number = '10'  # Replace with the actual ACL number
-
     with ConnectHandler(**router) as conn:
         # Policies
         policies = [
             {
                 'Policy': 'Set privilege 1 for local users',
-                'Description': 'All local users must have privilege level 1, except exempt users',
+                'Description': 'All local users have privilege level 1 or more',
                 'Command': 'show run | include privilege',
-                'Check': enforce_privilege_level_1(conn)
+                'Check': check_privilege_levels(conn)
             },
             {
                 'Policy': 'Set transport input ssh for line vty connections',
@@ -99,18 +50,6 @@ def main():
                 'Description': 'The EXEC process on the auxiliary port should be disabled',
                 'Command': 'show run | section aux',
                 'Check': check_no_exec_aux(conn)
-            },
-            {
-                'Policy': 'Create access-list for use with line vty',
-                'Description': 'VTY ACLs control what addresses may attempt to log in to the router.',
-                'Command': f'show ip access-list {acl_number}',
-                'Check': check_vty_acl(conn, acl_number)
-            },
-            {
-                'Policy': 'Set access-class for line vty',
-                'Description': 'Restrict remote access to devices authorized to manage the device.',
-                'Command': f'show run | section vty',
-                'Check': check_access_class(conn, acl_number)
             }
         ]
 
