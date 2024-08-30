@@ -51,7 +51,9 @@ def validate_no_exec_aux(output):
     aux_config = re.search(r'line aux 0[\s\S]*?(?=^line|\Z)', output, re.MULTILINE)
     
     if aux_config:
-        if 'no exec' in aux_config.group(0):
+        config_text = aux_config.group(0)
+        print(f"Debug: Extracted Configuration for aux 0:\n{config_text}")  # Debugging line
+        if 'no exec' in config_text:
             return "Compliant", "'no exec' is configured for 'line aux 0'"
         else:
             return "Non-compliant", "'no exec' is not configured for 'line aux 0'"
