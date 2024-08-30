@@ -8,7 +8,7 @@ def connect_to_router(hostname, port, username, password):
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname, port, username, password)
-        ssh.get_transport().set_keepalive(30)  # Keep the SSH session alive
+        ssh.get_transport().set_keepalive(60)  # Keep the SSH session alive
         return ssh
     except paramiko.AuthenticationException:
         print("Authentication failed.")
@@ -21,10 +21,13 @@ def connect_to_router(hostname, port, username, password):
 def execute_command(ssh, command):
     """Execute a command on the router and return the output."""
     try:
-        stdin, stdout, stderr = ssh.exec_command(command, timeout=10)
+        stdin, stdout, stderr = ssh.exec_command(command, timeout=30)  # Increased timeout
         return stdout.read().decode()
-    except Exception as e:
+    except paramiko.SSHException as e:
         print(f"Command execution failed: {e}")
+        return ""
+    except Exception as e:
+        print(f"Error during command execution: {e}")
         return ""
 
 def validate_privilege_level(output):
