@@ -1,57 +1,49 @@
 import paramiko
-import csv
+import re
 
-# Configuration
-ROUTER_IP = '192.168.1.1'  # Replace with your router's IP address
-USERNAME = 'admin'  # Replace with your SSH username
-PASSWORD = 'password'  # Replace with your SSH password
-LOCAL_USERNAME = 'admin'  # Replace with the local username you want to check
+def connect_to_router(hostname, port, username, password):
+    """Establish SSH connection to the router."""
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname, port, username, password)
+        return ssh
+    except paramiko.AuthenticationException:
+        print("Authentication failed.")
+    except paramiko.SSHException as e:
+        print(f"SSH connection error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
+    return None
 
-def check_privilege_level(client, local_username):
-    stdin, stdout, stderr = client.exec_command('show run | incl privilege')
-    output = stdout.read().decode()
-    privilege_level = None
-    
-    for line in output.splitlines():
-        if f'username {local_username}' in line:
-            privilege_level = line
-            break
+def execute_command(ssh, command):
+    """Execute a command on the router and return the output."""
+    stdin, stdout, stderr = ssh.exec_command(command)
+    return stdout.read().decode()
 
-    if privilege_level:
-        print(f"Privilege level for user '{local_username}': {privilege_level}")
-        return 'Pass' if 'privilege 1' in privilege_level else 'Fail'
+def validate_privilege_level(output):
+    """Validate that the output contains users with 'privilege 1'."""
+    users_with_privilege_1 = re.findall(r'username \S+ privilege 1', output)
+    if users_with_privilege_1:
+        print("Validation successful: The following users have 'privilege 1':")
+        for user in users_with_privilege_1:
+            print(user)
     else:
-        print(f"User '{local_username}' not found.")
-        return 'Fail'
+        print("Validation failed: No users found with 'privilege 1'.")
 
 def main():
-    # SSH Client setup
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    
-    try:
-        client.connect(ROUTER_IP, username=USERNAME, password=PASSWORD)
+    # Replace these with your router's details
+    hostname = "192.168.1.1"  # Replace with the router's IP
+    port = 22
+    username = "admin"
+    password = "password"
 
-        result = check_privilege_level(client, LOCAL_USERNAME)
-        
-        # Write results to CSV
-        with open('cisco_router_compliance_check.csv', mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Sr. no.', 'Category', 'Control Objective', 'Description', 'Remediation', 'Verification'])
-            writer.writerow([
-                '1',
-                'Access Rules',
-                'Set \'privilege 1\' for local users',
-                'Default device configuration does not require strong user authentication potentially enabling unfettered access to an attacker that is able to reach the device. Creating a local account with privilege level 1 permissions only allows the local user to access the device with EXEC-level permissions and will be unable to modify the device without using the enable password. In addition, require the use of an encrypted password as well',
-                'Set the local user to privilege level 1.\nhostname(config)#username <LOCAL_USERNAME> privilege 1',
-                result
-            ])
-        print("Compliance check completed. Results written to 'cisco_router_compliance_check.csv'.")
-        
-    except Exception as e:
-        print(f"An error occurred: {e}")
-    finally:
-        client.close()
+    ssh = connect_to_router(hostname, port, username, password)
+    if ssh:
+        command = "show running-config | include privilege"
+        output = execute_command(ssh, command)
+        validate_privilege_level(output)
+        ssh.close()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
