@@ -4,7 +4,7 @@ import csv
 # Configuration
 router = {
     'device_type': 'cisco_ios',
-    'host': '192.168.1.254',
+    'host': '192.168.1.1',
     'username': 'admin',
     'password': 'password',
     'port': 22,
