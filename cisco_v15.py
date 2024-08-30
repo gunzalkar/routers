@@ -1,6 +1,7 @@
 import paramiko
 import re
 import csv
+import time
 
 def connect_to_router(hostname, port, username, password):
     """Establish SSH connection to the router."""
@@ -18,17 +19,19 @@ def connect_to_router(hostname, port, username, password):
         print(f"Error: {e}")
     return None
 
-def execute_command(ssh, command):
-    """Execute a command on the router and return the output."""
-    try:
-        stdin, stdout, stderr = ssh.exec_command(command, timeout=30)  # Increased timeout
-        return stdout.read().decode()
-    except paramiko.SSHException as e:
-        print(f"Command execution failed: {e}")
-        return ""
-    except Exception as e:
-        print(f"Error during command execution: {e}")
-        return ""
+def execute_command(ssh, command, retries=3):
+    """Execute a command on the router with retries."""
+    for attempt in range(retries):
+        try:
+            stdin, stdout, stderr = ssh.exec_command(command, timeout=30)  # Increased timeout
+            return stdout.read().decode()
+        except paramiko.SSHException as e:
+            print(f"Attempt {attempt + 1}: Command execution failed: {e}")
+            time.sleep(5)  # Wait before retrying
+        except Exception as e:
+            print(f"Attempt {attempt + 1}: Error during command execution: {e}")
+            time.sleep(5)  # Wait before retrying
+    return ""
 
 def validate_privilege_level(output):
     """Validate that the output contains users with 'privilege 1'."""
