@@ -35,8 +35,8 @@ def check_vty_acl(conn, acl_number):
     deny_any_found = any("deny   any log" in line for line in acl_output.splitlines())
     return 'Compliant' if permit_found and deny_any_found else 'Non-Compliant'
 
-def check_access_class(conn, line_number):
-    command = f"show run | section vty {line_number}"
+def check_access_class(conn):
+    command = "show running-config | include access-class"
     output = execute_command(conn, command)
     
     # Debug output
@@ -52,7 +52,6 @@ def check_access_class(conn, line_number):
 # Main function
 def main():
     acl_number = '10'  # Replace with the actual ACL number
-    vty_line_number = '0 4'  # Replace with the actual VTY line numbers
 
     with ConnectHandler(**router) as conn:
         # Policies
@@ -84,8 +83,8 @@ def main():
             {
                 'Policy': 'Set access-class for line vty',
                 'Description': 'Restrict remote access to devices authorized to manage the device.',
-                'Command': f'show run | section vty {vty_line_number}',
-                'Check': check_access_class(conn, vty_line_number)
+                'Command': 'show running-config | include access-class',
+                'Check': check_access_class(conn)
             }
         ]
 
