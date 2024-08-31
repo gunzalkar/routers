@@ -147,7 +147,7 @@ def verify_vty_timeout_configured(connection, vty_line_number):
     
     # Split the output into lines
     lines = output.splitlines()
-    
+    print(lines)
     # Find the line that starts with 'Idle EXEC'
     for i, line in enumerate(lines):
         if line.strip().startswith('Idle EXEC'):
