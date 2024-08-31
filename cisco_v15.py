@@ -47,6 +47,11 @@ def verify_exec_timeout_on_aux(connection):
     output = connection.send_command(command)
     return all('exec-timeout' in line for line in output.splitlines() if 'exec-timeout' in line)
 
+def verify_exec_timeout_on_console(connection):
+    command = 'show run | sec line con 0'
+    output = connection.send_command(command)
+    return all('exec-timeout' in line for line in output.splitlines() if 'exec-timeout' in line)
+
 def main():
     connection = connect_to_router()
 
@@ -79,6 +84,11 @@ def main():
         print("Exec-timeout is configured on the AUX line.")
     else:
         print("Exec-timeout is not configured on the AUX line.")
+
+    if verify_exec_timeout_on_console(connection):
+        print("Exec-timeout is configured on the console line.")
+    else:
+        print("Exec-timeout is not configured on the console line.")
 
     connection.disconnect()
 
