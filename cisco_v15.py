@@ -41,6 +41,12 @@ start_line = '0'  # Replace with the actual starting VTY line number
 end_line = '4'    # Replace with the actual ending VTY line number
 acl_number = '10' # Replace with the ACL number you're verifying
 
+
+def verify_exec_timeout_on_aux(connection):
+    command = 'show run | sec line aux 0'
+    output = connection.send_command(command)
+    return 'exec-timeout' in output
+
 def main():
     connection = connect_to_router()
 
@@ -61,7 +67,6 @@ def main():
 
     if verify_acl_entries(connection, vty_acl_number, required_entries):
         print(f"ACL {vty_acl_number} contains the required entries: {', '.join(required_entries)}.")
-
     else:
         print(f"ACL {vty_acl_number} is missing one or more required entries: {', '.join(required_entries)}.")
 
@@ -69,6 +74,11 @@ def main():
         print(f"ACL {acl_number} is set on VTY lines {start_line} to {end_line}.")
     else:
         print(f"ACL {acl_number} is not set on VTY lines {start_line} to {end_line}.")
+    
+    if verify_exec_timeout_on_aux(connection):
+        print("Exec-timeout is configured on the AUX line.")
+    else:
+        print("Exec-timeout is not configured on the AUX line.")
 
     connection.disconnect()
 
