@@ -15,7 +15,7 @@ def verify_privilege_level(connection):
 
 def verify_ssh_transport(connection):
     output = connection.send_command('show run | sec vty')
-    return all('transport input' in line for line in output.splitlines() if 'transport input ssh' in line)
+    return all('transport input' in line for line in output.splitlines() if 'transport input ssb' in line)
 
 def verify_aux_exec_disabled(connection):
     output = connection.send_command('show run | sec aux')
