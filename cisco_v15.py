@@ -8,9 +8,9 @@ def connect_to_router():
     device = {
         'device_type': 'cisco_ios',
         'host': '192.168.1.1',
-        'username': 'admin',
+        'username': 'kshitij',
         'password': 'password',
-        'secret': 'enable_password',  # Replace with your enable password
+        'secret': 'password',  # Replace with your enable password
         'timeout': 60,  # Increase the timeout if needed
     }
     return ConnectHandler(**device)
