@@ -145,23 +145,21 @@ def verify_vty_timeout_configured(connection, vty_line_number):
     command = f'show line vty {vty_line_number} | begin Timeout'
     output = connection.send_command(command)
     
-    # Split the output into lines
-    lines = output.splitlines()
-    print(lines)
-    # Find the line that starts with 'Idle EXEC'
-    for i, line in enumerate(lines):
-        if line.strip().startswith('Idle EXEC'):
-            # Timeout value is expected on the next line
-            timeout_line = lines[i + 1].strip()
-            if timeout_line:
-                timeout_str = timeout_line.split()[0]  # Extract the timeout string
-                minutes, seconds = map(int, timeout_str.split(':'))
-                if minutes < 10 or (minutes == 10 and seconds == 0):
-                    return True
-                else:
-                    return False
+    # Regular expression to find timeout values in HH:MM:SS format
+    timeout_pattern = re.compile(r'Idle EXEC\s+(\d{2}:\d{2}:\d{2})')
+    match = timeout_pattern.search(output)
     
-    # Return False if 'Idle EXEC' timeout is not found
+    if match:
+        timeout_str = match.group(1)  # Extract the timeout string
+        hours, minutes, seconds = map(int, timeout_str.split(':'))
+        
+        # Check if timeout is 10 minutes or less
+        if hours == 0 and (minutes < 10 or (minutes == 10 and seconds == 0)):
+            return True
+        else:
+            return False
+    
+    # Return False if no matching timeout value is found
     return False
 
 # Example usage
