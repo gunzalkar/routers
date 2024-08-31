@@ -117,6 +117,22 @@ def verify_timeout_configured(connection):
     # Return False if 'exec-timeout' is not found or not within the desired range
     return False
 
+def verify_console_timeout_configured(connection):
+    command = 'show run | sec line con 0'
+    output = connection.send_command(command)
+    
+    # Look for the 'exec-timeout' line in the output
+    for line in output.splitlines():
+        if line.strip().startswith('exec-timeout'):
+            timeout_values = line.split()[1:]  # Get the timeout values (minutes and seconds)
+            if len(timeout_values) == 2:
+                minutes, seconds = map(int, timeout_values)
+                if minutes == 9 and seconds == 59:
+                    return True
+    
+    # Return False if 'exec-timeout' is not exactly 9 minutes 59 seconds
+    return False
+
 def main():
     connection = connect_to_router()
     enable_mode(connection)  # Enter enable mode
@@ -150,6 +166,11 @@ def main():
         print("A timeout of 10 minutes or less is configured for the AUX line.")
     else:
         print("Timeout configuration is missing or exceeds 10 minutes for the AUX line.")
+
+    if verify_console_timeout_configured(connection):
+        print("A timeout of exactly 9 minutes 59 seconds or less is configured for the console line.")
+    else:
+        print("Timeout configuration is missing or not set to exactly 9 minutes 59 seconds for the console line.")
 
     connection.disconnect()
 
