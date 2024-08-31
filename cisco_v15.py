@@ -68,15 +68,25 @@ def verify_aux_exec_disabled(connection):
         return False
 
     # Check the AUX line status
-    command_line = 'show line aux 0 | incl EXEC'
+    command_line = 'show line aux 0 | incl exec'
     output_line = connection.send_command(command_line)
     
     # Verify 'no exec' is present in the line status output
-    if 'Capabilities: EXEC Suppressed' not in output_line:
+    if 'no exec' not in output_line:
         return False
 
     # Return True if both checks are passed
     return True
+
+def verify_acl_entries(connection, vty_acl_number, required_entries):
+    command = f'show ip access-lists {vty_acl_number}'
+    output = connection.send_command(command)
+    print(output)
+    return all(f'{entry} ' in output for entry in required_entries)
+
+# In the main function or wherever you are doing the checks
+vty_acl_number = '10'  # Replace with the actual ACL number
+required_entries = ['10', '20', '30']  # List the sequence numbers you want to verify
 
 def main():
     connection = connect_to_router()
@@ -96,6 +106,11 @@ def main():
         print("The EXEC process for the AUX port is disabled.")
     else:
         print("The EXEC process for the AUX port is not disabled.")
+        
+    if verify_acl_entries(connection, vty_acl_number, required_entries):
+        print(f"ACL {vty_acl_number} contains the required entries: {', '.join(required_entries)}.")
+    else:
+        print(f"ACL {vty_acl_number} is missing one or more required entries: {', '.join(required_entries)}.")
 
     connection.disconnect()
 
