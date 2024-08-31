@@ -145,15 +145,21 @@ def verify_vty_timeout_configured(connection, vty_line_number):
     command = f'show line vty {vty_line_number} | begin Timeout'
     output = connection.send_command(command)
     
-    # Check if 'Idle EXEC' timeout is present in the output
-    for line in output.splitlines():
+    # Split the output into lines
+    lines = output.splitlines()
+    
+    # Find the line that starts with 'Idle EXEC'
+    for i, line in enumerate(lines):
         if line.strip().startswith('Idle EXEC'):
-            timeout_str = line.split()[1]  # Extract the timeout string
-            minutes, seconds = map(int, timeout_str.split(':'))
-            if minutes < 10 or (minutes == 10 and seconds == 0):
-                return True
-            else:
-                return False
+            # Timeout value is expected on the next line
+            timeout_line = lines[i + 1].strip()
+            if timeout_line:
+                timeout_str = timeout_line.split()[0]  # Extract the timeout string
+                minutes, seconds = map(int, timeout_str.split(':'))
+                if minutes < 10 or (minutes == 10 and seconds == 0):
+                    return True
+                else:
+                    return False
     
     # Return False if 'Idle EXEC' timeout is not found
     return False
@@ -209,7 +215,7 @@ def main():
     if verify_vty_timeout_configured(connection, vty_line_number):
         print(f"A timeout of 10 minutes or less is configured for VTY line {vty_line_number}.")
     else:
-        (f"No timeout configuration found or timeout exceeds 10 minutes for VTY line {vty_line_number}.")
+        print(f"No timeout configuration found or timeout exceeds 10 minutes for VTY line {vty_line_number}.")
 
     connection.disconnect()
 
