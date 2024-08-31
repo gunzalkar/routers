@@ -9,6 +9,9 @@ def connect_to_router():
     }
     return ConnectHandler(**device)
 
+def enable_mode(connection):
+    connection.enable()
+
 def verify_privilege_level(connection):
     output = connection.send_command('show run | incl privilege')
     return all('privilege 1' in line for line in output.splitlines())
@@ -69,6 +72,7 @@ def verify_exec_timeout_on_console(connection):
 
 def main():
     connection = connect_to_router()
+    enable_mode(connection)
 
     if verify_privilege_level(connection):
         print("All users are set to privilege level 1.")
