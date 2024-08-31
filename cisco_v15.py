@@ -14,10 +14,15 @@ def verify_privilege_level(connection):
     return all('privilege 1' in line for line in output.splitlines())
 
 def verify_ssh_transport(connection):
-    expected_line = ['transport input ssh']
     command = 'show run | sec vty'
     output = connection.send_command(command)
-    return any(f'{entry}' in output for entry in expected_line)
+    
+    # Check if 'transport input ssh' is present and no other transport methods are listed
+    lines = output.splitlines()
+    transport_lines = [line for line in lines if 'transport input' in line]
+    
+    # Ensure there is only one line with 'transport input ssh'
+    return len(transport_lines) == 1 and 'transport input ssb' in transport_lines[0]
 
 
 def verify_aux_exec_disabled(connection):
