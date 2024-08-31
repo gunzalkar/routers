@@ -1,4 +1,4 @@
-from netmiko import ConnectHandler
+from netmiko import ConnectHandler #type:ignore
 import logging
 import re
 # Enable logging for debugging
@@ -355,7 +355,7 @@ def verify_snmp_traps_enabled(connection):
     return False
 
 def verify_snmp_group_and_security_model(connection, expected_group_name, expected_security_model):
-    command = 'show snmp groups'
+    command = 'show snmp group'
     output = connection.send_command(command)
     
     # Print the command output for debugging
@@ -377,6 +377,27 @@ def verify_snmp_group_and_security_model(connection, expected_group_name, expect
 expected_group_name = 'hello'  # Replace with the expected group name
 expected_security_model = 'v3 priv'  # Replace with the expected security model
 
+def verify_snmp_user_and_security_settings(connection, expected_user_name, expected_security_settings):
+    command = 'show snmp user'
+    output = connection.send_command(command)
+    
+    # Print the command output for debugging
+    print("Command Output:\n", output)
+    
+    # Use regex to find the user name and security settings in the output
+    user_name_pattern = rf'username:\s*{expected_user_name}'
+    security_settings_pattern = rf'security model:\s*{expected_security_settings}'
+    
+    user_name_match = re.search(user_name_pattern, output, re.IGNORECASE)
+    security_settings_match = re.search(security_settings_pattern, output, re.IGNORECASE)
+    
+    # Check if both patterns are found in the output
+    if user_name_match and security_settings_match:
+        return True
+    return False
+# Example usage
+expected_user_name = 'your_user_name'  # Replace with the expected user name
+expected_security_settings = 'v3 priv'  # Replace with the expected security settings
 ###############################################################################################
 
 def main():
@@ -543,6 +564,10 @@ def main():
         print("SNMP group and security model are correctly configured.")
     else:
         print("SNMP group or security model are not correctly configured.")
+    if verify_snmp_user_and_security_settings(connection, expected_user_name, expected_security_settings):
+        print("SNMP user and security settings are correctly configured.")
+    else:
+        print("SNMP user or security settings are not correctly configured.")
 #############################################################################
     connection.disconnect()
 
