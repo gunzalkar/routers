@@ -144,19 +144,22 @@ tty_line_number = '44'
 def verify_vty_timeout_configured(connection, vty_line_number):
     command = f'show line vty {vty_line_number} | begin Timeout'
     output = connection.send_command(command)
-    
-    # Check if 'Idle EXEC' timeout is present in the output
-    for line in output.splitlines():
-        if line.strip().startswith('Idle EXEC'):
-                return True
-            
-    # Return False if 'Idle EXEC' timeout is not found
-    return False
+    return 'Idle EXEC' in output
 
 # Example usage
 vty_line_number = '0'  # Replace with the actual VTY line number
 
-
+def verify_aux_input_transports_disabled(connection):
+    command = 'show line aux 0 | include input transports'
+    output = connection.send_command(command)
+        
+    # Check if the line contains "Allowed input transports are none"
+    expected_transport = 'Allowed input transports are none'
+    if expected_transport in output:
+        return True
+    else:
+        return False
+    
 def main():
     connection = connect_to_router()
     enable_mode(connection)  # Enter enable mode
@@ -205,6 +208,11 @@ def main():
         print(f"A timeout of 10 minutes or less is configured for VTY line {vty_line_number}.")
     else:
         print(f"No timeout configuration found or timeout exceeds 10 minutes for VTY line {vty_line_number}.")
+
+    if verify_aux_input_transports_disabled(connection):
+        print("Inbound connections for the AUX port are disabled.")
+    else:
+        print("Inbound connections for the AUX port are not disabled.")
 
     connection.disconnect()
 
