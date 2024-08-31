@@ -22,7 +22,7 @@ def verify_ssh_transport(connection):
     transport_lines = [line for line in lines if 'transport input' in line]
     
     # Ensure there is only one line with 'transport input ssh'
-    return len(transport_lines) == 1 and 'transport input ssb' in transport_lines[0]
+    return len(transport_lines) == 1 and 'transport input ssh' in transport_lines[0]
 
 
 def verify_aux_exec_disabled(connection):
