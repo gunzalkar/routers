@@ -148,7 +148,7 @@ def verify_vty_timeout_configured(connection, vty_line_number):
     # Print the output for debugging
     print("Command Output:\n", output)
     
-    # Update regex pattern to match the exact format
+    # More flexible regex pattern
     timeout_pattern = re.compile(r'Idle EXEC\s+(\d{2}:\d{2}:\d{2})', re.IGNORECASE)
     match = timeout_pattern.search(output)
     
