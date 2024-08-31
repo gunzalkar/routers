@@ -6,6 +6,7 @@ def connect_to_router():
         'host': '192.168.1.1',
         'username': 'admin',
         'password': 'password',
+        'secret': 'password'
     }
     return ConnectHandler(**device)
 
