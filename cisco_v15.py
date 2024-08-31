@@ -23,8 +23,16 @@ def enable_mode(connection):
         raise
 
 def verify_privilege_level(connection):
-    output = connection.send_command('show run | incl privilege')
-    return all('privilege 1' in line for line in output.splitlines())
+    command = 'show run | include privilege'
+    output = connection.send_command(command)
+    lines = output.splitlines()
+    
+    # Filter lines that start with 'username' and include 'privilege'
+    privilege_lines = [line.strip() for line in lines if line.strip().startswith('username') and 'privilege' in line]
+
+    # Check if all 'privilege' lines are set to 1
+    return all('privilege 1' in line for line in privilege_lines)
+
 
 def verify_ssh_transport(connection):
     command = 'show run | sec vty'
@@ -36,7 +44,7 @@ def verify_ssh_transport(connection):
     if not transport_input_lines:
         return False  # No transport input lines found
     
-    return len(transport_input_lines) == 1 and transport_input_lines[0] == 'transport input sss'
+    return len(transport_input_lines) == 1 and transport_input_lines[0] == 'transport input ssh'
 
 def main():
     connection = connect_to_router()
