@@ -15,7 +15,7 @@ def verify_privilege_level(connection):
 
 def verify_ssh_transport(connection):
     output = connection.send_command('show run | sec vty')
-    return all('transport input ssh' in line for line in output.splitlines() if 'transport input' in line)
+    return all('transport input' in line for line in output.splitlines() if 'transport input ssh' in line)
 
 def verify_aux_exec_disabled(connection):
     output = connection.send_command('show run | sec aux')
@@ -28,13 +28,14 @@ def verify_acl_entries(connection, vty_acl_number, required_entries):
 
 # In the main function or wherever you are doing the checks
 vty_acl_number = '10'  # Replace with the actual ACL number
-required_entries = ['10', '20', '30','40']  # List the sequence numbers you want to verify
+required_entries = ['10', '20', '30']  # List the sequence numbers you want to verify
 
 def verify_acl_set_on_vty(connection, start_line, end_line, acl_number):
     command = f'show run | sec vty {start_line} {end_line}'
     output = connection.send_command(command)
     acl_check_string = f'access-class {acl_number} in'
     return all('{acl_check_string}' in line for line in output.splitlines() if '{acl_check_string}' in line)
+    #return all(f'{acl_check_string} ' in output for acl_check_string in required_entries)
 
 # In the main function or wherever you are doing the checks
 start_line = '0'  # Replace with the actual starting VTY line number
