@@ -114,6 +114,8 @@ def verify_timeout_configured(connection):
                 if minutes <= 10:
                     if seconds <=0:
                         return True
+                if minutes <=9:
+                    return True
     
     # Return False if 'exec-timeout' is not found or not within the desired range
     return False
