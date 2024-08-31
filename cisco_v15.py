@@ -17,6 +17,9 @@ def verify_ssh_transport(connection):
     command = 'show run | sec vty'
     output = connection.send_command(command)
     lines = output.splitlines()
+    print(output)
+    print("********************")
+    print(lines)
 
     transport_input_lines = [line.strip() for line in lines if line.strip().startswith('transport input')]
     
