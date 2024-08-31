@@ -81,12 +81,25 @@ def verify_aux_exec_disabled(connection):
 def verify_acl_entries(connection, vty_acl_number, required_entries):
     command = f'show ip access-lists {vty_acl_number}'
     output = connection.send_command(command)
-    print(output)
     return all(f'{entry} ' in output for entry in required_entries)
 
-# In the main function or wherever you are doing the checks
 vty_acl_number = '10'  # Replace with the actual ACL number
 required_entries = ['10', '20', '30']  # List the sequence numbers you want to verify
+
+def verify_acl_set(connection, line_start, line_end, vty_acl_number):
+    command = f'show run | sec vty {line_start} {line_end}'
+    output = connection.send_command(command)
+    vty_acl_number = vty_acl_number
+    # Check if 'access-class' is present in the output
+    return 'access-class {vty_acl_number} in' in output
+
+# Example usage
+line_start = '0'  # Replace with the starting line number
+line_end = '4'    # Replace with the ending line number
+
+
+
+
 
 def main():
     connection = connect_to_router()
@@ -106,11 +119,16 @@ def main():
         print("The EXEC process for the AUX port is disabled.")
     else:
         print("The EXEC process for the AUX port is not disabled.")
-        
+
     if verify_acl_entries(connection, vty_acl_number, required_entries):
         print(f"ACL {vty_acl_number} contains the required entries: {', '.join(required_entries)}.")
     else:
         print(f"ACL {vty_acl_number} is missing one or more required entries: {', '.join(required_entries)}.")
+
+    if verify_acl_set(connection, line_start, line_end,vty_acl_number):
+        print(f"Access-class is set for VTY lines {line_start} to {line_end}.")
+    else:
+        print(f"Access-class is not set for VTY lines {line_start} to {line_end}.")
 
     connection.disconnect()
 
