@@ -22,10 +22,14 @@ def enable_mode(connection):
         print(f"Failed to enter enable mode: {e}")
         raise
 
+
 def verify_privilege_level(connection):
     command = 'show run | include privilege'
     output = connection.send_command(command)
     lines = output.splitlines()
+    print(output)
+    print("***************")
+    print(lines)
     
     # Filter lines that start with 'username' and include 'privilege'
     privilege_lines = [line.strip() for line in lines if line.strip().startswith('username') and 'privilege' in line]
