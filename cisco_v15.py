@@ -133,6 +133,35 @@ def verify_console_timeout_configured(connection):
     # Return False if 'exec-timeout' is not exactly 9 minutes 59 seconds
     return False
 
+def verify_tty_timeout_configured(connection, tty_line_number):
+    command = f'show line tty {tty_line_number} | begin Timeout'
+    output = connection.send_command(command)
+    
+    # Check if 'exec-timeout' is present in the output
+    return 'exec-timeout' in output
+tty_line_number = '44' 
+
+def verify_vty_timeout_configured(connection, vty_line_number):
+    command = f'show line vty {vty_line_number} | begin Timeout'
+    output = connection.send_command(command)
+    
+    # Check if 'Idle EXEC' timeout is present in the output
+    for line in output.splitlines():
+        if line.strip().startswith('Idle EXEC'):
+            timeout_str = line.split()[1]  # Extract the timeout string
+            minutes, seconds = map(int, timeout_str.split(':'))
+            if minutes < 10 or (minutes == 10 and seconds == 0):
+                return True
+            else:
+                return False
+    
+    # Return False if 'Idle EXEC' timeout is not found
+    return False
+
+# Example usage
+vty_line_number = '0'  # Replace with the actual VTY line number
+
+
 def main():
     connection = connect_to_router()
     enable_mode(connection)  # Enter enable mode
@@ -171,6 +200,16 @@ def main():
         print("A timeout of exactly 9 minutes 59 seconds or less is configured for the console line.")
     else:
         print("Timeout configuration is missing or not set to exactly 9 minutes 59 seconds for the console line.")
+
+    if verify_tty_timeout_configured(connection, tty_line_number):
+        print(f"A timeout is configured for TTY line {tty_line_number}.")
+    else:
+        print(f"No timeout configuration found for TTY line {tty_line_number}.")
+    
+    if verify_vty_timeout_configured(connection, vty_line_number):
+        print(f"A timeout of 10 minutes or less is configured for VTY line {vty_line_number}.")
+    else:
+        (f"No timeout configuration found or timeout exceeds 10 minutes for VTY line {vty_line_number}.")
 
     connection.disconnect()
 
