@@ -17,12 +17,11 @@ def verify_ssh_transport(connection):
     command = 'show run | sec vty'
     output = connection.send_command(command)
     
-    # Split the output into lines and filter for transport input lines
     lines = output.splitlines()
     transport_lines = [line for line in lines if 'transport input' in line]
+    print(f"Number of transport lines: {len(transport_lines)}")
     
-    # Ensure that 'transport input ssh' is the only transport method listed
-    return len(transport_lines) == 1 and ' transport input ssh' in transport_lines[0]
+    return len(transport_lines) == 1 and 'transport input ssh' in transport_lines[0]
 
 
 
