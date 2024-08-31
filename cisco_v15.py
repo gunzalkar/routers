@@ -185,6 +185,61 @@ def verify_aaa_authentication_enable_mode(connection):
         return True
     return False
 
+def verify_aaa_accounting_commands(connection):
+    command = 'show running-config | include aaa accounting commands'
+    output = connection.send_command(command)
+        
+    # Check if the output contains "aaa accounting commands"
+    if 'aaa accounting commands' in output:
+        return True
+    return False
+
+def verify_aaa_accounting_connection(connection):
+    command = 'show running-config | include aaa accounting connection'
+    output = connection.send_command(command)
+        
+    # Check if the output contains "aaa accounting connection"
+    if 'aaa accounting connection' in output:
+        return True
+    return False
+
+def verify_aaa_accounting_exec(connection):
+    command = 'show running-config | include aaa accounting exec'
+    output = connection.send_command(command)
+        
+    # Check if the output contains "aaa accounting connection"
+    if 'aaa accounting exec' in output:
+        return True
+    return False
+
+
+def verify_aaa_accounting_network(connection):
+    command = 'show running-config | include aaa accounting network'
+    output = connection.send_command(command)
+        
+    # Check if the output contains "aaa accounting network"
+    if 'aaa accounting network' in output:
+        return True
+    return False
+
+def verify_aaa_accounting_system(connection):
+    command = 'show running-config | include aaa accounting system'
+    output = connection.send_command(command)
+        
+    # Check if the output contains "aaa accounting network"
+    if 'aaa accounting system' in output:
+        return True
+    return False
+
+def verify_exec_banner(connection):
+    command = 'show running-config | begin banner exec'
+    output = connection.send_command(command)
+    
+    # Check if the output contains the 'banner exec' section
+    if 'banner exec' in output:
+        return True
+    return False
+
 def main():
     connection = connect_to_router()
     enable_mode(connection)  # Enter enable mode
@@ -243,6 +298,7 @@ def main():
         print("AAA services are enabled.")
     else:
         print("AAA services are not enabled.")
+
     if verify_aaa_authentication_login_enabled(connection):
         print("AAA authentication for login is enabled.")
     else:
@@ -252,6 +308,38 @@ def main():
         print("AAA authentication for enable mode is enabled.")
     else:
         print("AAA authentication for enable mode is not enabled.")
+    
+    if verify_aaa_accounting_commands(connection):
+        print("AAA accounting for commands is enabled.")
+    else:
+        print("AAA accounting for commands is not enabled.")
+
+    if verify_aaa_accounting_connection(connection):
+        print("AAA accounting for connection is enabled.")
+    else:
+        print("AAA accounting for connection is not enabled.")
+
+    if verify_aaa_accounting_exec(connection):
+        print("AAA accounting for exec is enabled.")
+    else:
+        print("AAA accounting for exec is not enabled.")
+
+    if verify_aaa_accounting_network(connection):
+        print("AAA accounting for network is enabled.")
+    else:
+        print("AAA accounting for network is not enabled.")
+
+    if verify_aaa_accounting_system(connection):
+        print("AAA accounting for system is enable.")
+    else:
+        print("AAA accounting for system is not enable.")
+
+    if verify_exec_banner(connection):
+        print("Exec banner is set.")
+    else:
+        print("Exec banner is not set.")
+        
+
 
     connection.disconnect()
 
