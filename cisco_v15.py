@@ -1,6 +1,6 @@
 from netmiko import ConnectHandler
 import logging
-
+import re
 # Enable logging for debugging
 logging.basicConfig(filename='netmiko_debug.log', level=logging.DEBUG)
 
