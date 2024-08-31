@@ -147,7 +147,6 @@ def verify_vty_timeout_configured(connection, vty_line_number):
     
     # Regular expression to find timeout values in HH:MM:SS format
     timeout_pattern = re.compile(r'Idle EXEC\s+(\d{2}:\d{2}:\d{2})')
-    print(timeout_pattern)
     match = timeout_pattern.search(output)
     print(match)
     
@@ -155,14 +154,17 @@ def verify_vty_timeout_configured(connection, vty_line_number):
         timeout_str = match.group(1)  # Extract the timeout string
         hours, minutes, seconds = map(int, timeout_str.split(':'))
         
+        # Convert entire timeout to minutes
+        total_minutes = hours * 60 + minutes
+        
         # Check if timeout is 10 minutes or less
-        if hours == 0 and (minutes < 10 or (minutes == 10 and seconds == 0)):
+        if total_minutes <= 10:
             return True
         else:
             return False
-    
-    # Return False if no matching timeout value is found
-    return False
+    else:
+        # No timeout configuration found
+        return False
 
 # Example usage
 vty_line_number = '0'  # Replace with the actual VTY line number
