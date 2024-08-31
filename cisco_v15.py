@@ -36,7 +36,7 @@ def verify_ssh_transport(connection):
     if not transport_input_lines:
         return False  # No transport input lines found
     
-    return len(transport_input_lines) == 1 and transport_input_lines[0] == 'transport input ssh'
+    return len(transport_input_lines) == 1 and transport_input_lines[0] == 'transport input sss'
 
 def main():
     connection = connect_to_router()
