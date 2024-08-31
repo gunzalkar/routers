@@ -24,7 +24,7 @@ def enable_mode(connection):
 
 
 def verify_privilege_level(connection):
-    excluded_users = {'kshitij','admin'}
+    excluded_users = {'admin'}
     
     command = 'show run | include privilege'
     output = connection.send_command(command)
