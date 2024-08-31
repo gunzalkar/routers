@@ -72,7 +72,7 @@ def verify_aux_exec_disabled(connection):
     output_line = connection.send_command(command_line)
     
     # Verify 'no exec' is present in the line status output
-    if 'Capabilities: EXEC Depressed' not in output_line:
+    if 'Capabilities: EXEC Suppressed' not in output_line:
         return False
 
     # Return True if both checks are passed
