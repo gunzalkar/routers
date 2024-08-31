@@ -14,7 +14,7 @@ def verify_privilege_level(connection):
     return all('privilege 1' in line for line in output.splitlines())
 
 def verify_ssh_transport(connection):
-    expected_line = ['transport input sssad']
+    expected_line = ['transport input ssh']
     command = 'show run | sec vty'
     output = connection.send_command(command)
     return any(f'{entry}' in output for entry in expected_line)
