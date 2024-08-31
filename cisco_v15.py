@@ -176,6 +176,15 @@ def verify_aaa_authentication_login_enabled(connection):
     
     return False
 
+def verify_aaa_authentication_enable_mode(connection):
+    command = 'show running-config | include aaa authentication enable'
+    output = connection.send_command(command)
+        
+    # Check if the output contains "aaa authentication enable"
+    if 'aaa authentication enable' in output:
+        return True
+    return False
+
 def main():
     connection = connect_to_router()
     enable_mode(connection)  # Enter enable mode
@@ -238,6 +247,11 @@ def main():
         print("AAA authentication for login is enabled.")
     else:
         print("AAA authentication for login is not enabled.")
+        
+    if verify_aaa_authentication_enable_mode(connection):
+        print("AAA authentication for enable mode is enabled.")
+    else:
+        print("AAA authentication for enable mode is not enabled.")
 
     connection.disconnect()
 
