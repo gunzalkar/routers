@@ -68,11 +68,11 @@ def verify_aux_exec_disabled(connection):
         return False
 
     # Check the AUX line status
-    command_line = 'show line aux 0 | incl exec'
+    command_line = 'show line aux 0 | incl EXEC'
     output_line = connection.send_command(command_line)
     
     # Verify 'no exec' is present in the line status output
-    if 'no exec' not in output_line:
+    if 'Capabilities: EXEC Suppressed' not in output_line:
         return False
 
     # Return True if both checks are passed
@@ -91,7 +91,7 @@ def verify_acl_set(connection, line_start, line_end, vty_acl_number):
     output_line = connection.send_command(command)
     # Check if 'access-class' is present in the output
 
-    if 'batman' not in output_line:
+    if 'access-class' not in output_line:
         return False
 
     # Return True if both checks are passed
