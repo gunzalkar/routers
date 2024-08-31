@@ -22,7 +22,7 @@ def verify_ssh_transport(connection):
     transport_lines = [line for line in lines if 'transport input' in line]
     
     # Ensure that 'transport input ssh' is the only transport method listed
-    return len(transport_lines) == 1 and 'transport input ssh' in transport_lines[0]
+    return len(transport_lines) == 1 and ' transport input ssh' in transport_lines[0]
 
 
 
