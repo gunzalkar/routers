@@ -39,7 +39,7 @@ def verify_access_list_defined(connection, access_list_identifier):
     90 deny ip host 255.255.255.255 any log
     100 permit ip any any log"""
     # Check if any access-list definitions are present in the output
-    if output == list:
+    if list in output:
         return True  # Access-list definitions are present
     return False
 
