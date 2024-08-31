@@ -357,10 +357,7 @@ def verify_snmp_traps_enabled(connection):
 def verify_snmp_group_and_security_model(connection, expected_group_name, expected_security_model):
     command = 'show snmp group'
     output = connection.send_command(command)
-    
-    # Print the command output for debugging
-    print("Command Output:\n", output)
-    
+        
     # Use regex to find the group name and security model in the output
     group_name_pattern = rf'groupname:\s*{expected_group_name}'
     security_model_pattern = rf'security model:\s*{expected_security_model}'
@@ -381,9 +378,6 @@ def verify_snmp_user_and_security_settings(connection, expected_user_name, expec
     command = 'show snmp user'
     output = connection.send_command(command)
     
-    # Print the command output for debugging
-    print("Command Output:\n", output)
-    
     # Use regex to find the user name and security settings in the output
     user_name_pattern = rf'username:\s*{expected_user_name}'
     security_settings_pattern = rf'security model:\s*{expected_security_settings}'
@@ -398,6 +392,216 @@ def verify_snmp_user_and_security_settings(connection, expected_user_name, expec
 # Example usage
 expected_user_name = 'your_user_name'  # Replace with the expected user name
 expected_security_settings = 'v3 priv'  # Replace with the expected security settings
+
+def verify_hostname(connection):
+    command = 'show run | include hostname'
+    output = connection.send_command(command)
+    
+    # Print the command output for debugging
+    print("Command Output:\n", output)
+    
+    # Check if 'hostname' is in the output
+    if 'hostname' in output:
+        return True
+    return False
+
+def verify_domain_name(connection):
+    command = 'show run | include ip domain-name'
+    output = connection.send_command(command)
+    
+    # Check if 'ip domain-name' is in the output
+    if 'ip domain-name' in output:
+        return True
+    return False
+
+
+def verify_rsa_key_pair(connection):
+    command = 'show crypto key mypubkey rsa'
+    output = connection.send_command(command)
+        
+    # Check if 'RSA key pair' is in the output
+    if 'Usage: General Purpose Key' in output:
+        return True
+    return False
+
+
+def verify_ssh_timeout(connection):
+    command = 'show ip ssh'
+    output = connection.send_command(command)
+    
+    # Look for 'Timeout' in the output
+    if '60 secs' in output:
+        return True
+    return False
+
+def verify_ssh_retry(connection):
+    command = 'show ip ssh'
+    output = connection.send_command(command)
+    
+    # Look for 'Timeout' in the output
+    if 'retries: 3' in output:
+        return True
+    return False
+
+
+def verify_ssh_version(connection):
+    command = 'show ip ssh'
+    output = connection.send_command(command)
+    
+    # Look for 'Timeout' in the output
+    if 'version 2.0' in output:
+        return True
+    return False
+
+def verify_cdp_disabled(connection):
+    command = 'show cdp'
+    output = connection.send_command(command)
+    
+    # Check if 'CDP is not enabled' is in the output
+    if 'CDP is not enabled' in output:
+        return True
+    return False
+
+def verify_bootp_enabled(connection):
+    command = 'show run | include bootp'
+    output = connection.send_command(command)
+
+    # Check if 'no ip bootp server' is not present in the output
+    if 'no ip bootp server' not in output:
+        return True
+    return False
+
+def verify_dhcp_service_enabled(connection):
+    command = 'show run | include dhcp'
+    output = connection.send_command(command)
+        
+    # Check if 'no service dhcp' is not present in the output
+    if 'no service dhcp' not in output:
+        return True
+    return False
+
+def verify_identd_enabled(connection):
+    command = 'show run | include identd'
+    output = connection.send_command(command)
+    
+    # Check if there is no result for 'identd'
+    if 'identd' not in output:
+        return True
+    return False
+
+def verify_tcp_keepalives_in_enabled(connection):
+    command = 'show run | include service tcp'
+    output = connection.send_command(command)
+    
+    # Check if 'service tcp-keepalives-in' is present in the output
+    if 'service tcp-keepalives-in' in output:
+        return True
+    return False
+
+def verify_tcp_keepalives_out_enabled(connection):
+    command = 'show run | include service tcp'
+    output = connection.send_command(command)
+    
+    # Check if 'service tcp-keepalives-in' is present in the output
+    if 'service tcp-keepalives-out' in output:
+        return True
+    return False
+
+def verify_service_pad_disabled(connection):
+    command = 'show run | include service pad'
+    output = connection.send_command(command)
+    
+    # Check if 'service pad' is absent in the output
+    if 'no service pad' in output:
+        return True
+    return False
+
+def verify_logging_on_disabled(connection):
+    command = 'show run | include logging on'
+    output = connection.send_command(command)
+
+    # Check if 'logging on' is absent in the output
+    if 'loggin on' not in output:  # No result returned
+        return True
+    return False
+
+def verify_logging_buffered_enabled(connection):
+    command = 'show run | include logging buffered'
+    output = connection.send_command(command)
+
+    # Check if 'logging on' is absent in the output
+    if 'logging buffered' in output:  # No result returned
+        return True
+    return False
+
+
+def verify_logging_console_enabled(connection):
+    command = 'show run | include logging console'
+    output = connection.send_command(command)
+
+    # Check if 'logging on' is absent in the output
+    if 'logging console' in output:  # No result returned
+        return True
+    return False
+
+def verify_syslog_server_enabled(connection):
+    command = 'show run | include logging host'
+    output = connection.send_command(command)
+    
+    # Check if there are one or more IP addresses in the output
+    if 'logging host' in output:
+        return True
+    return 
+
+def verify_syslog_trap_server_enabled(connection):
+    command = 'sh log | incl Trap logging'
+    output = connection.send_command(command)
+
+    # Check if "level informational" is present in the output
+    if "level informational" in output:
+        return True
+    return False
+
+def verify_service_timestamps_debug_datetime_enabled(connection):
+    command = 'sh run | incl service timestamps'
+    output = connection.send_command(command)
+
+    # Print the command output for debugging
+    print("Command Output:\n", output)
+
+    # Check if the output contains "service timestamps debug datetime"
+    if "show-timezone" and "msec" in output:
+        return True
+    return False
+
+def verify_ntp_authentication_key(connection):
+    command = 'show run | include ntp authentication-key'
+    output = connection.send_command(command)
+    
+    # Check if 'ntp authentication-key' is present in the output
+    if 'ntp authentication-key' in output:
+        return True
+    return False
+
+def verify_ntp_trusted_keys(connection, expected_keys_count):
+    command = 'show run | include ntp trusted-key'
+    output = connection.send_command(command)
+    
+    # Print the command output for debugging
+    print("Command Output:\n", output)
+    
+    # Count the number of trusted NTP keys in the output
+    trusted_keys = [line for line in output.splitlines() if 'ntp trusted-key' in line]
+    trusted_keys_count_actual = len(trusted_keys)
+    
+    # Print the count of trusted keys found
+    print(f"Number of NTP trusted keys configured: {trusted_keys_count_actual}")
+    
+    # Compare the actual count with the expected count
+    if trusted_keys_count_actual == expected_keys_count:
+        return True
+    return False
+
 ###############################################################################################
 
 def main():
@@ -564,10 +768,118 @@ def main():
         print("SNMP group and security model are correctly configured.")
     else:
         print("SNMP group or security model are not correctly configured.")
+
     if verify_snmp_user_and_security_settings(connection, expected_user_name, expected_security_settings):
         print("SNMP user and security settings are correctly configured.")
     else:
         print("SNMP user or security settings are not correctly configured.")
+
+    if verify_hostname(connection):
+        print("Hostname is configured.")
+    else:
+        print("Hostname is not configured.")
+
+    if verify_domain_name(connection):
+        print("Domain name is configured.")
+    else:
+        print("Domain name is not configured.")
+
+    if verify_rsa_key_pair(connection):
+        print("RSA key pair is configured.")
+    else:
+        print("RSA key pair is not configured.")
+
+    if verify_ssh_timeout(connection):
+        print("SSH timeout is configured properly.")
+    else:
+        print("SSH timeout is not configured properly.")
+
+    if verify_ssh_retry(connection):
+        print("SSH Retry is configured properly.")
+    else:
+        print("SSH Retry is not configured properly.")
+
+    if verify_ssh_version(connection):
+        print("SSH Version is configured properly.")
+    else:
+        print("SSH Version is not configured properly.")
+
+    if verify_cdp_disabled(connection):
+        print("CDP is not enabled.")
+    else:
+        print("CDP is enabled or the result is different.")
+
+    if verify_bootp_enabled(connection):
+        print("BOOTP is not enabled or the result is different.")
+    else:
+        print("BOOTP is enabled.")
+
+    if verify_dhcp_service_enabled(connection):
+        print("DHCP service is not enabled or the result is different.")
+    else:
+        print("DHCP service is enabled.")
+
+    if verify_identd_enabled(connection):
+        print("Identd is not enabled.")
+    else:
+        print("Identd is enabled or the result is different.")
+
+    if verify_tcp_keepalives_in_enabled(connection):
+        print("TCP keepalives-in is enabled.")
+    else:
+        print("TCP keepalives-in is not enabled.")
+
+    if verify_tcp_keepalives_out_enabled(connection):
+        print("TCP keepalives-out is enabled.")
+    else:
+        print("TCP keepalives-out is not enabled.")
+
+    if verify_service_pad_disabled(connection):
+        print("Service pad is disabled.")
+    else:
+        print("Service pad is not disabled.")
+    
+    if verify_logging_on_disabled(connection):
+        print("Logging on is disabled.")
+    else:
+        print("Logging on is not disabled.")
+
+    if verify_logging_buffered_enabled(connection):
+        print("Logging buffered is enabled.")
+    else:
+        print("Logging buffered is not enabled.")
+
+    if verify_logging_console_enabled(connection):
+        print("Logging console is enabled.")
+    else:
+        print("Logging console is not enabled.")
+
+    if verify_syslog_server_enabled(connection):
+        print("Logging syslog is enabled.")
+    else:
+        print("Logging syslog is not enabled.")
+
+    if verify_syslog_trap_server_enabled(connection):
+        print("Syslog server for SNMP traps is enabled.")
+    else:
+        print("Syslog server for SNMP traps is not enabled.")
+
+    if verify_service_timestamps_debug_datetime_enabled(connection):
+        print("Service timestamps debug datetime is enabled.")
+    else:
+        print("Service timestamps debug datetime is not enabled.")
+
+    if verify_ntp_authentication_key(connection):
+        print("NTP authentication keys are configured.")
+    else:
+        print("NTP authentication keys are not configured.") 
+
+    expected_keys_count = 3  # Replace with the expected number of trusted keys
+    if verify_ntp_trusted_keys(connection, expected_keys_count):
+        print("The number of NTP trusted keys matches the expected number.")
+    else:
+        print("The number of NTP trusted keys does not match the expected number.")
+
 #############################################################################
     connection.disconnect()
 
