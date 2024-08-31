@@ -1,6 +1,6 @@
 from netmiko import ConnectHandler
 import logging
-
+import re
 # Enable logging for debugging
 logging.basicConfig(filename='netmiko_debug.log', level=logging.DEBUG)
 
@@ -336,6 +336,47 @@ def verify_acl_enabled(connection):
     if any(char.isdigit() for char in output):
         return True
     return False
+
+def verify_acl_entries_snmp(connection, vty_acl_number, required_entries):
+    command = f'show ip access-lists {vty_acl_number}'
+    output = connection.send_command(command)
+    return all(f'{entry} ' in output for entry in required_entries)
+
+vty_acl_number = '10'  # Replace with the actual ACL number
+required_entries = ['10', '20', '30']  # List the sequence numbers you want to verify
+
+def verify_snmp_traps_enabled(connection):
+    command = 'show run | incl snmp-server'
+    output = connection.send_command(command)
+    
+    # Check if any SNMP configuration is present in the output
+    if 'snmp-server enable traps' in output:
+        return True
+    return False
+
+def verify_snmp_group_and_security_model(connection, expected_group_name, expected_security_model):
+    command = 'show snmp groups'
+    output = connection.send_command(command)
+    
+    # Print the command output for debugging
+    print("Command Output:\n", output)
+    
+    # Use regex to find the group name and security model in the output
+    group_name_pattern = rf'groupname:\s*{expected_group_name}'
+    security_model_pattern = rf'security model:\s*{expected_security_model}'
+    
+    group_name_match = re.search(group_name_pattern, output, re.IGNORECASE)
+    security_model_match = re.search(security_model_pattern, output, re.IGNORECASE)
+    
+    # Check if both patterns are found in the output
+    if group_name_match and security_model_match:
+        return True
+    return False
+
+# Example usage
+expected_group_name = 'hello'  # Replace with the expected group name
+expected_security_model = 'v3 priv'  # Replace with the expected security model
+
 ###############################################################################################
 
 def main():
@@ -469,9 +510,9 @@ def main():
         print("SNMP agent is enabled.")
 
     if verify_public_community_string(connection):
-        print("Public community string is enabled (and 'private' is not present).")
+        print("Public community string private is not present.")
     else:
-        print("Public community string is not enabled or 'private' is present.")
+        print("Public community string private is present.")
 
     if verify_public_community_string(connection):
         print("Public community string is not enabled.")
@@ -488,6 +529,20 @@ def main():
     else:
         print("ACL is not enabled.")
 
+    if verify_acl_entries_snmp(connection, vty_acl_number, required_entries):
+        print(f"ACL {vty_acl_number} contains the required entries: {', '.join(required_entries)}.")
+    else:
+        print(f"ACL {vty_acl_number} is missing one or more required entries: {', '.join(required_entries)}.")
+
+    if verify_snmp_traps_enabled(connection):
+        print("SNMP traps are enabled.")
+    else:
+        print("SNMP traps are not enabled.")
+
+    if verify_snmp_group_and_security_model(connection, expected_group_name, expected_security_model):
+        print("SNMP group and security model are correctly configured.")
+    else:
+        print("SNMP group or security model are not correctly configured.")
 #############################################################################
     connection.disconnect()
 
