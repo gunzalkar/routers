@@ -39,7 +39,7 @@ def verify_acl_set_on_vty(connection, start_line, end_line, acl_number):
 # In the main function or wherever you are doing the checks
 start_line = '0'  # Replace with the actual starting VTY line number
 end_line = '4'    # Replace with the actual ending VTY line number
-acl_number = '10' # Replace with the ACL number you're verifying
+acl_number = '9' # Replace with the ACL number you're verifying
 
 
 def verify_exec_timeout_on_aux(connection):
