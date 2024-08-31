@@ -163,10 +163,18 @@ def verify_aux_input_transports_disabled(connection):
 def verify_aaa_services_enabled(connection):
     command = 'show running-config | include aaa new-model'
     output = connection.send_command(command)
-    
-    
-    # Check if the output contains "aaa new-model"
     return 'aaa new-model' in output
+
+def verify_aaa_authentication_login_enabled(connection):
+    command = 'show run | include aaa authentication login'
+    output = connection.send_command(command)
+
+    lines = output.splitlines()
+    for line in lines:
+        if 'aaa authentication login' in line:
+            return True
+    
+    return False
 
 def main():
     connection = connect_to_router()
@@ -226,6 +234,10 @@ def main():
         print("AAA services are enabled.")
     else:
         print("AAA services are not enabled.")
+    if verify_aaa_authentication_login_enabled(connection):
+        print("AAA authentication for login is enabled.")
+    else:
+        print("AAA authentication for login is not enabled.")
 
     connection.disconnect()
 
