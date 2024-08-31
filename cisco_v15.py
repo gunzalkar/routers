@@ -101,6 +101,21 @@ def verify_acl_set(connection, line_start, line_end, vty_acl_number):
 line_start = '0'  # Replace with the starting line number
 line_end = '4'    # Replace with the ending line number
 
+def verify_timeout_configured(connection):
+    command = 'show run | sec line aux 0'
+    output = connection.send_command(command)
+    
+    # Look for the 'exec-timeout' line in the output
+    for line in output.splitlines():
+        if line.strip().startswith('exec-timeout'):
+            timeout_values = line.split()[1:]  # Get the timeout values (minutes and seconds)
+            if len(timeout_values) == 2:
+                minutes, seconds = map(int, timeout_values)
+                if minutes <= 9:
+                    return True
+    
+    # Return False if 'exec-timeout' is not found or not within the desired range
+    return False
 
 def main():
     connection = connect_to_router()
@@ -130,6 +145,11 @@ def main():
         print(f"Access-class is set for VTY lines {line_start} to {line_end}.")
     else:
         print(f"Access-class is not set for VTY lines {line_start} to {line_end}.")
+
+    if verify_timeout_configured(connection):
+        print("A timeout of 10 minutes or less is configured for the AUX line.")
+    else:
+        print("Timeout configuration is missing or exceeds 10 minutes for the AUX line.")
 
     connection.disconnect()
 
