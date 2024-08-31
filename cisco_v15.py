@@ -37,6 +37,7 @@ def verify_aux_exec_disabled(connection):
 def verify_acl_entries(connection, vty_acl_number, required_entries):
     command = f'show ip access-lists {vty_acl_number}'
     output = connection.send_command(command)
+    print(output)
     return all(f'{entry} ' in output for entry in required_entries)
 
 # In the main function or wherever you are doing the checks
