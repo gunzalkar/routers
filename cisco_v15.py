@@ -34,7 +34,7 @@ def verify_acl_set_on_vty(connection, start_line, end_line, acl_number):
     command = f'show run | sec vty {start_line} {end_line}'
     output = connection.send_command(command)
     acl_check_string = f'access-class {acl_number} in'
-    return acl_check_string in output
+    return all('{acl_check_string}' in line for line in output.splitlines() if 'access-class' in line)
 
 # In the main function or wherever you are doing the checks
 start_line = '0'  # Replace with the actual starting VTY line number
