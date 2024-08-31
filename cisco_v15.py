@@ -20,7 +20,7 @@ def verify_ssh_transport(connection):
 def verify_aux_exec_disabled(connection):
     output_aux_sec = connection.send_command('show run | sec aux')
     output_aux_exec = connection.send_command('show line aux 0 | incl exec')
-    return 'no exec' in output_aux_sec or 'no exec' in output_aux_exec
+    return ' no exec' in output_aux_sec or 'no exec' in output_aux_exec
 
 def main():
     connection = connect_to_router()
