@@ -1,6 +1,6 @@
 from netmiko import ConnectHandler
 import logging
-import re
+
 # Enable logging for debugging
 logging.basicConfig(filename='netmiko_debug.log', level=logging.DEBUG)
 
@@ -145,31 +145,13 @@ def verify_vty_timeout_configured(connection, vty_line_number):
     command = f'show line vty {vty_line_number} | begin Timeout'
     output = connection.send_command(command)
     
-    # Print the output for debugging
-    print("Command Output:\n", output)
-    
-    # More flexible regex pattern
-    timeout_pattern = re.compile(r'Idle EXEC\s+(\d{2}:\d{2}:\d{2})', re.IGNORECASE)
-    match = timeout_pattern.search(output)
-    
-    # Print the match for debugging
-    print("Regex Match:", match)
-    
-    if match:
-        timeout_str = match.group(1)  # Extract the timeout string
-        hours, minutes, seconds = map(int, timeout_str.split(':'))
-        
-        # Convert entire timeout to minutes
-        total_minutes = hours * 60 + minutes
-        
-        # Check if timeout is 10 minutes or less
-        if total_minutes <= 10:
-            return True
-        else:
-            return False
-    else:
-        # No timeout configuration found
-        return False
+    # Check if 'Idle EXEC' timeout is present in the output
+    for line in output.splitlines():
+        if line.strip().startswith('Idle EXEC'):
+                return True
+            
+    # Return False if 'Idle EXEC' timeout is not found
+    return False
 
 # Example usage
 vty_line_number = '0'  # Replace with the actual VTY line number
