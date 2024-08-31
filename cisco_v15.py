@@ -159,7 +159,15 @@ def verify_aux_input_transports_disabled(connection):
         return True
     else:
         return False
+
+def verify_aaa_services_enabled(connection):
+    command = 'show running-config | include aaa new-model'
+    output = connection.send_command(command)
     
+    
+    # Check if the output contains "aaa new-model"
+    return 'aaa new-model' in output
+
 def main():
     connection = connect_to_router()
     enable_mode(connection)  # Enter enable mode
@@ -213,6 +221,11 @@ def main():
         print("Inbound connections for the AUX port are disabled.")
     else:
         print("Inbound connections for the AUX port are not disabled.")
+    
+    if verify_aaa_services_enabled(connection):
+        print("AAA services are enabled.")
+    else:
+        print("AAA services are not enabled.")
 
     connection.disconnect()
 
