@@ -23,8 +23,6 @@ def verify_ssh_transport(connection):
     
     return len(transport_lines) == 1 and 'transport input ssh' in transport_lines[0]
 
-
-
 def verify_aux_exec_disabled(connection):
     output = connection.send_command('show run | sec aux')
     return all('no exec' in line for line in output.splitlines() if 'exec' in line)
@@ -36,7 +34,7 @@ def verify_acl_entries(connection, vty_acl_number, required_entries):
 
 # In the main function or wherever you are doing the checks
 vty_acl_number = '10'  # Replace with the actual ACL number
-required_entries = ['10', '20', '30']  # List the sequence numbers you want to verify
+required_entries = ['10', '20', '40']  # List the sequence numbers you want to verify
 
 def verify_acl_set_on_vty(connection, start_line, end_line, acl_number):
     command = f'show run | sec vty {start_line} {end_line}'
