@@ -240,6 +240,49 @@ def verify_exec_banner(connection):
         return True
     return False
 
+def verify_login_banner(connection):
+    command = 'show running-config | begin banner login'
+    output = connection.send_command(command)
+    
+    # Check if the output contains the 'banner exec' section
+    if 'banner login' in output:
+        return True
+    return False
+
+
+def verify_motd_banner(connection):
+    command = 'show running-config | begin banner motd'
+    output = connection.send_command(command)
+    
+    # Check if the output contains the 'banner exec' section
+    if 'banner motd' in output:
+        return True
+    return False
+
+def verify_enable_secret(connection):
+    command = 'show running-config | include enable secret'
+    output = connection.send_command(command)
+    
+    # Check if the output contains 'enable secret'
+    if 'enable secret' in output:
+        return True
+    return False
+
+#####################################################################################
+
+def verify_password_encryption(connection):
+    command = 'show running-config | include service password-encryption'
+    output = connection.send_command(command)
+    
+    
+    # Check if the output contains 'service password-encryption'
+    if 'no service password-encryption' in output:
+        return False
+    
+    if 'service password-encryption' in output:
+        return True
+
+
 def main():
     connection = connect_to_router()
     enable_mode(connection)  # Enter enable mode
@@ -339,7 +382,26 @@ def main():
     else:
         print("Exec banner is not set.")
         
+    if verify_login_banner(connection):
+        print("Login banner is set.")
+    else:
+        print("Login banner is not set.")
 
+    if verify_motd_banner(connection):
+        print("motd banner is set.")
+    else:
+        print("motd banner is not set.")
+
+    if verify_enable_secret(connection):
+        ("Enable secret is set.")
+    else:
+        print("Enable secret is not set.")
+    ################################################################
+
+    if verify_password_encryption(connection):
+        print("Password encryption service is enabled.")
+    else:
+        print("Password encryption service is not enabled.")
 
     connection.disconnect()
 
