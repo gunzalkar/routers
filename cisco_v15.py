@@ -111,7 +111,7 @@ def verify_timeout_configured(connection):
             timeout_values = line.split()[1:]  # Get the timeout values (minutes and seconds)
             if len(timeout_values) == 2:
                 minutes, seconds = map(int, timeout_values)
-                if minutes <= 9:
+                if minutes <= 8:
                     return True
     
     # Return False if 'exec-timeout' is not found or not within the desired range
