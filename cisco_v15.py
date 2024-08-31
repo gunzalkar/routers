@@ -282,6 +282,61 @@ def verify_password_encryption(connection):
     if 'service password-encryption' in output:
         return True
 
+def verify_encrypted_password_user(connection):
+    command = 'show running-config | include username'
+    output = connection.send_command(command)
+        
+    # Check if any line contains 'secret', indicating an encrypted password
+    if any('secret' in line for line in output.splitlines()):
+        return True
+    return False
+
+def verify_snmp_agent_status(connection):
+    command = 'show snmp community'
+    output = connection.send_command(command)
+    
+    # Check if the output contains the phrase "SNMP agent not enabled"
+    if "SNMP agent not enabled" in output:
+        return True
+    return False
+
+def verify_public_community_string(connection):
+    command = 'show snmp community'
+    output = connection.send_command(command)
+
+    # Check if 'private' is not present in the output
+    if "private" not in output:
+        return True
+    return False
+
+def verify_public_community_string(connection):
+    command = 'show snmp community'
+    output = connection.send_command(command)
+    
+    # Check if 'public' is not present in the output
+    if "public" not in output:
+        return True
+    return False
+
+def verify_rw_community_string(connection):
+    command = 'show run | incl snmp-server community'
+    output = connection.send_command(command)
+    
+    # Check if ' RW ' is not present in the output
+    if ' RW ' not in output:
+        return True
+    return False
+
+def verify_acl_enabled(connection):
+
+    command = 'show run | incl snmp-server community'
+    output = connection.send_command(command)
+    
+    # Check if the output contains a number after the community string
+    if any(char.isdigit() for char in output):
+        return True
+    return False
+###############################################################################################
 
 def main():
     connection = connect_to_router()
@@ -403,6 +458,37 @@ def main():
     else:
         print("Password encryption service is not enabled.")
 
+    if verify_encrypted_password_user(connection):
+        print("User with an encrypted password is enabled.")
+    else:
+        print("No user with an encrypted password is found.")
+
+    if verify_snmp_agent_status(connection):
+        print("SNMP agent is not enabled.")
+    else:
+        print("SNMP agent is enabled.")
+
+    if verify_public_community_string(connection):
+        print("Public community string is enabled (and 'private' is not present).")
+    else:
+        print("Public community string is not enabled or 'private' is present.")
+
+    if verify_public_community_string(connection):
+        print("Public community string is not enabled.")
+    else:
+        print("Public community string is enabled.")
+
+    if verify_rw_community_string(connection):
+        print("Read/Write community string is not enabled.")
+    else:
+        print("Read/Write community string is enabled.")
+
+    if verify_acl_enabled(connection):
+        print("ACL is enabled.")
+    else:
+        print("ACL is not enabled.")
+
+#############################################################################
     connection.disconnect()
 
 if __name__ == "__main__":
