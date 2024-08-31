@@ -17,6 +17,11 @@ def verify_ssh_transport(connection):
     output = connection.send_command('show run | sec vty')
     return all('transport input ssh' in line for line in output.splitlines() if 'transport input' in line)
 
+def verify_aux_exec_disabled(connection):
+    output_aux_sec = connection.send_command('show run | sec aux')
+    output_aux_exec = connection.send_command('show line aux 0 | incl exec')
+    return 'no exec' in output_aux_sec or 'no exec' in output_aux_exec
+
 def main():
     connection = connect_to_router()
 
@@ -29,6 +34,11 @@ def main():
         print("SSH is the only transport method for VTY logins.")
     else:
         print("Non-SSH transport methods are configured for VTY logins.")
+
+    if verify_aux_exec_disabled(connection):
+        print("The EXEC process for the AUX port is disabled.")
+    else:
+        print("The EXEC process for the AUX port is not disabled.")
 
     connection.disconnect()
 
