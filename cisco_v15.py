@@ -45,7 +45,7 @@ acl_number = '10' # Replace with the ACL number you're verifying
 def verify_exec_timeout_on_aux(connection):
     command = 'show run | sec line aux 0'
     output = connection.send_command(command)
-    return 'exec-timeout' in output
+    return all('exec-timeout' in line for line in output.splitlines() if 'exec-timeout' in line)
 
 def main():
     connection = connect_to_router()
