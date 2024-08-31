@@ -24,18 +24,29 @@ def enable_mode(connection):
 
 
 def verify_privilege_level(connection):
+    excluded_users = {'kshitij','admin'}
+    
     command = 'show run | include privilege'
     output = connection.send_command(command)
     lines = output.splitlines()
-    print(output)
-    print("***************")
-    print(lines)
     
-    # Filter lines that start with 'username' and include 'privilege'
-    privilege_lines = [line.strip() for line in lines if line.strip().startswith('username') and 'privilege' in line]
+    # Filter lines to find all 'username' entries with 'privilege'
+    privilege_lines = [line.strip() for line in lines if 'username' in line and 'privilege' in line]
 
-    # Check if all 'privilege' lines are set to 1
-    return all('privilege 1' in line for line in privilege_lines)
+    # If there are no privilege lines, return True
+    if not privilege_lines:
+        return True
+
+    # Check if any 'privilege' line is not set to 1 for non-excluded users
+    for line in privilege_lines:
+        username = line.split()[1]
+        privilege = line.split('privilege')[1].strip().split()[0]
+        if username not in excluded_users and privilege != '1':
+            return False
+
+    # Return True if all non-excluded 'privilege' lines are set to 1
+    return True
+
 
 
 def verify_ssh_transport(connection):
