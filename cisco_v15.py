@@ -13,12 +13,23 @@ def verify_privilege_level(connection):
     output = connection.send_command('show run | incl privilege')
     return all('privilege 1' in line for line in output.splitlines())
 
+def verify_ssh_transport(connection):
+    output = connection.send_command('show run | sec vty')
+    return all('transport input ssh' in line for line in output.splitlines() if 'transport input' in line)
+
 def main():
     connection = connect_to_router()
+
     if verify_privilege_level(connection):
         print("All users are set to privilege level 1.")
     else:
         print("There are users not set to privilege level 1.")
+
+    if verify_ssh_transport(connection):
+        print("SSH is the only transport method for VTY logins.")
+    else:
+        print("Non-SSH transport methods are configured for VTY logins.")
+
     connection.disconnect()
 
 if __name__ == "__main__":
