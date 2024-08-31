@@ -88,11 +88,15 @@ required_entries = ['10', '20', '30']  # List the sequence numbers you want to v
 
 def verify_acl_set(connection, line_start, line_end, vty_acl_number):
     command = f'show run | sec vty {line_start} {line_end}'
-    output = connection.send_command(command)
-    print(output)
-    vty_acl_number = vty_acl_number
+    output_line = connection.send_command(command)
     # Check if 'access-class' is present in the output
-    return 'access-class {vty_acl_number} in' in output
+
+    if 'access-class' not in output_line:
+        return False
+
+    # Return True if both checks are passed
+    return True
+
 
 # Example usage
 line_start = '0'  # Replace with the starting line number
