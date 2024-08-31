@@ -566,9 +566,6 @@ def verify_service_timestamps_debug_datetime_enabled(connection):
     command = 'sh run | incl service timestamps'
     output = connection.send_command(command)
 
-    # Print the command output for debugging
-    print("Command Output:\n", output)
-
     # Check if the output contains "service timestamps debug datetime"
     if "show-timezone" and "msec" in output:
         return True
@@ -587,21 +584,41 @@ def verify_ntp_trusted_keys(connection, expected_keys_count):
     command = 'show run | include ntp trusted-key'
     output = connection.send_command(command)
     
-    # Print the command output for debugging
-    print("Command Output:\n", output)
-    
     # Count the number of trusted NTP keys in the output
     trusted_keys = [line for line in output.splitlines() if 'ntp trusted-key' in line]
     trusted_keys_count_actual = len(trusted_keys)
-    
-    # Print the count of trusted keys found
-    print(f"Number of NTP trusted keys configured: {trusted_keys_count_actual}")
-    
+
     # Compare the actual count with the expected count
     if trusted_keys_count_actual == expected_keys_count:
         return True
     return False
 
+def verify_ntp_servers_configured(connection):
+    command = 'show run | include ntp server'
+    output = connection.send_command(command)
+    
+    # Check if there are any NTP servers in the output
+    if 'ntp server' in output:
+        return True
+    return False
+
+def verify_ntp_associations(connection):
+    command = 'show ntp associations'
+    output = connection.send_command(command)
+    
+    # Check if there are any NTP associations in the output
+    if 'address' in output:
+        return True  # No NTP associations are configured
+    return False
+
+def verify_loopback_interface_defined(connection):
+    command = 'show ip interface brief | include Loopback'
+    output = connection.send_command(command)
+    
+    # Check if the output contains an IP address for a loopback interface
+    if 'Loopback' in output and any(ip in output for ip in ['.', ':']):
+        return True  # Loopback interface is defined with an IP address
+    return False
 ###############################################################################################
 
 def main():
@@ -879,6 +896,21 @@ def main():
         print("The number of NTP trusted keys matches the expected number.")
     else:
         print("The number of NTP trusted keys does not match the expected number.")
+
+    if verify_ntp_servers_configured(connection):
+        print("NTP servers are configured.")
+    else:
+        print("No NTP servers are configured.")
+
+    if verify_ntp_associations(connection):
+        print("NTP associations are configured.")
+    else:
+        print("No NTP associations are configured.")
+
+    if verify_loopback_interface_defined(connection):
+        print("A loopback interface is defined with an IP address.")
+    else:
+        print("No loopback interface is defined with an IP address.")
 
 #############################################################################
     connection.disconnect()
