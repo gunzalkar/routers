@@ -845,75 +845,76 @@ def main():
     
     results = []
 
-    # Existing checks
+    # Check 1: Privilege Level
     result = verify_privilege_level_1(connection)
     results.append({
         'Serial Number': 1,
         'Objective': 'Verify that non-excluded users are set to privilege level 1.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
+    # Check 2: SSH Transport
     result = verify_ssh_transport_2(connection)
     results.append({
         'Serial Number': 2,
         'Objective': 'Verify that SSH is the only transport method for VTY logins.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
+    # Check 3: AUX EXEC Process
     result = verify_aux_exec_disabled_3(connection)
     results.append({
         'Serial Number': 3,
         'Objective': 'Verify that the EXEC process for the AUX port is disabled.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
-    vty_acl_number = 100
-    required_entries = ['entry1', 'entry2']
+    # Check 4: ACL Entries
     result = verify_acl_entries_4(connection, vty_acl_number, required_entries)
     results.append({
         'Serial Number': 4,
         'Objective': f'Check if ACL {vty_acl_number} contains required entries: {", ".join(required_entries)}.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
-    line_start = 0
-    line_end = 4
+    # Check 5: Access-class for VTY lines
     result = verify_acl_set_5(connection, line_start, line_end, vty_acl_number)
     results.append({
         'Serial Number': 5,
         'Objective': f'Check if access-class is set for VTY lines {line_start} to {line_end}.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
+    # Check 6: AUX Line Timeout
     result = verify_timeout_configured_6(connection)
     results.append({
         'Serial Number': 6,
         'Objective': 'Verify that a timeout of 10 minutes or less is configured for the AUX line.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
+    # Check 7: Console Line Timeout
     result = verify_console_timeout_configured_7(connection)
     results.append({
         'Serial Number': 7,
         'Objective': 'Verify that a timeout of exactly 9 minutes 59 seconds or less is configured for the console line.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
-    # New check: TTY Line Timeout
-    tty_line_number = 1  # Set appropriate TTY line number
+    # Check 8: TTY Line Timeout
     result = verify_tty_timeout_configured_8(connection, tty_line_number)
     results.append({
         'Serial Number': 8,
         'Objective': f'Verify that a timeout is configured for TTY line {tty_line_number}.',
         'Result': 'Pass' if result else 'Fail',
-        'Compliance': result
+        'Compliance': 'Compliant' if result else 'Non-Compliant'
     })
 
     # Write results to CSV
