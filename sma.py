@@ -847,6 +847,10 @@ def main():
 
     # Check 1: Privilege Level
     result = verify_privilege_level_1(connection)
+    if result:
+        print("Check 1 Passed: All non-excluded users are set to privilege level 1.")
+    else:
+        print("Check 1 Failed: There are non-excluded users not set to privilege level 1.")
     results.append({
         'Serial Number': 1,
         'Objective': 'Verify that non-excluded users are set to privilege level 1.',
@@ -856,6 +860,10 @@ def main():
 
     # Check 2: SSH Transport
     result = verify_ssh_transport_2(connection)
+    if result:
+        print("Check 2 Passed: SSH is the only transport method for VTY logins.")
+    else:
+        print("Check 2 Failed: Non-SSH transport methods are configured for VTY logins or 'transport input ssh' is missing.")
     results.append({
         'Serial Number': 2,
         'Objective': 'Verify that SSH is the only transport method for VTY logins.',
@@ -865,6 +873,10 @@ def main():
 
     # Check 3: AUX EXEC Process
     result = verify_aux_exec_disabled_3(connection)
+    if result:
+        print("Check 3 Passed: The EXEC process for the AUX port is disabled.")
+    else:
+        print("Check 3 Failed: The EXEC process for the AUX port is not disabled.")
     results.append({
         'Serial Number': 3,
         'Objective': 'Verify that the EXEC process for the AUX port is disabled.',
@@ -874,6 +886,10 @@ def main():
 
     # Check 4: ACL Entries
     result = verify_acl_entries_4(connection, vty_acl_number, required_entries)
+    if result:
+        print(f"Check 4 Passed: ACL {vty_acl_number} contains the required entries: {', '.join(required_entries)}.")
+    else:
+        print(f"Check 4 Failed: ACL {vty_acl_number} is missing one or more required entries: {', '.join(required_entries)}.")
     results.append({
         'Serial Number': 4,
         'Objective': f'Check if ACL {vty_acl_number} contains required entries: {", ".join(required_entries)}.',
@@ -883,6 +899,10 @@ def main():
 
     # Check 5: Access-class for VTY lines
     result = verify_acl_set_5(connection, line_start, line_end, vty_acl_number)
+    if result:
+        print(f"Check 5 Passed: Access-class is set for VTY lines {line_start} to {line_end}.")
+    else:
+        print(f"Check 5 Failed: Access-class is not set for VTY lines {line_start} to {line_end}.")
     results.append({
         'Serial Number': 5,
         'Objective': f'Check if access-class is set for VTY lines {line_start} to {line_end}.',
@@ -892,6 +912,10 @@ def main():
 
     # Check 6: AUX Line Timeout
     result = verify_timeout_configured_6(connection)
+    if result:
+        print("Check 6 Passed: A timeout of 10 minutes or less is configured for the AUX line.")
+    else:
+        print("Check 6 Failed: Timeout configuration is missing or exceeds 10 minutes for the AUX line.")
     results.append({
         'Serial Number': 6,
         'Objective': 'Verify that a timeout of 10 minutes or less is configured for the AUX line.',
@@ -901,6 +925,10 @@ def main():
 
     # Check 7: Console Line Timeout
     result = verify_console_timeout_configured_7(connection)
+    if result:
+        print("Check 7 Passed: A timeout of exactly 9 minutes 59 seconds or less is configured for the console line.")
+    else:
+        print("Check 7 Failed: Timeout configuration is missing or not set to exactly 9 minutes 59 seconds for the console line.")
     results.append({
         'Serial Number': 7,
         'Objective': 'Verify that a timeout of exactly 9 minutes 59 seconds or less is configured for the console line.',
@@ -910,6 +938,10 @@ def main():
 
     # Check 8: TTY Line Timeout
     result = verify_tty_timeout_configured_8(connection, tty_line_number)
+    if result:
+        print(f"Check 8 Passed: A timeout is configured for TTY line {tty_line_number}.")
+    else:
+        print(f"Check 8 Failed: No timeout configuration found for TTY line {tty_line_number}.")
     results.append({
         'Serial Number': 8,
         'Objective': f'Verify that a timeout is configured for TTY line {tty_line_number}.',
