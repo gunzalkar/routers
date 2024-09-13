@@ -1,48 +1,60 @@
 import paramiko
+import time
+import csv
 
-def connect_and_run_command(hostname, port, username, password):
-    # Create an SSH client
+hostname = '192.168.1.1'
+port = 22
+username = 'admin'
+password = 'password'
+
+def connect_to_router():
     ssh_client = paramiko.SSHClient()
-    
-    # Automatically add the router's host key (you may want to handle this more securely)
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     
     try:
-        # Connect to the router
         ssh_client.connect(hostname, port=port, username=username, password=password)
-        print("Connected to the router successfully!")
-
-        # Start an interactive session
-        shell = ssh_client.invoke_shell()
-        
-        # Send commands
-        shell.send('system-view\n')
-        shell.send('display current-configuration | include telnet\n')
-        shell.send('quit\n')
-        
-        # Wait for the commands to execute and retrieve output
-        import time
-        time.sleep(2)  # Adjust time as needed for command execution
-        
-        output = shell.recv(65535).decode()  # Adjust buffer size as needed
-        
-        # Print output
-        print("Command output:\n", output)
-    
-    except paramiko.AuthenticationException:
-        print("Authentication failed, please verify your credentials")
-    except paramiko.SSHException as e:
-        print(f"Unable to establish SSH connection: {e}")
+        return ssh_client
     except Exception as e:
-        print(f"An error occurred: {e}")
-    finally:
-        # Close the connection
-        ssh_client.close()
+        print(f"Connection error: {e}")
+        return None
 
-# Example usage
-hostname = '192.168.1.10'  # Replace with your router's IP address
-port = 22  # Default SSH port
-username = 'admin'  # Replace with your username
-password = 'password'  # Replace with your password
+def run_command(shell, command):
+    shell.send(f"{command}\n")
+    time.sleep(2)
+    return shell.recv(65535).decode()
 
-connect_and_run_command(hostname, port, username, password)
+# MBSS 1 - Disable Telnet Check
+def check_telnet_compliance(shell):
+    output = run_command(shell, 'display current-configuration | include telnet')
+    return 'telnet server enable' not in output
+
+results = []
+
+ssh_client = connect_to_router()
+
+if ssh_client:
+    shell = ssh_client.invoke_shell()
+    shell.send('system-view\n')
+    time.sleep(1)
+
+    # MBSS 1
+    telnet_compliance = check_telnet_compliance(shell)
+    results.append({
+        'Serial Number': 1,
+        'Category': 'Device protection',
+        'Objective': 'Disable telnet',
+        'Comments': 'Compliant' if telnet_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if telnet_compliance else 'Non-Compliant'
+    })
+
+    ssh_client.close()
+
+# Output results
+for result in results:
+    print(f"Check Passed: {result['Objective']} is correctly set." if result['Compliance'] == 'Compliant' else f"Check Failed: {result['Objective']} is not correctly set.")
+
+# Write results to CSV
+with open('compliance_report.csv', 'w', newline='') as file:
+    writer = csv.DictWriter(file, fieldnames=['Serial Number', 'Category', 'Objective', 'Comments', 'Compliance'])
+    writer.writeheader()
+    writer.writerows(results)
