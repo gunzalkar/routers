@@ -1,6 +1,6 @@
 import paramiko
 
-def connect_to_router(hostname, port, username, password):
+def connect_and_run_command(hostname, port, username, password):
     # Create an SSH client
     ssh_client = paramiko.SSHClient()
     
@@ -10,13 +10,24 @@ def connect_to_router(hostname, port, username, password):
     try:
         # Connect to the router
         ssh_client.connect(hostname, port=port, username=username, password=password)
-        
-        # Print a success message
         print("Connected to the router successfully!")
+
+        # Start an interactive session
+        shell = ssh_client.invoke_shell()
         
-        # Run a command (optional, for testing)
-        stdin, stdout, stderr = ssh_client.exec_command('show version')
-        print("Command output:", stdout.read().decode())
+        # Send commands
+        shell.send('system-view\n')
+        shell.send('display current-configuration | include telnet\n')
+        shell.send('exit\n')
+        
+        # Wait for the commands to execute and retrieve output
+        import time
+        time.sleep(2)  # Adjust time as needed for command execution
+        
+        output = shell.recv(65535).decode()  # Adjust buffer size as needed
+        
+        # Print output
+        print("Command output:\n", output)
     
     except paramiko.AuthenticationException:
         print("Authentication failed, please verify your credentials")
@@ -34,4 +45,4 @@ port = 22  # Default SSH port
 username = 'admin'  # Replace with your username
 password = 'password'  # Replace with your password
 
-connect_to_router(hostname, port, username, password)
+connect_and_run_command(hostname, port, username, password)
