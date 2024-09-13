@@ -32,12 +32,17 @@ def check_telnet_compliance(shell):
 # MBSS 2 - Enable HTTPS Check
 def check_https_compliance(shell):
     output = run_command(shell, 'display current-configuration | include https')
-    return 'https' in output and 'aaa' in output
+    return 'https' in output and 'enabled' in output
 
 # MBSS 3 - Disable TFTP Check
 def check_tftp_compliance(shell):
     output = run_command(shell, 'display current-configuration | include tftp')
     return 'tftp' not in output or 'enable' not in output
+
+# MBSS 4 - Enable SNMPv3 Check
+def check_snmp_compliance(shell):
+    output = run_command(shell, 'display current-configuration | include snmp')
+    return 'snmp-agent sys-info version v3' in output
 
 results = []
 
@@ -76,6 +81,16 @@ if ssh_client:
         'Objective': 'Disable TFTP',
         'Comments': 'Compliant' if tftp_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if tftp_compliance else 'Non-Compliant'
+    })
+
+    # MBSS 4
+    snmp_compliance = check_snmp_compliance(shell)
+    results.append({
+        'Serial Number': 4,
+        'Category': 'Device protection',
+        'Objective': 'Enable SNMPv3',
+        'Comments': 'Compliant' if snmp_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if snmp_compliance else 'Non-Compliant'
     })
 
     ssh_client.close()
