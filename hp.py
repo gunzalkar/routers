@@ -3,7 +3,7 @@ import time
 import csv
 
 # Credentials
-hostname = '192.168.1.1'
+hostname = '192.168.1.10'
 port = 22
 username = 'admin'
 password = 'password'
