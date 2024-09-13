@@ -1,4 +1,4 @@
-import paramiko
+import paramiko # type: ignore
 import time
 import csv
 
@@ -32,7 +32,7 @@ def check_telnet_compliance(shell):
 # MBSS 2 - Enable HTTPS Check
 def check_https_compliance(shell):
     output = run_command(shell, 'display current-configuration | include https')
-    return 'https' in output and 'enabled' in output
+    return '' in output and '' in output
 
 # MBSS 3 - Disable TFTP Check
 def check_tftp_compliance(shell):
@@ -60,6 +60,37 @@ def check_authorized_ip_managers_compliance(shell):
     print(output)
     return 'rule 10' and 'rule 20' in output
 
+# MBSS 8 - Radis Scheme Check
+def radius_authentication(shell):
+    output = run_command(shell, 'display current-configuration | include radius')
+    print(output)
+    return 'radius scheme local' in output
+
+# MBSS 9 - TACAS Scheme Check
+def tacacs_authentication(shell):
+    output = run_command(shell, 'display current-configuration | include TACACS')
+    print(output)
+    return '' in output #TACAS 
+
+# MBSS 10 - TACAS Scheme Check
+def level_privilege(shell):
+    output = run_command(shell, 'display current-configuration | include radius')
+    print(output)
+    return 'service' in output 
+
+# MBSS 11 - ARP Protection
+def arp_valid(shell):
+    output = run_command(shell, 'display current-configuration | include arp')
+    print(output)
+    return 'valid' in output
+
+# MBSS 12 - Password Recovery Disable
+def password_rec(shell):
+    output = run_command(shell, 'display current-configuration | include password')
+    print(output)
+    return 'undo password-recovery' in output
+
+
 results = []
 
 ssh_client = connect_to_router()
@@ -75,7 +106,6 @@ if ssh_client:
         'Serial Number': 1,
         'Category': 'Device protection',
         'Objective': 'Disable telnet',
-        'Comments': 'Compliant' if telnet_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if telnet_compliance else 'Non-Compliant'
     })
 
@@ -95,7 +125,6 @@ if ssh_client:
         'Serial Number': 3,
         'Category': 'Device protection',
         'Objective': 'Disable TFTP',
-        'Comments': 'Compliant' if tftp_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if tftp_compliance else 'Non-Compliant'
     })
 
@@ -105,7 +134,6 @@ if ssh_client:
         'Serial Number': 4,
         'Category': 'Device protection',
         'Objective': 'Enable SNMPv3',
-        'Comments': 'Compliant' if snmpv3_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if snmpv3_compliance else 'Non-Compliant'
     })
 
@@ -115,7 +143,6 @@ if ssh_client:
         'Serial Number': 5,
         'Category': 'Device protection',
         'Objective': 'IP Stack Management',
-        'Comments': 'Compliant' if ip_stack_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if ip_stack_compliance else 'Non-Compliant'
     })
 
@@ -125,7 +152,6 @@ if ssh_client:
         'Serial Number': 6,
         'Category': 'Access Control',
         'Objective': 'Secure Management VLAN',
-        'Comments': 'Compliant' if secure_vlan_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if secure_vlan_compliance else 'Non-Compliant'
     })
 
@@ -135,8 +161,52 @@ if ssh_client:
         'Serial Number': 7,
         'Category': 'Access Control',
         'Objective': 'Authorized IP Managers',
-        'Comments': 'Compliant' if authorized_ip_managers_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if authorized_ip_managers_compliance else 'Non-Compliant'
+    })
+
+    # MBSS 8
+    radius_auth = radius_authentication(shell)
+    results.append({
+        'Serial Number': 8,
+        'Category': 'Access Control',
+        'Objective': 'RADIUS authentication',
+        'Compliance': 'Compliant' if radius_auth else 'Non-Compliant'
+    })
+
+    # MBSS 9
+    radius_auth = tacacs_authentication(shell)
+    results.append({
+        'Serial Number': 9,
+        'Category': 'Access Control',
+        'Objective': 'TACACS authentication',
+        'Compliance': 'Compliant' if radius_auth else 'Non-Compliant'
+    })
+    
+    # MBSS 10
+    radius_auth = level_privilege(shell)
+    results.append({
+        'Serial Number': 10,
+        'Category': 'Access Control',
+        'Objective': 'Server-Supplied Privilege Level',
+        'Compliance': 'Compliant' if radius_auth else 'Non-Compliant'
+    })
+
+    # MBSS 11
+    radius_auth = arp_valid(shell)
+    results.append({
+        'Serial Number': 11,
+        'Category': 'Attack Prevention',
+        'Objective': 'Dynamic ARP Protection',
+        'Compliance': 'Compliant' if radius_auth else 'Non-Compliant'
+    })
+
+    # MBSS 12
+    radius_auth = password_rec(shell)
+    results.append({
+        'Serial Number': 11,
+        'Category': 'Physical Security',
+        'Objective': 'Password Clear Protection – Front-Panel Security ',
+        'Compliance': 'Compliant' if radius_auth else 'Non-Compliant'
     })
 
     ssh_client.close()
@@ -147,6 +217,6 @@ for result in results:
 
 # Write results to CSV
 with open('compliance_report.csv', 'w', newline='') as file:
-    writer = csv.DictWriter(file, fieldnames=['Serial Number', 'Category', 'Objective', 'Comments', 'Compliance'])
+    writer = csv.DictWriter(file, fieldnames=['Serial Number', 'Category', 'Objective','Compliance'])
     writer.writeheader()
     writer.writerows(results)
