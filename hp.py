@@ -34,6 +34,11 @@ def check_https_compliance(shell):
     output = run_command(shell, 'display current-configuration | include https')
     return 'https' in output and 'aaa' in output
 
+# MBSS 3 - Disable TFTP Check
+def check_tftp_compliance(shell):
+    output = run_command(shell, 'display current-configuration | include tftp')
+    return 'tftp' not in output or 'enable' not in output
+
 results = []
 
 ssh_client = connect_to_router()
@@ -61,6 +66,16 @@ if ssh_client:
         'Objective': 'Enable HTTPS',
         'Comments': 'Compliant' if https_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if https_compliance else 'Non-Compliant'
+    })
+
+    # MBSS 3
+    tftp_compliance = check_tftp_compliance(shell)
+    results.append({
+        'Serial Number': 3,
+        'Category': 'Device protection',
+        'Objective': 'Disable TFTP',
+        'Comments': 'Compliant' if tftp_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if tftp_compliance else 'Non-Compliant'
     })
 
     ssh_client.close()
