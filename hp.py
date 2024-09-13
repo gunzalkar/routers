@@ -40,9 +40,19 @@ def check_tftp_compliance(shell):
     return 'tftp' not in output or 'enable' not in output
 
 # MBSS 4 - Enable SNMPv3 Check
-def check_snmp_compliance(shell):
+def check_snmpv3_compliance(shell):
     output = run_command(shell, 'display current-configuration | include snmp')
     return 'snmp-agent sys-info version v3' in output
+
+# MBSS 5 - IP Stack Management Check
+def check_ip_stack_management_compliance(shell):
+    output = run_command(shell, 'display current-configuration | include stack')
+    return 'enable' not in output
+
+# MBSS 6 - Secure Management VLAN Check
+def check_secure_management_vlan_compliance(shell):
+    output = run_command(shell, 'display current-configuration | include vlan')
+    return 'vlan' in output
 
 results = []
 
@@ -84,13 +94,33 @@ if ssh_client:
     })
 
     # MBSS 4
-    snmp_compliance = check_snmp_compliance(shell)
+    snmpv3_compliance = check_snmpv3_compliance(shell)
     results.append({
         'Serial Number': 4,
         'Category': 'Device protection',
         'Objective': 'Enable SNMPv3',
-        'Comments': 'Compliant' if snmp_compliance else 'Non-Compliant',
-        'Compliance': 'Compliant' if snmp_compliance else 'Non-Compliant'
+        'Comments': 'Compliant' if snmpv3_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if snmpv3_compliance else 'Non-Compliant'
+    })
+
+    # MBSS 5
+    ip_stack_compliance = check_ip_stack_management_compliance(shell)
+    results.append({
+        'Serial Number': 5,
+        'Category': 'Device protection',
+        'Objective': 'IP Stack Management',
+        'Comments': 'Compliant' if ip_stack_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if ip_stack_compliance else 'Non-Compliant'
+    })
+
+    # MBSS 6
+    secure_vlan_compliance = check_secure_management_vlan_compliance(shell)
+    results.append({
+        'Serial Number': 6,
+        'Category': 'Access Control',
+        'Objective': 'Secure Management VLAN',
+        'Comments': 'Compliant' if secure_vlan_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if secure_vlan_compliance else 'Non-Compliant'
     })
 
     ssh_client.close()
