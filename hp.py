@@ -3,7 +3,7 @@ import time
 import csv
 
 # Credentials
-hostname = '192.168.1.10'
+hostname = '192.168.1.1'
 port = 22
 username = 'admin'
 password = 'password'
@@ -53,6 +53,14 @@ def check_ip_stack_management_compliance(shell):
 def check_secure_management_vlan_compliance(shell):
     output = run_command(shell, 'display current-configuration | include vlan')
     return 'vlan' in output
+
+# MBSS 7 - Authorized IP Managers Check
+def check_authorized_ip_managers_compliance(shell):
+    output = run_command(shell, 'display acl 200')
+    return (
+        'rule 10 permit source 10.1.0.0 0.0.0.255' in output and
+        'rule 20 permit source 10.1.0.50 0' in output
+    )
 
 results = []
 
@@ -121,6 +129,16 @@ if ssh_client:
         'Objective': 'Secure Management VLAN',
         'Comments': 'Compliant' if secure_vlan_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if secure_vlan_compliance else 'Non-Compliant'
+    })
+
+    # MBSS 7
+    authorized_ip_managers_compliance = check_authorized_ip_managers_compliance(shell)
+    results.append({
+        'Serial Number': 7,
+        'Category': 'Access Control',
+        'Objective': 'Authorized IP Managers',
+        'Comments': 'Compliant' if authorized_ip_managers_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if authorized_ip_managers_compliance else 'Non-Compliant'
     })
 
     ssh_client.close()
