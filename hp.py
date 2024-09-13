@@ -196,7 +196,7 @@ if ssh_client:
     # MBSS 12
     radius_auth = password_rec(shell)
     results.append({
-        'Serial Number': 11,
+        'Serial Number': 12,
         'Category': 'Physical Security',
         'Objective': 'Password Clear Protection – Front-Panel Security ',
         'Compliance': 'Compliant' if radius_auth else 'Non-Compliant'
