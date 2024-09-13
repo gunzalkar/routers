@@ -18,7 +18,7 @@ def connect_and_run_command(hostname, port, username, password):
         # Send commands
         shell.send('system-view\n')
         shell.send('display current-configuration | include telnet\n')
-        shell.send('exit\n')
+        shell.send('quit\n')
         
         # Wait for the commands to execute and retrieve output
         import time
