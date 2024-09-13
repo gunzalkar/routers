@@ -2,6 +2,7 @@ import paramiko
 import time
 import csv
 
+# Credentials
 hostname = '192.168.1.10'
 port = 22
 username = 'admin'
@@ -28,6 +29,11 @@ def check_telnet_compliance(shell):
     output = run_command(shell, 'display current-configuration | include telnet')
     return 'telnet server enable' not in output
 
+# MBSS 2 - Enable HTTPS Check
+def check_https_compliance(shell):
+    output = run_command(shell, 'display current-configuration | include https')
+    return 'https' in output and 'aaa' in output
+
 results = []
 
 ssh_client = connect_to_router()
@@ -45,6 +51,16 @@ if ssh_client:
         'Objective': 'Disable telnet',
         'Comments': 'Compliant' if telnet_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if telnet_compliance else 'Non-Compliant'
+    })
+
+    # MBSS 2
+    https_compliance = check_https_compliance(shell)
+    results.append({
+        'Serial Number': 2,
+        'Category': 'Device protection',
+        'Objective': 'Enable HTTPS',
+        'Comments': 'Compliant' if https_compliance else 'Non-Compliant',
+        'Compliance': 'Compliant' if https_compliance else 'Non-Compliant'
     })
 
     ssh_client.close()
