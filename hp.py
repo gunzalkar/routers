@@ -57,37 +57,31 @@ def check_secure_management_vlan_compliance(shell):
 # MBSS 7 - Authorized IP Managers Check
 def check_authorized_ip_managers_compliance(shell):
     output = run_command(shell, 'display acl 2000')
-    print(output)
     return 'rule 10' and 'rule 20' in output
 
 # MBSS 8 - Radis Scheme Check
 def radius_authentication(shell):
     output = run_command(shell, 'display current-configuration | include radius')
-    print(output)
     return 'radius scheme local' in output
 
 # MBSS 9 - TACAS Scheme Check
 def tacacs_authentication(shell):
     output = run_command(shell, 'display current-configuration | include TACACS')
-    print(output)
     return '' in output #TACAS 
 
 # MBSS 10 - TACAS Scheme Check
 def level_privilege(shell):
     output = run_command(shell, 'display current-configuration | include radius')
-    print(output)
     return 'service' in output 
 
 # MBSS 11 - ARP Protection
 def arp_valid(shell):
     output = run_command(shell, 'display current-configuration | include arp')
-    print(output)
     return 'valid' in output
 
 # MBSS 12 - Password Recovery Disable
 def password_rec(shell):
     output = run_command(shell, 'display current-configuration | include password')
-    print(output)
     return 'undo password-recovery' in output
 
 
@@ -115,7 +109,6 @@ if ssh_client:
         'Serial Number': 2,
         'Category': 'Device protection',
         'Objective': 'Enable HTTPS',
-        'Comments': 'Compliant' if https_compliance else 'Non-Compliant',
         'Compliance': 'Compliant' if https_compliance else 'Non-Compliant'
     })
 
