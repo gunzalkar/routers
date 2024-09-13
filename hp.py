@@ -57,9 +57,7 @@ def check_secure_management_vlan_compliance(shell):
 # MBSS 7 - Authorized IP Managers Check
 def check_authorized_ip_managers_compliance(shell):
     output = run_command(shell, 'display acl 200')
-    has_rule_10 = 'rule 10' in output
-    has_rule_20 = 'rule 20' in output
-    return has_rule_10 and has_rule_20
+    return 'rule 10' and 'rule 20' in output
 
 results = []
 
