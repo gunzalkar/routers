@@ -29,7 +29,7 @@ def connect_to_router(hostname, port, username, password):
         ssh_client.close()
 
 # Example usage
-hostname = '192.168.1.1'  # Replace with your router's IP address
+hostname = '192.168.1.10'  # Replace with your router's IP address
 port = 22  # Default SSH port
 username = 'admin'  # Replace with your username
 password = 'password'  # Replace with your password
