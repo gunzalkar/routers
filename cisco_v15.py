@@ -102,7 +102,7 @@ def verify_privilege_level_1(connection):
 
 def verify_ssh_transport_2(connection):
     command0 ='enable'
-    command = 'show running-config | sec vty'
+    command = 'show running-config | sec transport input'
     connection.send_command(command0)
     output = connection.send_command(command)
     print("**********************************")
