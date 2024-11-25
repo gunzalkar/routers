@@ -108,10 +108,11 @@ def verify_ssh_transport_2(connection):
 
     transport_input_lines = [line.strip() for line in lines if line.strip().startswith('transport input')]
     print(transport_input_lines)
+    print(transport_input_lines[0])
     if not transport_input_lines:
         return False  # No transport input lines found
     
-    return len(transport_input_lines) == 1 and transport_input_lines[0] == 'transport input ssh'
+    return len(transport_input_lines) == 2 and transport_input_lines[0] == 'transport input ssh'
 
 def verify_aux_exec_disabled_3(connection):
     # Check the running configuration for the AUX port
