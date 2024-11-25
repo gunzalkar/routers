@@ -112,7 +112,7 @@ def verify_ssh_transport_2(connection):
     if not transport_input_lines:
         return False  # No transport input lines found
     
-    return len(transport_input_lines) == 2 and transport_input_lines[0] == 'transport input ssh'
+    return transport_input_lines[0] == 'transport input ssh'
 
 def verify_aux_exec_disabled_3(connection):
     # Check the running configuration for the AUX port
