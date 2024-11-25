@@ -102,15 +102,15 @@ def verify_privilege_level_1(connection):
 
 def verify_ssh_transport_2(connection):
     command0 ='enable'
-    command = 'show running-config | sec transport input'
+    command = 'show running-config | sec vty'
     connection.send_command(command0)
     output = connection.send_command(command)
     print("**********************************")
     print(output)
     lines = output.splitlines()
 
-    transport_input_lines = [line.strip() for line in lines if line.strip().startswith('transport input')]
-    
+    transport_input_lines = [line.strip() for line in lines if line.strip().startswith(' transport input')]
+    print(transport_input_lines)
     if not transport_input_lines:
         return False  # No transport input lines found
     
