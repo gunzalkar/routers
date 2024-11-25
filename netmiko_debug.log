@@ -1,0 +1,1284 @@
+DEBUG:paramiko.transport:starting thread (client mode): 0xa3e3f490
+DEBUG:paramiko.transport:Local version/idstring: SSH-2.0-paramiko_3.5.0
+DEBUG:paramiko.transport:Remote version/idstring: SSH-1.99-Cisco-1.25
+INFO:paramiko.transport:Connected (version 1.99, client Cisco-1.25)
+DEBUG:paramiko.transport:=== Key exchange possibilities ===
+DEBUG:paramiko.transport:kex algos: ecdh-sha2-nistp256, ecdh-sha2-nistp384, ecdh-sha2-nistp521, diffie-hellman-group14-sha1
+DEBUG:paramiko.transport:server key: rsa-sha2-512, rsa-sha2-256, ssh-rsa
+DEBUG:paramiko.transport:client encrypt: aes128-gcm, aes256-gcm, aes128-ctr, aes192-ctr, aes256-ctr
+DEBUG:paramiko.transport:server encrypt: aes128-gcm, aes256-gcm, aes128-ctr, aes192-ctr, aes256-ctr
+DEBUG:paramiko.transport:client mac: hmac-sha2-256-etm@openssh.com, hmac-sha2-512-etm@openssh.com, hmac-sha2-256, hmac-sha2-512, hmac-sha1
+DEBUG:paramiko.transport:server mac: hmac-sha2-256-etm@openssh.com, hmac-sha2-512-etm@openssh.com, hmac-sha2-256, hmac-sha2-512, hmac-sha1
+DEBUG:paramiko.transport:client compress: none
+DEBUG:paramiko.transport:server compress: none
+DEBUG:paramiko.transport:client lang: <none>
+DEBUG:paramiko.transport:server lang: <none>
+DEBUG:paramiko.transport:kex follows: False
+DEBUG:paramiko.transport:=== Key exchange agreements ===
+DEBUG:paramiko.transport:Kex: ecdh-sha2-nistp256
+DEBUG:paramiko.transport:HostKey: rsa-sha2-512
+DEBUG:paramiko.transport:Cipher: aes128-ctr
+DEBUG:paramiko.transport:MAC: hmac-sha2-256
+DEBUG:paramiko.transport:Compression: none
+DEBUG:paramiko.transport:=== End of kex handshake ===
+DEBUG:paramiko.transport:kex engine KexNistp256 specified hash_algo <built-in function openssl_sha256>
+DEBUG:paramiko.transport:Switch to new keys ...
+DEBUG:paramiko.transport:Adding ssh-rsa host key for 192.168.1.1: b'432757a9cd75f669b245aa185e3f0c39'
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (password) failed.
+DEBUG:paramiko.transport:EOF in transport thread
+DEBUG:paramiko.transport:starting thread (client mode): 0xc34cf490
+DEBUG:paramiko.transport:Local version/idstring: SSH-2.0-paramiko_3.5.0
+DEBUG:paramiko.transport:Remote version/idstring: SSH-1.99-Cisco-1.25
+INFO:paramiko.transport:Connected (version 1.99, client Cisco-1.25)
+DEBUG:paramiko.transport:=== Key exchange possibilities ===
+DEBUG:paramiko.transport:kex algos: ecdh-sha2-nistp256, ecdh-sha2-nistp384, ecdh-sha2-nistp521, diffie-hellman-group14-sha1
+DEBUG:paramiko.transport:server key: rsa-sha2-512, rsa-sha2-256, ssh-rsa
+DEBUG:paramiko.transport:client encrypt: aes128-gcm, aes256-gcm, aes128-ctr, aes192-ctr, aes256-ctr
+DEBUG:paramiko.transport:server encrypt: aes128-gcm, aes256-gcm, aes128-ctr, aes192-ctr, aes256-ctr
+DEBUG:paramiko.transport:client mac: hmac-sha2-256-etm@openssh.com, hmac-sha2-512-etm@openssh.com, hmac-sha2-256, hmac-sha2-512, hmac-sha1
+DEBUG:paramiko.transport:server mac: hmac-sha2-256-etm@openssh.com, hmac-sha2-512-etm@openssh.com, hmac-sha2-256, hmac-sha2-512, hmac-sha1
+DEBUG:paramiko.transport:client compress: none
+DEBUG:paramiko.transport:server compress: none
+DEBUG:paramiko.transport:client lang: <none>
+DEBUG:paramiko.transport:server lang: <none>
+DEBUG:paramiko.transport:kex follows: False
+DEBUG:paramiko.transport:=== Key exchange agreements ===
+DEBUG:paramiko.transport:Kex: ecdh-sha2-nistp256
+DEBUG:paramiko.transport:HostKey: rsa-sha2-512
+DEBUG:paramiko.transport:Cipher: aes128-ctr
+DEBUG:paramiko.transport:MAC: hmac-sha2-256
+DEBUG:paramiko.transport:Compression: none
+DEBUG:paramiko.transport:=== End of kex handshake ===
+DEBUG:paramiko.transport:kex engine KexNistp256 specified hash_algo <built-in function openssl_sha256>
+DEBUG:paramiko.transport:Switch to new keys ...
+DEBUG:paramiko.transport:Adding ssh-rsa host key for 192.168.1.1: b'432757a9cd75f669b245aa185e3f0c39'
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (password) failed.
+DEBUG:paramiko.transport:starting thread (client mode): 0x97237490
+DEBUG:paramiko.transport:Local version/idstring: SSH-2.0-paramiko_3.5.0
+DEBUG:paramiko.transport:Remote version/idstring: SSH-2.0-Cisco-1.25
+INFO:paramiko.transport:Connected (version 2.0, client Cisco-1.25)
+DEBUG:paramiko.transport:=== Key exchange possibilities ===
+DEBUG:paramiko.transport:kex algos: ecdh-sha2-nistp256, ecdh-sha2-nistp384, ecdh-sha2-nistp521, diffie-hellman-group14-sha1
+DEBUG:paramiko.transport:server key: rsa-sha2-512, rsa-sha2-256, ssh-rsa
+DEBUG:paramiko.transport:client encrypt: aes128-gcm, aes256-gcm, aes128-ctr, aes192-ctr, aes256-ctr
+DEBUG:paramiko.transport:server encrypt: aes128-gcm, aes256-gcm, aes128-ctr, aes192-ctr, aes256-ctr
+DEBUG:paramiko.transport:client mac: hmac-sha2-256-etm@openssh.com, hmac-sha2-512-etm@openssh.com, hmac-sha2-256, hmac-sha2-512, hmac-sha1
+DEBUG:paramiko.transport:server mac: hmac-sha2-256-etm@openssh.com, hmac-sha2-512-etm@openssh.com, hmac-sha2-256, hmac-sha2-512, hmac-sha1
+DEBUG:paramiko.transport:client compress: none
+DEBUG:paramiko.transport:server compress: none
+DEBUG:paramiko.transport:client lang: <none>
+DEBUG:paramiko.transport:server lang: <none>
+DEBUG:paramiko.transport:kex follows: False
+DEBUG:paramiko.transport:=== Key exchange agreements ===
+DEBUG:paramiko.transport:Kex: ecdh-sha2-nistp256
+DEBUG:paramiko.transport:HostKey: rsa-sha2-512
+DEBUG:paramiko.transport:Cipher: aes128-ctr
+DEBUG:paramiko.transport:MAC: hmac-sha2-256
+DEBUG:paramiko.transport:Compression: none
+DEBUG:paramiko.transport:=== End of kex handshake ===
+DEBUG:paramiko.transport:kex engine KexNistp256 specified hash_algo <built-in function openssl_sha256>
+DEBUG:paramiko.transport:Switch to new keys ...
+DEBUG:paramiko.transport:Adding ssh-rsa host key for 192.168.1.1: b'432757a9cd75f669b245aa185e3f0c39'
+DEBUG:paramiko.transport:userauth is OK
+INFO:paramiko.transport:Authentication (password) successful!
+DEBUG:paramiko.transport:[chan 0] Max packet in: 32768 bytes
+DEBUG:paramiko.transport:[chan 0] Max packet out: 4096 bytes
+DEBUG:paramiko.transport:Secsh channel 0 opened.
+DEBUG:paramiko.transport:[chan 0] Sesch channel 0 request ok
+DEBUG:paramiko.transport:[chan 0] Sesch channel 0 request ok
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:write_channel: b'terminal width 511\n'
+DEBUG:netmiko:read_channel: 
+
+cv800#
+cv800#
+DEBUG:netmiko:read_channel: termin
+DEBUG:netmiko:read_channel: al widt
+DEBUG:netmiko:read_channel: h 511
+cv800#
+DEBUG:netmiko:Pattern found: (terminal width 511) 
+
+cv800#
+cv800#terminal width 511
+DEBUG:netmiko:In disable_paging
+DEBUG:netmiko:Command: terminal length 0
+
+DEBUG:netmiko:write_channel: b'terminal length 0\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: terminal
+DEBUG:netmiko:read_channel:  le
+DEBUG:netmiko:read_channel: ngth 0
+cv800#
+DEBUG:netmiko:Pattern found: (terminal\ length\ 0) 
+cv800#terminal length 0
+DEBUG:netmiko:
+cv800#terminal length 0
+DEBUG:netmiko:Exiting disable_paging
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:Clear buffer detects data in the channel
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:
+Parenthesis found in pattern.
+
+pattern: (\#|>)
+
+
+This can be problemtic when used in read_until_pattern().
+
+You should ensure that you use either non-capture groups i.e. '(?:' or that the
+parenthesis completely wrap the pattern '(pattern)'
+DEBUG:netmiko:Pattern found: (\#|>) 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:Pattern found: (cv800.*) 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include privilege\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: un | 
+DEBUG:netmiko:read_channel: include
+DEBUG:netmiko:read_channel:  pri
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: vilege
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ privilege) show run | include privilege
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: username super privilege 15 ******** 0 ********
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | sec vty\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: n | sec vt
+DEBUG:netmiko:read_channel: y
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ sec\ vty) show run | sec vty
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: line vty 0 4
+ ******** ********
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | sec aux\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: n | se
+DEBUG:netmiko:read_channel: c aux
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ sec\ aux) show run | sec aux
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: line aux 0
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show ip access-lists 10\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ip 
+DEBUG:netmiko:read_channel: access-li
+DEBUG:netmiko:read_channel: sts 10
+
+DEBUG:netmiko:Pattern found: (show\ ip\ access\-lists\ 10) show ip access-lists 10
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | sec vty 0 4\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: run | s
+DEBUG:netmiko:read_channel: ec v
+DEBUG:netmiko:read_channel: ty
+DEBUG:netmiko:read_channel:  0 4
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ sec\ vty\ 0\ 4) show run | sec vty 0 4
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: line vty 0 4
+ ******** ********
+ login local
+ transport input ssh
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | sec line aux 0\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: un | se
+DEBUG:netmiko:read_channel: c line a
+DEBUG:netmiko:read_channel: ux 0
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ sec\ line\ aux\ 0) show run | sec line aux 0
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: line aux 0
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | sec line con 0\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: n | sec l
+DEBUG:netmiko:read_channel: ine con 
+DEBUG:netmiko:read_channel: 0
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ sec\ line\ con\ 0) show run | sec line con 0
+DEBUG:netmiko:read_channel: line con 0
+ stopbits 1
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show line tty 44 | begin Timeout\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show lin
+DEBUG:netmiko:read_channel: e tty 44 |
+DEBUG:netmiko:read_channel:  begin T
+DEBUG:netmiko:read_channel: imeout
+cv800#
+DEBUG:netmiko:Pattern found: (show\ line\ tty\ 44\ \|\ begin\ Timeout) show line tty 44 | begin Timeout
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show line vty 0 | begin Timeout\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: line v
+DEBUG:netmiko:read_channel: ty 0 | beg
+DEBUG:netmiko:read_channel: in Tim
+DEBUG:netmiko:read_channel: eout
+Timeouts:      Idle EXEC    Idle Session   Modem Answer  Session   Dispatch
+               00:10:00        never                        none     not set
+                            Idle Session Disconnect Warning
+                              never 
+                            Login-sequence User Response
+                             00:00:30
+                            Autoselect Initial Wait
+                              not set 
+Modem type is unknown.
+Session limit is not set.
+Time since activation: 00:00:01
+Editing is enabled.
+History is enabled, history size is 10.
+DNS resolution in show commands is enabled
+Full user help is disabled
+Allowed input transports are ssh.
+Allowed output transports are pad telnet rlogin ssh.
+Preferred transport is telnet.
+Shell: disabled
+Shell trace: off
+No output characters are padded
+No special data dispatching characters
+cv800#
+DEBUG:netmiko:Pattern found: (show\ line\ vty\ 0\ \|\ begin\ Timeout) show line vty 0 | begin Timeout
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show line aux 0 | include input transports\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show li
+DEBUG:netmiko:read_channel: ne aux
+DEBUG:netmiko:read_channel:  0 | i
+DEBUG:netmiko:read_channel: nclude inp
+DEBUG:netmiko:read_channel: ut tra
+DEBUG:netmiko:read_channel: nsports
+Allowed input transports are none.
+cv800#
+DEBUG:netmiko:Pattern found: (show\ line\ aux\ 0\ \|\ include\ input\ transports) show line aux 0 | include input transports
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include aaa new-model\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: running-c
+DEBUG:netmiko:read_channel: onf
+DEBUG:netmiko:read_channel: ig | inclu
+DEBUG:netmiko:read_channel: de aaa new
+DEBUG:netmiko:read_channel: -model
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ aaa\ new\-model) show running-config | include aaa new-model
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: no aaa new-model
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include aaa authentication login\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: run | inc
+DEBUG:netmiko:read_channel: lude aaa
+DEBUG:netmiko:read_channel:  authenti
+DEBUG:netmiko:read_channel: cation
+DEBUG:netmiko:read_channel:  login
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ aaa\ authentication\ login) show run | include aaa authentication login
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include aaa authentication enable\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show run
+DEBUG:netmiko:read_channel: ning-con
+DEBUG:netmiko:read_channel: fig | inc
+DEBUG:netmiko:read_channel: lude aaa a
+DEBUG:netmiko:read_channel: uthentic
+DEBUG:netmiko:read_channel: ation ena
+DEBUG:netmiko:read_channel: ble
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ aaa\ authentication\ enable) show running-config | include aaa authentication enable
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include aaa accounting commands\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: unning-c
+DEBUG:netmiko:read_channel: onfig |
+DEBUG:netmiko:read_channel:  include 
+DEBUG:netmiko:read_channel: aaa account
+DEBUG:netmiko:read_channel: ing comman
+DEBUG:netmiko:read_channel: ds
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ aaa\ accounting\ commands) show running-config | include aaa accounting commands
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include aaa accounting connection\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show runn
+DEBUG:netmiko:read_channel: ing-conf
+DEBUG:netmiko:read_channel: ig | inclu
+DEBUG:netmiko:read_channel: de aaa
+DEBUG:netmiko:read_channel:  accounting conne
+DEBUG:netmiko:read_channel: ction
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ aaa\ accounting\ connection) show running-config | include aaa accounting connection
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include aaa accounting exec\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show run
+DEBUG:netmiko:read_channel: ning-conf
+DEBUG:netmiko:read_channel: ig | incl
+DEBUG:netmiko:read_channel: ude aaa a
+DEBUG:netmiko:read_channel: ccountin
+DEBUG:netmiko:read_channel: g exec
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ aaa\ accounting\ exec) show running-config | include aaa accounting exec
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include aaa accounting network\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: nning-co
+DEBUG:netmiko:read_channel: nfig | in
+DEBUG:netmiko:read_channel: clude aaa
+DEBUG:netmiko:read_channel:  accountin
+DEBUG:netmiko:read_channel: g network
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ aaa\ accounting\ network) show running-config | include aaa accounting network
+DEBUG:netmiko:read_channel: 
+
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include aaa accounting system\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: unning-con
+DEBUG:netmiko:read_channel: fig | inc
+DEBUG:netmiko:read_channel: lude aaa 
+DEBUG:netmiko:read_channel: accountin
+DEBUG:netmiko:read_channel: g syste
+DEBUG:netmiko:read_channel: m
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ aaa\ accounting\ system) show running-config | include aaa accounting system
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | begin banner exec\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: sho
+DEBUG:netmiko:read_channel: w runnin
+DEBUG:netmiko:read_channel: g-config
+DEBUG:netmiko:read_channel:  | beg
+DEBUG:netmiko:read_channel: in ban
+DEBUG:netmiko:read_channel: ner exe
+DEBUG:netmiko:read_channel: c
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ begin\ banner\ exec) show running-config | begin banner exec
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | begin banner login\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: nning-conf
+DEBUG:netmiko:read_channel: ig | begi
+DEBUG:netmiko:read_channel: n banner
+DEBUG:netmiko:read_channel:  login
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ begin\ banner\ login) show running-config | begin banner login
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | begin banner motd\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: running-co
+DEBUG:netmiko:read_channel: nfig | beg
+DEBUG:netmiko:read_channel: in banner
+DEBUG:netmiko:read_channel:  motd
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ begin\ banner\ motd) show running-config | begin banner motd
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include enable secret\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: nning-co
+DEBUG:netmiko:read_channel: nfig | inc
+DEBUG:netmiko:read_channel: lude enab
+DEBUG:netmiko:read_channel: le se
+DEBUG:netmiko:read_channel: cret
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ enable\ secret) show running-config | include enable secret
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: enable secret 9 $9$Ad22efX8tDo83.$VcLrShfkGLbpXUQ0gVKF0FuTny81EWE55wWFvLID6ng
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include service ********-encryption\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: nning-
+DEBUG:netmiko:read_channel: config 
+DEBUG:netmiko:read_channel: | incl
+DEBUG:netmiko:read_channel: ude se
+DEBUG:netmiko:read_channel: rvice pa
+DEBUG:netmiko:read_channel: ssword
+DEBUG:netmiko:read_channel: -encr
+DEBUG:netmiko:read_channel: yption
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ service\ ********\-encryption) show running-config | include service ********-encryption
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show running-config | include username\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: runn
+DEBUG:netmiko:read_channel: ing-con
+DEBUG:netmiko:read_channel: fig | i
+DEBUG:netmiko:read_channel: nclude 
+DEBUG:netmiko:read_channel: username
+
+DEBUG:netmiko:Pattern found: (show\ running\-config\ \|\ include\ username) show running-config | include username
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: username super privilege 15 ******** 0 ********
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show snmp community\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: snmp 
+DEBUG:netmiko:read_channel: comm
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: unity
+
+Community name: ILMI
+Community Index: ILMI
+Community SecurityName: ILMI
+storage-type: read-only	 active
+
+
+Community name: hello
+Community Index: hello
+Community SecurityName: hello
+storage-type: nonvolatile	 active
+
+
+cv800#
+DEBUG:netmiko:Pattern found: (show\ snmp\ community) show snmp community
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show snmp community\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show s
+DEBUG:netmiko:read_channel: nmp commu
+DEBUG:netmiko:read_channel: ni
+DEBUG:netmiko:read_channel: ty
+
+Community name: ILMI
+Community Index: ILMI
+Community SecurityName: ILMI
+storage-type: read-only	 active
+
+
+Community name: hello
+Community Index: hello
+Community SecurityName: hello
+storage-type: nonvolatile	 active
+
+
+cv800#
+DEBUG:netmiko:Pattern found: (show\ snmp\ community) show snmp community
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show snmp community\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show
+DEBUG:netmiko:read_channel:  snmp com
+DEBUG:netmiko:read_channel: munity
+
+Community name: ILMI
+Community Index: ILMI
+Community SecurityName: ILMI
+storage-type: read-only	 active
+
+
+Community name: hello
+Community Index: hello
+Community SecurityName: hello
+storage-type: nonvolatile	 active
+
+
+cv800#
+DEBUG:netmiko:Pattern found: (show\ snmp\ community) show snmp community
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | incl snmp-server community\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show run
+DEBUG:netmiko:read_channel:  | incl
+DEBUG:netmiko:read_channel:  snmp-se
+DEBUG:netmiko:read_channel: rver com
+DEBUG:netmiko:read_channel: munity
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ incl\ snmp\-server\ community) show run | incl snmp-server community
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: snmp-server community hello RO
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | incl snmp-server community\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: run | in
+DEBUG:netmiko:read_channel: cl snmp
+DEBUG:netmiko:read_channel: -server 
+DEBUG:netmiko:read_channel: communi
+DEBUG:netmiko:read_channel: ty
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ incl\ snmp\-server\ community) show run | incl snmp-server community
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: snmp-server community hello RO
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show ip access-lists 10\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: ip
+DEBUG:netmiko:read_channel:  access-lists 10
+DEBUG:netmiko:Pattern found: (show\ ip\ access\-lists\ 10) show ip access-lists 10
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | incl snmp-server\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: n | in
+DEBUG:netmiko:read_channel: cl snmp-
+DEBUG:netmiko:read_channel: server
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ incl\ snmp\-server) show run | incl snmp-server
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: snmp-server community hello RO
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show snmp group\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: snmp g
+DEBUG:netmiko:read_channel: roup
+groupname: ILMI                             security model:v1 
+contextname: <no context specified>         storage-type: permanent
+readview : *ilmi                            writeview: *ilmi                           
+notifyview: <no notifyview specified>       
+row status: active
+
+groupname: ILMI                             security model:v2c 
+contextname: <no context specified>         storage-type: permanent
+readview : *ilmi                            writeview: *ilmi                           
+notifyview: <no notifyview specified>       
+row status: active
+
+groupname: hello                            security model:v1 
+contextname: <no context specified>         storage-type: permanent
+readview : v1default                        writeview: <no writeview specified>        
+notifyview: <no notifyview specified>       
+row status: active
+
+groupname: hello                            security model:v2c 
+contextname: <no context specified>         storage-type: permanent
+readview : v1default                        writeview: <no writeview specified>        
+notifyview: <no notifyview specified>       
+row status: active
+
+cv800#
+DEBUG:netmiko:Pattern found: (show\ snmp\ group) show snmp group
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show snmp user\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show sn
+DEBUG:netmiko:read_channel: mp user
+DEBUG:netmiko:Pattern found: (show\ snmp\ user) show snmp user
+DEBUG:netmiko:read_channel: 
+
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include hostname\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show run | in
+DEBUG:netmiko:read_channel: clude h
+DEBUG:netmiko:read_channel: ostname
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ hostname) show run | include hostname
+DEBUG:netmiko:read_channel: 
+
+DEBUG:netmiko:read_channel: hostname cv800
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include ip domain-name\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: un | in
+DEBUG:netmiko:read_channel: clude ip
+DEBUG:netmiko:read_channel:  domain
+DEBUG:netmiko:read_channel: -name
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ ip\ domain\-name) show run | include ip domain-name
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show crypto key mypubkey rsa\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: crypto ke
+DEBUG:netmiko:read_channel: y mypubke
+DEBUG:netmiko:read_channel: y rsa
+% Key pair was generated at: 19:02:08 UTC Nov 22 2024
+Key name: TP-self-signed-2215559581
+Key type: RSA KEYS
+ Storage Device: not specified
+ Usage: General Purpose Key
+ Key is not exportable. Redundancy enabled.
+ Key Data:
+  30820122 300D0609 2A864886 F70D0101 01050003 82010F00 3082010A 02820101 
+  00A94EAB 53E6AB3B B51E5E43 66C73A52 C6CE88C6 4FD23F39 CB12CAF0 03F87B46 
+  BBB59DCC FD9417E9 72A479DF 91D084A3 CD28AE60 C82039E5 301863B8 BF936257 
+  67382B95 E793FC45 12119DF2 01C3BC24 063B96D8 9DFE8490 539225F5 A1DFF1FF 
+  7EA44967 F99FBC41 7B9F1795 088A1B19 5139BF60 DEAD3E19 1B3A4D46 F0EC0896 
+  26818360 0443DFB7 33D73F56 CD4AAC33 614D3812 8E4FC98F F7619AE9 28B4A8A5 
+  733C3F79 8D21CEFA 65F6DF6F 4B71CB96 192F427E EDD57EE6 CC790B3E 5DB9D6B5 
+  B74FC3B2 AB385960 2EE9978F 078D2178 BBC27B30 39C01DBB A4DB6510 A5472171 
+  955FE91B B63F1B9B A1FF25C0 3132AD26 C122417D DA217808 2864F24C B539B0DC 
+  67020301 0001
+% Key pair was generated at: 19:02:09 UTC Nov 22 2024
+Key name: TP-self-signed-2215559581.server
+Key type: RSA KEYS
+Temporary key
+ Usage: Encryption Key
+ Key is not exportable.
+ Key Data:
+  30820132 300D0609 2A864886 F70D0101 01050003 82011F00 3082011A 02820111 
+  00CD68FF 527435C9 D18DB0FB B542C80B BCBD678A 44F76B13 2C9354CD FD85C4A8 
+  99BD3C98 B0D9AD54 BFEF2E98 9149BC70 1DA22776 08F04C3D 6261E7FE A3F1DA95 
+  945A6EF6 0517C007 720C0C25 F74B0B17 919B3BFA 43219B1D 2BE9248D CCD366B8 
+  61805C3A EF7872F9 69705B8C A578BD15 382F35B4 DA3F355C E43E9914 10887DA1 
+  9144BEA2 02D55841 5726573D CB8FB814 83481958 4AC84550 145E84D8 DB448C24 
+  13FA3334 46149C05 8638A399 E9409DDB 9B29547A 78E089E4 84F0D969 C859F09A 
+  F2F8474E 7345ECB4 C4B82761 956EC1AE AB82172F 259A875C 10DB9049 998CE898 
+  FBABBAF2 F9788C34 E78470B2 4491DEC9 AD35936D DD68521E 321E4C6C B65086D7 
+  30D5445F 26F993DC FF6EBCA1 13303F33 29020301 0001
+cv800#
+DEBUG:netmiko:Pattern found: (show\ crypto\ key\ mypubkey\ rsa) show crypto key mypubkey rsa
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show ip ssh\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ip ssh
+DEBUG:netmiko:Pattern found: (show\ ip\ ssh) show ip ssh
+DEBUG:netmiko:read_channel: 
+SSH Enabled - version 2.0
+Authentication methods:publickey,keyboard-interactive,********
+Authentication Publickey Algorithms:x509v3-ssh-rsa,ssh-rsa,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,x509v3-ecdsa-sha2-nistp256,x509v3-ecdsa-sha2-nistp384,x509v3-ecdsa-sha2-nistp521,rsa-sha2-256,rsa-sha2-512
+Hostkey Algorithms:x509v3-ssh-rsa,rsa-sha2-512,rsa-sha2-256,ssh-rsa
+Encryption Algorithms:aes128-gcm,aes256-gcm,aes128-ctr,aes192-ctr,aes256-ctr
+MAC Algorithms:hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-sha1
+KEX Algorithms:ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha1
+Authentication timeout: 120 secs; Authentication retries: 3
+Minimum expected Diffie Hellman key size : 2048 bits
+IOS Keys in SECSH format(ssh-rsa, base64 encoded): TP-self-signed-2215559581
+Modulus Size : 2048 bits
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpTqtT5qs7tR5eQ2bHOlLGzojGT9I/OcsSyvAD+HtG
+u7WdzP2UF+lypHnfkdCEo80ormDIIDnlMBhjuL+TYldnOCuV55P8RRIRnfIBw7wkBjuW2J3+hJBTkiX1
+od/x/36kSWf5n7xBe58XlQiKGxlROb9g3q0+GRs6TUbw7AiWJoGDYARD37cz1z9WzUqsM2FNOBKOT8mP
+92Ga6Si0qKVzPD95jSHO+mX2329LccuWGS9Cfu3VfubMeQs+XbnWtbdPw7KrOFlgLumXjweNIXi7wnsw
+OcAdu6TbZRClRyFxlV/pG7Y/G5uh/yXAMTKtJsEiQX3aIXgIKGTyTLU5sNxn                    
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show ip ssh\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show i
+DEBUG:netmiko:read_channel: p ssh
+SSH Enabled - version 2.0
+Authentication methods:publickey,keyboard-interactive,********
+Authentication Publickey Algorithms:x509v3-ssh-rsa,ssh-rsa,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,x509v3-ecdsa-sha2-nistp256,x509v3-ecdsa-sha2-nistp384,x509v3-ecdsa-sha2-nistp521,rsa-sha2-256,rsa-sha2-512
+Hostkey Algorithms:x509v3-ssh-rsa,rsa-sha2-512,rsa-sha2-256,ssh-rsa
+Encryption Algorithms:aes128-gcm,aes256-gcm,aes128-ctr,aes192-ctr,aes256-ctr
+MAC Algorithms:hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-sha1
+KEX Algorithms:ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha1
+Authentication timeout: 120 secs; Authentication retries: 3
+Minimum expected Diffie Hellman key size : 2048 bits
+IOS Keys in SECSH format(ssh-rsa, base64 encoded): TP-self-signed-2215559581
+Modulus Size : 2048 bits
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpTqtT5qs7tR5eQ2bHOlLGzojGT9I/OcsSyvAD+HtG
+u7WdzP2UF+lypHnfkdCEo80ormDIIDnlMBhjuL+TYldnOCuV55P8RRIRnfIBw7wkBjuW2J3+hJBTkiX1
+od/x/36kSWf5n7xBe58XlQiKGxlROb9g3q0+GRs6TUbw7AiWJoGDYARD37cz1z9WzUqsM2FNOBKOT8mP
+92Ga6Si0qKVzPD95jSHO+mX2329LccuWGS9Cfu3VfubMeQs+XbnWtbdPw7KrOFlgLumXjweNIXi7wnsw
+OcAdu6TbZRClRyFxlV/pG7Y/G5uh/yXAMTKtJsEiQX3aIXgIKGTyTLU5sNxn                    
+cv800#
+DEBUG:netmiko:Pattern found: (show\ ip\ ssh) show ip ssh
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show ip ssh\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show i
+DEBUG:netmiko:read_channel: p ssh
+SSH Enabled - version 2.0
+Authentication methods:publickey,keyboard-interactive,********
+Authentication Publickey Algorithms:x509v3-ssh-rsa,ssh-rsa,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,x509v3-ecdsa-sha2-nistp256,x509v3-ecdsa-sha2-nistp384,x509v3-ecdsa-sha2-nistp521,rsa-sha2-256,rsa-sha2-512
+Hostkey Algorithms:x509v3-ssh-rsa,rsa-sha2-512,rsa-sha2-256,ssh-rsa
+Encryption Algorithms:aes128-gcm,aes256-gcm,aes128-ctr,aes192-ctr,aes256-ctr
+MAC Algorithms:hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-sha1
+KEX Algorithms:ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha1
+Authentication timeout: 120 secs; Authentication retries: 3
+Minimum expected Diffie Hellman key size : 2048 bits
+IOS Keys in SECSH format(ssh-rsa, base64 encoded): TP-self-signed-2215559581
+Modulus Size : 2048 bits
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpTqtT5qs7tR5eQ2bHOlLGzojGT9I/OcsSyvAD+HtG
+u7WdzP2UF+lypHnfkdCEo80ormDIIDnlMBhjuL+TYldnOCuV55P8RRIRnfIBw7wkBjuW2J3+hJBTkiX1
+od/x/36kSWf5n7xBe58XlQiKGxlROb9g3q0+GRs6TUbw7AiWJoGDYARD37cz1z9WzUqsM2FNOBKOT8mP
+92Ga6Si0qKVzPD95jSHO+mX2329LccuWGS9Cfu3VfubMeQs+XbnWtbdPw7KrOFlgLumXjweNIXi7wnsw
+OcAdu6TbZRClRyFxlV/pG7Y/G5uh/yXAMTKtJsEiQX3aIXgIKGTyTLU5sNxn                    
+cv800#
+DEBUG:netmiko:Pattern found: (show\ ip\ ssh) show ip ssh
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show cdp\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show
+DEBUG:netmiko:read_channel:  cdp
+% CDP is not enabled
+cv800#
+DEBUG:netmiko:Pattern found: (show\ cdp) show cdp
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include bootp\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: run | i
+DEBUG:netmiko:read_channel: nclude b
+DEBUG:netmiko:read_channel: ootp
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ bootp) show run | include bootp
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include dhcp\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: un | incl
+DEBUG:netmiko:read_channel: ud
+DEBUG:netmiko:read_channel: e d
+DEBUG:netmiko:read_channel: hcp
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ dhcp) show run | include dhcp
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include identd\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: un | 
+DEBUG:netmiko:read_channel: incl
+DEBUG:netmiko:read_channel: ude identd
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ identd) show run | include identd
+DEBUG:netmiko:read_channel: 
+
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include service tcp\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: n | inc
+DEBUG:netmiko:read_channel: lude servi
+DEBUG:netmiko:read_channel: ce tcp
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ service\ tcp) show run | include service tcp
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include service tcp\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show ru
+DEBUG:netmiko:read_channel: n | inc
+DEBUG:netmiko:read_channel: lude
+DEBUG:netmiko:read_channel:  service
+DEBUG:netmiko:read_channel:  tcp
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ service\ tcp) show run | include service tcp
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include service pad\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show run
+DEBUG:netmiko:read_channel:  | includ
+DEBUG:netmiko:read_channel: e servi
+DEBUG:netmiko:read_channel: ce pad
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ service\ pad) show run | include service pad
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include logging on\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show r
+DEBUG:netmiko:read_channel: un | incl
+DEBUG:netmiko:read_channel: ude loggi
+DEBUG:netmiko:read_channel: ng on
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ logging\ on) show run | include logging on
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include logging buffered\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show
+DEBUG:netmiko:read_channel:  ru
+DEBUG:netmiko:read_channel: n | include log
+DEBUG:netmiko:read_channel: ging bu
+DEBUG:netmiko:read_channel: ffered
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ logging\ buffered) show run | include logging buffered
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include logging console\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: run | 
+DEBUG:netmiko:read_channel: include
+DEBUG:netmiko:read_channel:  logging c
+DEBUG:netmiko:read_channel: onsole
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ logging\ console) show run | include logging console
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include logging host\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show run |
+DEBUG:netmiko:read_channel:  include 
+DEBUG:netmiko:read_channel: logging ho
+DEBUG:netmiko:read_channel: st
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ logging\ host) show run | include logging host
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'sh log | incl Trap logging\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: sh log
+DEBUG:netmiko:read_channel:  | incl 
+DEBUG:netmiko:read_channel: Trap loggi
+DEBUG:netmiko:read_channel: ng
+    Trap logging: level informational, 94 message lines logged
+cv800#
+DEBUG:netmiko:Pattern found: (sh\ log\ \|\ incl\ Trap\ logging) sh log | incl Trap logging
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'sh run | incl service timestamps\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: sh ru
+DEBUG:netmiko:read_channel: n | in
+DEBUG:netmiko:read_channel: cl serv
+DEBUG:netmiko:read_channel: ice time
+DEBUG:netmiko:read_channel: stamps
+
+DEBUG:netmiko:Pattern found: (sh\ run\ \|\ incl\ service\ timestamps) sh run | incl service timestamps
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: service timestamps debug datetime msec
+service timestamps log datetime msec
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include ntp authentication-key\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show
+DEBUG:netmiko:read_channel:  run | inc
+DEBUG:netmiko:read_channel: lude ntp a
+DEBUG:netmiko:read_channel: uthenticat
+DEBUG:netmiko:read_channel: ion-key
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ ntp\ authentication\-key) show run | include ntp authentication-key
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include ntp trusted-key\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: sh
+DEBUG:netmiko:read_channel: ow run | 
+DEBUG:netmiko:read_channel: include nt
+DEBUG:netmiko:read_channel: p truste
+DEBUG:netmiko:read_channel: d-key
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ ntp\ trusted\-key) show run | include ntp trusted-key
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show run | include ntp server\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show 
+DEBUG:netmiko:read_channel: run | incl
+DEBUG:netmiko:read_channel: ude ntp
+DEBUG:netmiko:read_channel:  ser
+DEBUG:netmiko:read_channel: ver
+
+DEBUG:netmiko:Pattern found: (show\ run\ \|\ include\ ntp\ server) show run | include ntp server
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show ntp associations\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show n
+DEBUG:netmiko:read_channel: tp as
+DEBUG:netmiko:read_channel: soci
+DEBUG:netmiko:read_channel: ations
+cv800#
+DEBUG:netmiko:Pattern found: (show\ ntp\ associations) show ntp associations
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:[find_prompt()]: prompt is cv800#
+DEBUG:netmiko:write_channel: b'show ip interface brief | include Loopback\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: show i
+DEBUG:netmiko:read_channel: p interfac
+DEBUG:netmiko:read_channel: e brief |
+DEBUG:netmiko:read_channel:  inclu
+DEBUG:netmiko:read_channel: de Loopb
+DEBUG:netmiko:read_channel: ack
+cv800#
+DEBUG:netmiko:Pattern found: (show\ ip\ interface\ brief\ \|\ include\ Loopback) show ip interface brief | include Loopback
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:write_channel: b'\n'
+DEBUG:netmiko:read_channel: 
+DEBUG:netmiko:read_channel: 
+cv800#
+DEBUG:netmiko:Pattern found: ([>#]) 
+cv800#
+DEBUG:netmiko:write_channel: b'exit\n'

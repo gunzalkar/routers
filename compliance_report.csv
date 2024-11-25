@@ -1,0 +1,67 @@
+Serial Number,Objective,Result,Compliance
+1,Verify that non-excluded users are set to privilege level 1.,Pass,Compliant
+2,Verify that SSH is the only transport method for VTY logins.,Pass,Compliant
+3,Verify that the EXEC process for the AUX port is disabled.,Fail,Non-Compliant
+4,"Check if ACL 10 contains required entries: 10, 20, 30.",Fail,Non-Compliant
+5,Check if access-class is set for VTY lines 0 to 4.,Fail,Non-Compliant
+6,Verify that a timeout of 10 minutes or less is configured for the AUX line.,Fail,Non-Compliant
+7,Verify that a timeout of exactly 9 minutes 59 seconds or less is configured for the console line.,Fail,Non-Compliant
+8,Verify that a timeout is configured for TTY line 44.,Fail,Non-Compliant
+9,Verify that a timeout of 10 minutes or less is configured for VTY line 0.,Pass,Compliant
+10,Verify that inbound connections for the AUX port are disabled.,Pass,Compliant
+11,Verify that AAA services are enabled.,Pass,Compliant
+12,Verify that AAA authentication for login is enabled.,Fail,Non-Compliant
+13,Verify that AAA authentication for enable mode is enabled.,Fail,Non-Compliant
+14,Verify that login authentication is set for line con 0.,Fail,Non-Compliant
+15,Verify that login authentication is set for line TTY 0.,Fail,Non-Compliant
+16,Verify that login authentication is set for line VTY 0.,Fail,Non-Compliant
+17,Verify that AAA accounting for commands is enabled.,Fail,Non-Compliant
+18,Verify that AAA accounting for connection is enabled.,Fail,Non-Compliant
+19,Verify that AAA accounting for exec is enabled.,Fail,Non-Compliant
+20,Verify that AAA accounting for network is enabled.,Fail,Non-Compliant
+21,Verify that AAA accounting for system is enabled.,Fail,Non-Compliant
+22,Verify that the Exec banner is set.,Fail,Non-Compliant
+23,Verify that the Login banner is set.,Fail,Non-Compliant
+24,Verify that the MOTD banner is set.,Fail,Non-Compliant
+25,Verify that the enable secret is set.,Pass,Compliant
+26,Verify that the password encryption service is enabled.,Fail,Non-Compliant
+27,Verify that a user with an encrypted password is enabled.,Fail,Non-Compliant
+28,Verify that the SNMP agent is not enabled.,Fail,Non-Compliant
+29,Verify that the private community string 'private' is not present.,Pass,Compliant
+30,Verify that the public community string is not enabled.,Pass,Compliant
+31,Verify that the Read/Write community string is not enabled.,Pass,Compliant
+32,Verify that ACL is enabled.,Fail,Non-Compliant
+33,Verify that ACL 10 contains the required entries for SNMP.,Fail,Non-Compliant
+34,Verify that SNMP HOSTs are enabled.,Fail,Non-Compliant
+35,Verify that SNMP traps are enabled.,Fail,Non-Compliant
+36,Verify that SNMP group and security model are correctly configured.,Fail,Non-Compliant
+37,Verify that SNMP user and security settings are correctly configured.,Fail,Non-Compliant
+38,Verify that the hostname is configured.,Pass,Compliant
+39,Verify that the domain name is configured.,Fail,Non-Compliant
+40,Verify that the RSA key pair is configured.,Pass,Compliant
+41,Verify that SSH timeout is configured properly.,Fail,Non-Compliant
+42,Verify that SSH Retry is configured properly.,Pass,Compliant
+43,Verify that SSH Version is configured properly.,Pass,Compliant
+44,Verify that CDP is not enabled.,Pass,Compliant
+45,Verify that BOOTP is not enabled.,Fail,Non-Compliant
+46,Verify that DHCP service is not enabled.,Fail,Non-Compliant
+47,Verify that Identd is not enabled.,Pass,Compliant
+48,Verify that TCP keepalives-in is enabled.,Fail,Non-Compliant
+49,Verify that TCP keepalives-out is enabled.,Fail,Non-Compliant
+50,Verify that service pad is disabled.,Fail,Non-Compliant
+51,Verify that logging on is disabled.,Pass,Compliant
+52,Verify that logging buffered is enabled.,Fail,Non-Compliant
+53,Verify that logging console is enabled.,Fail,Non-Compliant
+54,Verify that logging syslog is enabled.,Fail,Non-Compliant
+55,Verify that syslog server for SNMP traps is enabled.,Pass,Compliant
+56,Verify that service timestamps debug datetime is enabled.,Pass,Compliant
+57,Verify that Logging Source Interface is enabled.,Fail,Non-Compliant
+58,Verify that NTP Authentication is enabled.,Fail,Non-Compliant
+59,Verify that NTP authentication keys are configured.,Fail,Non-Compliant
+60,Verify that the number of NTP trusted keys matches the expected number.,Fail,Non-Compliant
+61,Verify that NTP servers are configured.,Fail,Non-Compliant
+62,Verify that NTP associations are configured.,Fail,Non-Compliant
+63,Verify that a loopback interface is defined with an IP address.,Fail,Non-Compliant
+64,Verify that AAA services are bound to a source interface.,Fail,Non-Compliant
+65,Verify that NTP services are bound to a source interface.,Fail,Non-Compliant
+66,Verify that TFTP services are bound to a source interface.,Fail,Non-Compliant
