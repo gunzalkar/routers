@@ -101,7 +101,7 @@ def verify_privilege_level_1(connection):
     return True
 
 def verify_ssh_transport_2(connection):
-    command = 'show run | sec vty'
+    command = 'show running-config | sec vty'
     output = connection.send_command(command)
     lines = output.splitlines()
 
