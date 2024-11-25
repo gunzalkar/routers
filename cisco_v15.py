@@ -103,12 +103,9 @@ def verify_privilege_level_1(connection):
 def verify_ssh_transport_2(connection):
     command = 'show running-config | sec vty'
     output = connection.send_command(command)
-    print(output)
     lines = output.splitlines()
 
     transport_input_lines = [line.strip() for line in lines if line.strip().startswith('transport input')]
-    print(transport_input_lines)
-    print(transport_input_lines[0])
     if not transport_input_lines:
         return False  # No transport input lines found
     
@@ -116,7 +113,7 @@ def verify_ssh_transport_2(connection):
 
 def verify_aux_exec_disabled_3(connection):
     # Check the running configuration for the AUX port
-    command_run = 'show run | sec aux'
+    command_run = 'show running-config | sec aux'
     output_run = connection.send_command(command_run)
     
     # Verify 'no exec' is present in the configuration output
@@ -140,7 +137,7 @@ def verify_acl_entries_4(connection, vty_acl_number, required_entries):
     return all(f'{entry} ' in output for entry in required_entries)
 
 def verify_acl_set_5(connection, line_start, line_end, vty_acl_number):
-    command = f'show run | sec vty {line_start} {line_end}'
+    command = f'show running-config | sec vty {line_start} {line_end}'
     output_line = connection.send_command(command)
     # Check if 'access-class' is present in the output
 
@@ -151,7 +148,7 @@ def verify_acl_set_5(connection, line_start, line_end, vty_acl_number):
     return True
 
 def verify_timeout_configured_6(connection):
-    command = 'show run | sec line aux 0'
+    command = 'show running-config | sec line aux 0'
     output = connection.send_command(command)
     
     # Look for the 'exec-timeout' line in the output
@@ -167,7 +164,7 @@ def verify_timeout_configured_6(connection):
     return False
 
 def verify_console_timeout_configured_7(connection):
-    command = 'show run | sec line con 0'
+    command = 'show running-config | sec line con 0'
     output = connection.send_command(command)
     
     # Look for the 'exec-timeout' line in the output
@@ -211,7 +208,7 @@ def verify_aaa_services_enabled_11(connection):
     return 'aaa new-model' in output
 
 def verify_aaa_authentication_login_enabled_12(connection):
-    command = 'show run | include aaa authentication login'
+    command = 'show running-config | include aaa authentication login'
     output = connection.send_command(command)
 
     lines = output.splitlines()
@@ -387,7 +384,7 @@ def verify_public_community_string_30(connection):
     return False
 
 def verify_rw_community_string_31(connection):
-    command = 'show run | incl snmp-server community'
+    command = 'show running-config | incl snmp-server community'
     output = connection.send_command(command)
     
     # Check if ' RW ' is not present in the output
@@ -397,7 +394,7 @@ def verify_rw_community_string_31(connection):
 
 def verify_acl_enabled_32(connection):
 
-    command = 'show run | incl snmp-server community'
+    command = 'show running-config | incl snmp-server community'
     output = connection.send_command(command)
     
     # Check if the output contains a number after the community string
@@ -411,7 +408,7 @@ def verify_acl_entries_snmp_33(connection, vty_acl_number, required_entries):
     return all(f'{entry} ' in output for entry in required_entries)
 
 def verify_snmp_traps_enabled_34(connection):
-    command = 'show run | incl snmp-server'
+    command = 'show running-config | incl snmp-server'
     output = connection.send_command(command)
     
     # Check if any SNMP configuration is present in the output
@@ -420,7 +417,7 @@ def verify_snmp_traps_enabled_34(connection):
     return False
 
 def verify_snmp_traps_enabled_35(connection):
-    command = 'show run | incl snmp-server'
+    command = 'show running-config | incl snmp-server'
     output = connection.send_command(command)
     
     # Check if any SNMP configuration is present in the output
@@ -461,7 +458,7 @@ def verify_snmp_user_and_security_settings_37(connection, expected_user_name, ex
     return False
 
 def verify_hostname_38(connection):
-    command = 'show run | include hostname'
+    command = 'show running-config | include hostname'
     output = connection.send_command(command)
     
     # Check if 'hostname' is in the output
@@ -470,7 +467,7 @@ def verify_hostname_38(connection):
     return False
 
 def verify_domain_name_39(connection):
-    command = 'show run | include ip domain name'
+    command = 'show running-config | include ip domain name'
     output = connection.send_command(command)
     
     # Check if 'ip domain-name' is in the output
@@ -524,7 +521,7 @@ def verify_cdp_disabled_44(connection):
     return False
 
 def verify_bootp_enabled_45(connection):
-    command = 'show run | include bootp'
+    command = 'show running-config | include bootp'
     output = connection.send_command(command)
 
     # Check if 'no ip bootp server' is not present in the output
@@ -533,7 +530,7 @@ def verify_bootp_enabled_45(connection):
     return False
 
 def verify_dhcp_service_enabled_46(connection):
-    command = 'show run | include dhcp'
+    command = 'show running-config | include dhcp'
     output = connection.send_command(command)
         
     # Check if 'no service dhcp' is not present in the output
@@ -542,7 +539,7 @@ def verify_dhcp_service_enabled_46(connection):
     return False
 
 def verify_identd_enabled_47(connection):
-    command = 'show run | include identd'
+    command = 'show running-config | include identd'
     output = connection.send_command(command)
     
     # Check if there is no result for 'identd'
@@ -551,7 +548,7 @@ def verify_identd_enabled_47(connection):
     return False
 
 def verify_tcp_keepalives_in_enabled_48(connection):
-    command = 'show run | include service tcp'
+    command = 'show running-config | include service tcp'
     output = connection.send_command(command)
     
     # Check if 'service tcp-keepalives-in' is present in the output
@@ -560,7 +557,7 @@ def verify_tcp_keepalives_in_enabled_48(connection):
     return False
 
 def verify_tcp_keepalives_out_enabled_49(connection):
-    command = 'show run | include service tcp'
+    command = 'show running-config | include service tcp'
     output = connection.send_command(command)
     
     # Check if 'service tcp-keepalives-in' is present in the output
@@ -569,7 +566,7 @@ def verify_tcp_keepalives_out_enabled_49(connection):
     return False
 
 def verify_service_pad_disabled_50(connection):
-    command = 'show run | include service pad'
+    command = 'show running-config | include service pad'
     output = connection.send_command(command)
     
     # Check if 'service pad' is absent in the output
@@ -578,7 +575,7 @@ def verify_service_pad_disabled_50(connection):
     return False
 
 def verify_logging_on_disabled_51(connection):
-    command = 'show run | include logging on'
+    command = 'show running-config | include logging on'
     output = connection.send_command(command)
 
     # Check if 'logging on' is absent in the output
@@ -587,7 +584,7 @@ def verify_logging_on_disabled_51(connection):
     return False
 
 def verify_logging_buffered_enabled_52(connection):
-    command = 'show run | include logging buffered'
+    command = 'show running-config | include logging buffered'
     output = connection.send_command(command)
 
     # Check if 'logging on' is absent in the output
@@ -596,7 +593,7 @@ def verify_logging_buffered_enabled_52(connection):
     return False
 
 def verify_logging_console_enabled_53(connection):
-    command = 'show run | include logging console'
+    command = 'show running-config | include logging console'
     output = connection.send_command(command)
 
     # Check if 'logging on' is absent in the output
@@ -605,7 +602,7 @@ def verify_logging_console_enabled_53(connection):
     return False
 
 def verify_syslog_server_enabled_54(connection):
-    command = 'show run | include logging host'
+    command = 'show running-config | include logging host'
     output = connection.send_command(command)
     
     # Check if there are one or more IP addresses in the output
@@ -623,7 +620,7 @@ def verify_syslog_trap_server_enabled_55(connection):
     return False
 
 def verify_service_timestamps_debug_datetime_enabled_56(connection):
-    command = 'sh run | incl service timestamps'
+    command = 'sh running-config | incl service timestamps'
     output = connection.send_command(command)
 
     # Check if the output contains "service timestamps debug datetime"
@@ -632,7 +629,7 @@ def verify_service_timestamps_debug_datetime_enabled_56(connection):
     return False
 
 def loggin_source_interface_57(connection):
-    command = 'show run | include logging source'
+    command = 'show running-config | include logging source'
     output = connection.send_command(command)
     
     # Check if 'ntp authentication-key' is present in the output
@@ -641,7 +638,7 @@ def loggin_source_interface_57(connection):
     return False
 
 def verify_ntp_authenticate_58(connection):
-    command = 'show run | include ntp'
+    command = 'show running-config | include ntp'
     output = connection.send_command(command)
     
     # Check if 'ntp authentication-key' is present in the output
@@ -650,7 +647,7 @@ def verify_ntp_authenticate_58(connection):
     return False
 
 def verify_ntp_authentication_key_59(connection):
-    command = 'show run | include ntp authentication-key'
+    command = 'show running-config | include ntp authentication-key'
     output = connection.send_command(command)
     
     # Check if 'ntp authentication-key' is present in the output
@@ -659,7 +656,7 @@ def verify_ntp_authentication_key_59(connection):
     return False
 
 def verify_ntp_trusted_keys_60(connection, expected_keys_count):
-    command = 'show run | include ntp trusted-key'
+    command = 'show running-config | include ntp trusted-key'
     output = connection.send_command(command)
     
     # Count the number of trusted NTP keys in the output
@@ -672,7 +669,7 @@ def verify_ntp_trusted_keys_60(connection, expected_keys_count):
     return False
 
 def verify_ntp_servers_configured_61(connection):
-    command = 'show run | include ntp server'
+    command = 'show running-config | include ntp server'
     output = connection.send_command(command)
     
     # Check if there are any NTP servers in the output
@@ -699,7 +696,7 @@ def verify_loopback_interface_defined_63(connection):
     return False
 
 def verify_aaa_services_bound_to_source_interface_64(connection):
-    command = 'show run | include source'
+    command = 'show running-config | include source'
     output = connection.send_command(command)
     
     # Check if 'tacacs source' or 'radius source' is present in the output
@@ -708,7 +705,7 @@ def verify_aaa_services_bound_to_source_interface_64(connection):
     return False
 
 def verify_ntp_services_bound_to_source_interface_65(connection):
-    command = 'show run | include ntp source'
+    command = 'show running-config | include ntp source'
     output = connection.send_command(command)
     
     # Check if 'ntp source' is present in the output
@@ -717,7 +714,7 @@ def verify_ntp_services_bound_to_source_interface_65(connection):
     return False
 
 def verify_tftp_services_bound_to_source_interface_66(connection):
-    command = 'show run | include tftp source-interface'
+    command = 'show running-config | include tftp source-interface'
     output = connection.send_command(command)
     
     # Check if 'tftp source-interface' is present in the output
@@ -726,7 +723,7 @@ def verify_tftp_services_bound_to_source_interface_66(connection):
     return False
 
 def verify_ip_source_route_enabled_67(connection):
-    command = 'show run | include ip source-route'
+    command = 'show running-config | include ip source-route'
     output = connection.send_command(command)
     
     # Check if 'ip source-route' is present in the output
@@ -781,7 +778,7 @@ def verify_access_list_defined_71(connection, access_list_identifier):
     return False
 
 def verify_access_group_applied_72(connection, interface_name):
-    command = f'show run | section interface {interface_name}'
+    command = f'show running-config | section interface {interface_name}'
     output = connection.send_command(command)
 
     # Check if 'access-group' is present in the output
@@ -790,7 +787,7 @@ def verify_access_group_applied_72(connection, interface_name):
     return False
 
 def verify_key_chain_defined_73(connection, key_chain_name):
-    command = 'show run | section key chain'
+    command = 'show running-config | section key chain'
     output = connection.send_command(command)
 
     
@@ -800,7 +797,7 @@ def verify_key_chain_defined_73(connection, key_chain_name):
     return False
 
 def verify_key_chain_number_defined_74(connection):
-    command = 'show run | section key chain'
+    command = 'show running-config | section key chain'
     output = connection.send_command(command)
     
     # Check if 'key chain' is present in the output
@@ -809,7 +806,7 @@ def verify_key_chain_number_defined_74(connection):
     return False
 
 def verify_key_chain_string_defined_75(connection):
-    command = 'show run | section key chain'
+    command = 'show running-config | section key chain'
     output = connection.send_command(command)
     
     # Check if 'key chain' is present in the output
@@ -818,7 +815,7 @@ def verify_key_chain_string_defined_75(connection):
     return False
 
 def verify_address_family_set_76(connection):
-    command = 'show run | section router eigrp'
+    command = 'show running-config | section router eigrp'
     output = connection.send_command(command)
         
     # Check if address family is configured under router eigrp
@@ -827,7 +824,7 @@ def verify_address_family_set_76(connection):
     return False
 
 def verify_router_eigrp_set_77(connection):
-    command = 'show run | section router eigrp'
+    command = 'show running-config | section router eigrp'
     output = connection.send_command(command)
         
     # Check if address family is configured under router eigrp
@@ -836,7 +833,7 @@ def verify_router_eigrp_set_77(connection):
     return False
 
 def verify_key_chain_set_78(connection):
-    command = 'show run | section router eigrp'
+    command = 'show running-config | section router eigrp'
     output = connection.send_command(command)
     
     # Check if 'key-chain' is present in the output
@@ -845,7 +842,7 @@ def verify_key_chain_set_78(connection):
     return 
 
 def set_eigrp_md5_79(connection):
-    command = 'show run | section router eigrp'
+    command = 'show running-config | section router eigrp'
     output = connection.send_command(command)
         
     # Check if 'key-chain' is present in the output
@@ -854,7 +851,7 @@ def set_eigrp_md5_79(connection):
     return False
 
 def ip_authentication_key_chain_eigrp_80(connection, interface_name):
-    command = f'show run interface {interface_name} | include key-chain'
+    command = f'show running-config interface {interface_name} | include key-chain'
     output = connection.send_command(command)
     
     # Check if 'key-chain' is present in the output
@@ -863,7 +860,7 @@ def ip_authentication_key_chain_eigrp_80(connection, interface_name):
     return False
 
 def verify_authentication_mode_on_interface_81(connection, interface_name):
-    command = f'show run interface {interface_name} | include authentication mode'
+    command = f'show running-config interface {interface_name} | include authentication mode'
     output = connection.send_command(command)
 
     # Check if 'authentication mode' is present in the output
@@ -872,7 +869,7 @@ def verify_authentication_mode_on_interface_81(connection, interface_name):
     return False
 
 def verify_message_digest_for_ospf_82(connection):
-    command = 'show run | section router ospf'
+    command = 'show running-config | section router ospf'
     output = connection.send_command(command)
     
     # Check if 'message-digest' is present in the output
@@ -881,7 +878,7 @@ def verify_message_digest_for_ospf_82(connection):
     return False
 
 def verify_md5_key_on_interface_83(connection, interface_name):
-    command = f'show run int {interface_name}'
+    command = f'show running-config int {interface_name}'
     output = connection.send_command(command)
     
     # Check if 'md5' is present in the output for the given interface
@@ -890,7 +887,7 @@ def verify_md5_key_on_interface_83(connection, interface_name):
     return False
 
 def verify_key_chain_defined_84(connection):
-    command = 'show run | section key chain'
+    command = 'show running-config | section key chain'
     output = connection.send_command(command)
     
     # Check if 'key chain' is present in the output
@@ -899,7 +896,7 @@ def verify_key_chain_defined_84(connection):
     return False
 
 def verify_key_chain_defined_85(connection):
-    command = 'show run | section key chain'
+    command = 'show running-config | section key chain'
     output = connection.send_command(command)
     
     # Check if 'key chain' is present in the output
@@ -908,7 +905,7 @@ def verify_key_chain_defined_85(connection):
     return False
 
 def verify_key_chain_defined_86(connection):
-    command = f'show run interface {interface_name} | include key-chain'
+    command = f'show running-config interface {interface_name} | include key-chain'
     output = connection.send_command(command)
 
     # Check if 'key-chain' is present in the output
@@ -917,7 +914,7 @@ def verify_key_chain_defined_86(connection):
     return False
 
 def rip_rip_authentication_mode_md5_88(connection):
-    command = f'show run interface {interface_name} | include md5'
+    command = f'show running-config interface {interface_name} | include md5'
     output = connection.send_command(command)
     
     # Check if 'md5' is present in the output
@@ -926,7 +923,7 @@ def rip_rip_authentication_mode_md5_88(connection):
     return False
 
 def verify_bgp_neighbor_password_89(connection):
-    command = 'show run | section router bgp'
+    command = 'show running-config | section router bgp'
     output = connection.send_command(command)
     
     # Check if 'password' is present in the BGP configuration
